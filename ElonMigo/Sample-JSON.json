@@ -15,10 +15,10 @@
       "type": "multiple_choice",
       "question": "What is the largest planet in our solar system?",
       "options": [
-        { "text": "Earth" },
-        { "text": "Saturn" },
+        { "text": "Earth", "correct": false },
+        { "text": "Saturn", "correct": false },
         { "text": "Jupiter", "correct": true },
-        { "text": "Uranus" }
+        { "text": "Uranus", "correct": false }
       ]
     },
     {
