@@ -9,12 +9,10 @@ import SwiftUI
 
 @main
 struct ElonMigoApp: App {
-    @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
-    
+    @AppStorage("apiKey") var key: String = "";
     init() {
-        GeminiAPI.`init`(with: AppSettings.apiKey)
+        GeminiAPI.initialize(with: key)
     }
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
