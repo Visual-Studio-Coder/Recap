@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct ElonMigoApp: App {
-    @AppStorage("apiKey") var apiKey = ""
+    @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
     
     init() {
         GeminiAPI.`init`(with: apiKey)

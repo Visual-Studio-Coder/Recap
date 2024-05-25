@@ -9,14 +9,14 @@ import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
-    @AppStorage("apiKey") var apiKey = ""
+    @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
     
     @State private var showingSettingsSheet = false
     
     @State private var userInput = ""
     
     // Settings
-    @AppStorage("model") private var selectedOption = "gemini-1.5-pro-latest"
+    @AppStorage("geminiModel") private var selectedOption = AppSettings.geminiModel
     let options = ["Gemini 1.5 Pro", "Gemini 1.5 Flash"]
     
     // Web Search

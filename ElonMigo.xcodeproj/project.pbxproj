@@ -21,6 +21,7 @@
 		787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 787010152C0254AE004CDA60 /* Sample-JSON.json */; };
 		8B25C4DC2C02654D00EC5F54 /* QuizProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */; };
 		8B25C4DE2C02701500EC5F54 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4DD2C02701500EC5F54 /* File.swift */; };
+		8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E12C02739F00EC5F54 /* AppSettings.swift */; };
 		8B9675452C02429E005950FB /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9675442C02429E005950FB /* GoogleGenerativeAI */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,7 @@
 		787010152C0254AE004CDA60 /* Sample-JSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
 		8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizProgressBar.swift; sourceTree = "<group>"; };
 		8B25C4DD2C02701500EC5F54 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		8B25C4E12C02739F00EC5F54 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8B9675322C02420D005950FB /* ElonMigo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElonMigo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -91,6 +93,7 @@
 				787010102C0254AE004CDA60 /* Views */,
 				787010112C0254AE004CDA60 /* Assets.xcassets */,
 				787010122C0254AE004CDA60 /* ContentView.swift */,
+				8B25C4E12C02739F00EC5F54 /* AppSettings.swift */,
 				787010132C0254AE004CDA60 /* ElonMigoApp.swift */,
 				787010142C0254AE004CDA60 /* GeminiAPI.swift */,
 				8B25C4DD2C02701500EC5F54 /* File.swift */,
@@ -194,6 +197,7 @@
 			files = (
 				7870101B2C0254AE004CDA60 /* UserAnswer.swift in Sources */,
 				787010172C0254AE004CDA60 /* Explanation.swift in Sources */,
+				8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */,
 				787010202C0254AE004CDA60 /* ContentView.swift in Sources */,
 				787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */,
 				787010182C0254AE004CDA60 /* Question.swift in Sources */,
