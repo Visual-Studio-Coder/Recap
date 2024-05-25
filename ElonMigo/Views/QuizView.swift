@@ -26,7 +26,7 @@ struct QuizView: View {
                         selectedIndex = index
                     } label: {
                         if submittedQuestion {
-                            Image(systemName: option.correct ? "checkmark" : "xmark")
+                            Image(systemName: option.correct ?? false ? "checkmark" : "xmark")
                         }
                         
                         Text(option.text)

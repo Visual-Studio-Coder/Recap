@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
-    @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
+    @AppStorage("apiKey") private var apiKey = ""
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
@@ -97,7 +97,7 @@ struct ContentView: View {
                         print(apiKey)
                         print(selectedOption)
                         
-                        if !apiKey.isEmpty {
+                        if apiKey != "" {
                             geminiAPI!.sendMessage(userInput: userInput, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
                                 print(response)
                                 
@@ -120,10 +120,10 @@ struct ContentView: View {
                         
                         Label(gemeniGeneratingQuiz ? "Generating Quiz..." : "Generate Quiz", systemImage: "paperplane")
                             .foregroundStyle(.white)
-                            .opacity(userInput.isEmpty ? 0.3 : 1)
+                            //.opacity(userInput.isEmpty ? 0.3 : 1)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(userInput.isEmpty ? Color.accentColor.opacity(0.7) : Color.accentColor)
+                            .background(Color.accentColor)
                             .clipShape(RoundedRectangle(cornerRadius: 15))
                     }
                     .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0))
