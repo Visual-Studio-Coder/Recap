@@ -9,6 +9,8 @@ import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
+    @EnvironmentObject var quizStorage: QuizStorage
+    
     @AppStorage("apiKey") private var apiKey = ""
     
     // Gemini
@@ -321,5 +323,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    Group {
+        @StateObject var quizStorage = QuizStorage()
+        
+        ContentView()
+            .environmentObject(quizStorage)
+    }
 }

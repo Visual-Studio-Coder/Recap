@@ -15,7 +15,7 @@ struct Quiz: Codable {
 }
 
 @MainActor
-class QRCodeStore: ObservableObject {
+class QuizStorage: ObservableObject {
     @Published var history: [Quiz] = []
 
     private static func fileURL() throws -> URL {
