@@ -101,6 +101,8 @@ struct QuizView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
             }
             .padding(.horizontal)
+            
+            QuizProgressBar(current: Float(submittedQuestion ? selectedTab + 1 : selectedTab), total: Float(quiz.questions.count))
         }
     }
 }
