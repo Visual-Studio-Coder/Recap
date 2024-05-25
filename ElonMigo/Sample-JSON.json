@@ -2,7 +2,7 @@
   "quiz_title": "Sample Quiz",
   "questions": [
     {
-      "type": "multiple_choice",
+      "type": "MCQ",
       "question": "Question",
       "options": [
         { "text": "Option #4", "correct": false },
@@ -12,7 +12,7 @@
       ]
     },
     {
-      "type": "multiple_choice",
+      "type": "MCQ",
       "question": "What is the largest planet in our solar system?",
       "options": [
         { "text": "Earth", "correct": false },
