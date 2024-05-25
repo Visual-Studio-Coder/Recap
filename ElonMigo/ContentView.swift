@@ -15,6 +15,7 @@ struct ContentView: View {
     let geminiAPI = GeminiAPI.shared
     @State private var quiz: Quiz?
     @State private var showingQuizSheet = false
+    @State private var showingQuizCustomizationSheet = false
     @State private var gemeniGeneratingQuiz = false
     @State private var showingGeminiAPIAlert = false
     @State private var showingGeminiFailAlert = false
@@ -22,6 +23,7 @@ struct ContentView: View {
     @State private var showingSettingsSheet = false
     
     @State private var userInput = ""
+    @AppStorage("numberOfQuestions") private var numberOfQuestions = 5
     
     // Settings
     @AppStorage("geminiModel") private var selectedOption = AppSettings.geminiModel
@@ -51,6 +53,13 @@ struct ContentView: View {
                         .padding(.horizontal)
                     
                     HStack {
+                        Button {
+                            showingQuizCustomizationSheet.toggle()
+                        } label: {
+                            Image(systemName: "slider.horizontal.3")
+                        }
+                        .buttonStyle(.bordered)
+                        .clipShape(RoundedRectangle(cornerRadius: 100))
                         Spacer()
                         HStack {
                             PhotosPicker(selection: $selectedItems, maxSelectionCount: 1, matching: .images) {
@@ -136,8 +145,6 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Divider()
-                    
                     VStack {
                         Text("Recent Quizzes")
                             .font(.title)
@@ -162,6 +169,22 @@ struct ContentView: View {
 //                        QuizView(quiz: quiz)
 //                    }
 //                }
+                .sheet(isPresented: $showingQuizCustomizationSheet) {
+                    NavigationStack {
+                        Form {
+                            Section {
+                                Stepper("Number of Questions: \(numberOfQuestions)", value: $numberOfQuestions)
+                            } header: {
+                                Text("Customize Question Count")
+                            } footer: {
+                               Text("No guarantee, but we'll try to get Gemini to generate only ^[\(numberOfQuestions) question](inflect: true).")
+                            }
+                        }
+                        .navigationTitle("Customize Quiz Properties")
+                        .navigationBarTitleDisplayMode(.inline)
+                    }
+                    .presentationDetents([.large, .medium])
+                }
                 .sheet(isPresented: $showingURLSheet) {
                     NavigationStack {
                         Form {
