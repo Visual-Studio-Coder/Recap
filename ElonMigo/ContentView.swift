@@ -9,6 +9,8 @@ import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
+    @EnvironmentObject var quizStorage: QuizStorage
+    
     @AppStorage("apiKey") private var apiKey = ""
     
     // Gemini
@@ -26,8 +28,8 @@ struct ContentView: View {
     @AppStorage("numberOfQuestions") private var numberOfQuestions = 5
     
     // Settings
-    @AppStorage("geminiModel") private var selectedOption = AppSettings.geminiModel
-    let options = ["Gemini 1.5 Pro", "Gemini 1.5 Flash"]
+    @AppStorage("geminiModel") private var geminiModel = AppSettings.geminiModel
+    let geminiModels = ["1.5 Pro", "1.5 Flash"]
     
     // Web Search
     @State private var showingURLSheet = false
@@ -104,7 +106,7 @@ struct ContentView: View {
                     
                     Button {
                         print(apiKey)
-                        print(selectedOption)
+                        print(geminiModel)
                         
                         if apiKey != "" {
                             geminiAPI!.sendMessage(userInput: userInput, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
@@ -137,11 +139,11 @@ struct ContentView: View {
                     }
                     .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0))
                     .padding(.horizontal)
-//                    .onChange(of: gemeniGeneratingQuiz) { status in
-//                        if !status {
-//                            showingQuizSheet = true
-//                        }
-//                    }
+                    //                    .onChange(of: gemeniGeneratingQuiz) { status in
+                    //                        if !status {
+                    //                            showingQuizSheet = true
+                    //                        }
+                    //                    }
                     
                     Spacer()
                     
@@ -234,40 +236,98 @@ struct ContentView: View {
                 }
                 .sheet(isPresented: $showingSettingsSheet) {
                     NavigationStack {
-                        Form {
-                            Section {
-                                SecureField("Top Secret Gemini API Key", text: $apiKey)
-                            } header: {
-                                Text("API Key")
-                            } footer: {
-                                Text("Grab one from [makersuite.google.com](https://makersuite.google.com/app/apikey)\n**Reminder: Never share API keys.**")
+                        List {
+                            NavigationLink {
+                                Form {
+                                    Section {
+                                        SecureField("Gemini API Key", text: $apiKey)
+                                    } footer: {
+                                        Text("**Remember:** Never share API keys.")
+                                    }
+                                    
+                                    Section {
+                                        Button {
+                                            if let url = URL(string: "https://makersuite.google.com/app/apikey") {
+                                                UIApplication.shared.open(url)
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Label("Generate API Key", systemImage: "lightbulb")
+                                                Spacer()
+                                                Image(systemName: "arrow.up.right")
+                                                    .tint(.secondary)
+                                            }
+                                        }
+                                        .tint(.primary)
+                                    }
+                                }
+                                .navigationTitle("API Key")
+                            } label: {
+                                Label("API Key", systemImage: "number")
                             }
                             
-                            Section {
-                                Picker("Preferred Model", selection: $selectedOption) {
-                                    ForEach(options, id: \.self) { option in
-                                        HStack {
-                                            if option == "Gemini 1.5 Flash" {
-                                                Label(" \(option)", systemImage: "bolt.fill")
-                                            } else {
-                                                Label(" \(option)", systemImage: "brain.head.profile")
+                            NavigationLink {
+                                List {
+                                    Section {
+                                        ForEach(geminiModels, id: \.self) { i in
+                                            Button {
+                                                if i == "1.5 Flash" {
+                                                    geminiModel = "gemini-1.5-flash"
+                                                } else {
+                                                    geminiModel = "gemini-1.5-pro-latest"
+                                                }
+                                            } label: {
+                                                HStack {
+                                                    Label(" \(i)", systemImage: i == "1.5 Flash" ? "bolt.fill" : "brain.head.profile")
+                                                        .tint(.primary)
+                                                    
+                                                    if geminiModel == (i == "1.5 Flash" ? "gemini-1.5-flash" : "gemini-1.5-pro-latest") {
+                                                        Spacer()
+                                                        Image(systemName: "checkmark")
+                                                    }
+                                                }
                                             }
+                                        }
+                                    } footer: {
+                                        if geminiModel == "1.5 Flash" {
+                                            Text("Gemini 1.5 Flash delivers a **faster response** at the cost of accuracy.")
+                                        } else {
+                                            Text("Gemini 1.5 Pro delivers a **smarter response** at the cost of speed.")
                                         }
                                     }
                                 }
-                            } header: {
-                                Text("Choose Model")
-                            } footer: {
-                                if selectedOption == "Gemini 1.5 Flash" {
-                                    Text("You will receive a **faster response** but not necessarily a smarter, more accurate quiz.")
-                                } else {
-                                    Text("You will receive a **smarter response** but not necessarily a in a short amount of time.")
-                                }
+                                .navigationTitle("Gemini Model")
+                            } label: {
+                                Label("Gemini Model", systemImage: "cpu")
                             }
                             
-                            Section("Privacy") {
-                                Toggle("Save Quiz Results", isOn: .constant(true))
-                                Toggle("Improve Gemini for Everyone", isOn: .constant(true))
+                            NavigationLink {
+                                List {
+                                    Section {
+                                        Button {
+                                            if let url = URL(string: "") {
+                                                UIApplication.shared.open(url)
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Label("Privacy Policy", systemImage: "checkmark.shield")
+                                                Spacer()
+                                                Image(systemName: "arrow.up.right")
+                                                    .tint(.secondary)
+                                            }
+                                        }
+                                        .tint(.primary)
+                                    }
+                                    
+                                    Section {
+                                        Toggle("Save Quiz Results", isOn: .constant(true))
+                                        Toggle("Improve Gemini for Everyone", isOn: .constant(true))
+                                            .disabled(true)
+                                    }
+                                }
+                                .navigationTitle("Privacy")
+                            } label: {
+                                Label("Privacy", systemImage: "checkmark.shield")
                             }
                         }
                         .navigationTitle("Settings")
@@ -288,5 +348,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    Group {
+        @StateObject var quizStorage = QuizStorage()
+        
+        ContentView()
+            .environmentObject(quizStorage)
+    }
 }
