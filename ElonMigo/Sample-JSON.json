@@ -1,0 +1,30 @@
+{
+    "quiz_title": "Sample Quiz",
+    "questions": [
+        {
+            "type": "multiple_choice",
+            "question": "Question",
+            "options": [
+                {"text": "Option #4", "correct": false},
+                {"text": "Option #3", "correct": false},
+                {"text": "Option #2", "correct": true},
+                {"text": "Option #1", "correct": false}
+            ]
+        },
+        {
+            "type": "multiple_choice",
+            "question": "What is the largest planet in our solar system?",
+            "options": [
+                {"text": "Earth"},
+                {"text": "Saturn"},
+                {"text": "Jupiter", "correct": true},
+                {"text": "Uranus"}
+            ]
+        },
+        {
+            "type": "free_answer",
+            "question": "Free Answer Question?",
+            "answer": "//leave this empty"
+        }
+    ]
+}
