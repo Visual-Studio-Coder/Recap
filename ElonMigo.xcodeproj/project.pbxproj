@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		782566FC2C02461600FC0E7B /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782566FB2C02461600FC0E7B /* SwiftUIView.swift */; };
+		782566FE2C0246A300FC0E7B /* Sample-JSON.json in Sources */ = {isa = PBXBuildFile; fileRef = 782566FD2C0246A300FC0E7B /* Sample-JSON.json */; };
 		8B9675362C02420D005950FB /* ElonMigoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675352C02420D005950FB /* ElonMigoApp.swift */; };
 		8B9675382C02420D005950FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675372C02420D005950FB /* ContentView.swift */; };
 		8B96753A2C02420D005950FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9675392C02420D005950FB /* Assets.xcassets */; };
@@ -14,6 +16,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		782566FB2C02461600FC0E7B /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
+		782566FD2C0246A300FC0E7B /* Sample-JSON.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
 		8B9675322C02420D005950FB /* ElonMigo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElonMigo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9675352C02420D005950FB /* ElonMigoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElonMigoApp.swift; sourceTree = "<group>"; };
 		8B9675372C02420D005950FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -52,7 +56,9 @@
 			isa = PBXGroup;
 			children = (
 				8B9675352C02420D005950FB /* ElonMigoApp.swift */,
+				782566FD2C0246A300FC0E7B /* Sample-JSON.json */,
 				8B9675372C02420D005950FB /* ContentView.swift */,
+				782566FB2C02461600FC0E7B /* SwiftUIView.swift */,
 				8B9675392C02420D005950FB /* Assets.xcassets */,
 				8B96753B2C02420D005950FB /* Preview Content */,
 			);
@@ -138,7 +144,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B9675382C02420D005950FB /* ContentView.swift in Sources */,
+				782566FE2C0246A300FC0E7B /* Sample-JSON.json in Sources */,
 				8B9675362C02420D005950FB /* ElonMigoApp.swift in Sources */,
+				782566FC2C02461600FC0E7B /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +280,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = L3P446LNNP;
+				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -301,7 +309,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = L3P446LNNP;
+				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
