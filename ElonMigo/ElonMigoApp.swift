@@ -11,6 +11,10 @@ import SwiftUI
 struct ElonMigoApp: App {
     @AppStorage("apiKey") var apiKey = ""
     
+//    init() {
+//        GeminiAPI.`init`(with: apiKey)
+//    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -6,16 +6,42 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ContentView: View {
+    @AppStorage("apiKey") var apiKey = ""
+    
+    @State private var selectedItems: [PhotosPickerItem] = []
+    @State private var selectedPhotosData: [Data] = []
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            VStack {
+                HStack {
+                    SecureField("Top Secret API Key", text: $apiKey)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                HStack {
+                    PhotosPicker(selection: $selectedItems, maxSelectionCount: 1, matching: .images) {
+                        Label("Select Photos", systemImage: "photo.on.rectangle.angled")
+                    }
+                }
+                .buttonStyle(.bordered)
+                .onChange(of: selectedItems) { _ in
+//                    selectedItems
+                }
+            }
+            .navigationTitle("ElonMigo")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {} label: {
+                        Label("Settings", systemImage: "gearshape")
+                    }
+                }
+            }
         }
-        .padding()
     }
 }
 
