@@ -6,28 +6,75 @@ import SwiftUI
 
 struct QuizView: View {
     let quiz: Quiz
-    @State private var selectedTab = 0
+    
+    @State var selectedTab = 0
+    
+    @State private var selectedIndex = -1
+    @State private var submittedQuestion = false
     
     var body: some View {
         VStack {
-            TabView(selection: $selectedTab) {
-                ForEach(0..<quiz.questions.count, id: \.self) { index in
-                    QuestionView(question: quiz.questions[index])
+            ScrollView {
+                Text(quiz.questions[selectedTab].question)
+                    .font(.largeTitle)
+                    .bold()
+                
+                Spacer()
+                
+                ForEach(Array(zip(quiz.questions[selectedTab].options.indices, quiz.questions[selectedTab].options)), id: \.0) { index, option in
+                    Button {
+                        selectedIndex = index
+                    } label: {
+                        if submittedQuestion {
+                            Image(systemName: option.correct ? "checkmark" : "xmark")
+                        }
+                        
+                        Text(option.text)
+                            .font(.title)
+                            .foregroundStyle(.white)
+                    }
+                    .disabled(submittedQuestion)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+                    .background(index == selectedIndex ? .green : .secondary)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.vertical, 2)
+                    .padding(.horizontal)
+                    .opacity((submittedQuestion && index != selectedIndex) ? 0.6 : 1)
                 }
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
             
-            Button(action: {
-                if selectedTab < quiz.questions.count - 1 {
+//            if submittedQuestion {
+//                Button {
+//                    selectedIndex = -1
+//                    submittedQuestion = false
+//                } label: {
+//                    Label("Try again", systemImage: "arrow.circlepath")
+//                }
+//            }
+            
+            Button {
+                if submittedQuestion {
                     selectedTab += 1
+                    selectedIndex = -1
+                    submittedQuestion = false
+                } else {
+                    submittedQuestion = true
                 }
-            }) {
-                Text("Next")
+            } label: {
+                Text(submittedQuestion ? "Next" : "Submit")
+                    .foregroundStyle(.white)
+                    .opacity(selectedIndex == -1 ? 0.3 : 1)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(selectedIndex == -1 ? Color.accentColor.opacity(0.7) : Color.accentColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
             }
+            .padding(.horizontal)
         }
     }
 }
 
 #Preview {
-    QuizView(quiz: Quiz(title: "Quiz 1", questions: [Question(questionType: "MCQ", question: "Select Elon Musk #1", options: [QuestionOption(text: "Elon Musk", correct: true), QuestionOption(text: "Elon Crust", correct: false), QuestionOption(text: "Jeff Bezos", correct: false), QuestionOption(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(questionType: "MCQ", question: "Select Elon Musk #2", options: [QuestionOption(text: "Elon Musk", correct: true), QuestionOption(text: "Elon Crust", correct: false), QuestionOption(text: "Jeff Bezos", correct: false), QuestionOption(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(questionType: "MCQ", question: "Select Elon Musk #3", options: [QuestionOption(text: "Elon Musk", correct: true), QuestionOption(text: "Elon Crust", correct: false), QuestionOption(text: "Jeff Bezos", correct: false), QuestionOption(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk")]))
+    QuizView(quiz: Quiz(title: "Quiz 1", questions: [Question(questionType: "MCQ", question: "Select Elon Musk #1", options: [QuestionOption(text: "Elon Musk", correct: true), QuestionOption(text: "Elon Crust", correct: false), QuestionOption(text: "Jeff Bezos", correct: false), QuestionOption(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(questionType: "MCQ", question: "Select Jeff Bezos #2", options: [QuestionOption(text: "Elon Musk", correct: false), QuestionOption(text: "Elon Crust", correct: false), QuestionOption(text: "Jeff Bezos", correct: true), QuestionOption(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(questionType: "MCQ", question: "Select Elon Musk #3", options: [QuestionOption(text: "Elon Musk", correct: true), QuestionOption(text: "Elon Crust", correct: false), QuestionOption(text: "Jeff Bezos", correct: false), QuestionOption(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk")]))
 }
