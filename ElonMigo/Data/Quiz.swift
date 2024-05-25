@@ -9,9 +9,9 @@ import Foundation
 
 struct Quiz: Codable {
     var id = UUID()
-    let title: String
+    var title: String
     let questions: [Question]
-    let userCorrect: Int
+    var userCorrect: Int = 0
 }
 
 @MainActor
