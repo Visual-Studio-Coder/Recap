@@ -7,31 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B9675362C02420D005950FB /* ElonMigoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675352C02420D005950FB /* ElonMigoApp.swift */; };
-		8B9675382C02420D005950FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675372C02420D005950FB /* ContentView.swift */; };
-		8B96753A2C02420D005950FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9675392C02420D005950FB /* Assets.xcassets */; };
-		8B96753D2C02420D005950FB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B96753C2C02420D005950FB /* Preview Assets.xcassets */; };
+		787010172C0254AE004CDA60 /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010062C0254AE004CDA60 /* Explanation.swift */; };
+		787010182C0254AE004CDA60 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010072C0254AE004CDA60 /* Question.swift */; };
+		787010192C0254AE004CDA60 /* QuestionOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010082C0254AE004CDA60 /* QuestionOption.swift */; };
+		7870101A2C0254AE004CDA60 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010092C0254AE004CDA60 /* Quiz.swift */; };
+		7870101B2C0254AE004CDA60 /* UserAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7870100A2C0254AE004CDA60 /* UserAnswer.swift */; };
+		7870101C2C0254AE004CDA60 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7870100C2C0254AE004CDA60 /* Preview Assets.xcassets */; };
+		7870101D2C0254AE004CDA60 /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7870100E2C0254AE004CDA60 /* QuestionView.swift */; };
+		7870101E2C0254AE004CDA60 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7870100F2C0254AE004CDA60 /* QuizView.swift */; };
+		7870101F2C0254AE004CDA60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 787010112C0254AE004CDA60 /* Assets.xcassets */; };
+		787010202C0254AE004CDA60 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010122C0254AE004CDA60 /* ContentView.swift */; };
+		787010212C0254AE004CDA60 /* ElonMigoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010132C0254AE004CDA60 /* ElonMigoApp.swift */; };
+		787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010142C0254AE004CDA60 /* GeminiAPI.swift */; };
+		787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 787010152C0254AE004CDA60 /* Sample-JSON.json */; };
 		8B9675452C02429E005950FB /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9675442C02429E005950FB /* GoogleGenerativeAI */; };
-		8B9675472C0242E9005950FB /* GeminiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675462C0242E9005950FB /* GeminiAPI.swift */; };
-		8B96754C2C02475F005950FB /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B96754B2C02475F005950FB /* Quiz.swift */; };
-		8B96754E2C024788005950FB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B96754D2C024788005950FB /* Question.swift */; };
-		8B9675502C0247D8005950FB /* QuestionOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B96754F2C0247D8005950FB /* QuestionOption.swift */; };
-		8B9675522C024834005950FB /* UserAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675512C024834005950FB /* UserAnswer.swift */; };
-		8B9675542C024884005950FB /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675532C024884005950FB /* Explanation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		787010062C0254AE004CDA60 /* Explanation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
+		787010072C0254AE004CDA60 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		787010082C0254AE004CDA60 /* QuestionOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionOption.swift; sourceTree = "<group>"; };
+		787010092C0254AE004CDA60 /* Quiz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
+		7870100A2C0254AE004CDA60 /* UserAnswer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAnswer.swift; sourceTree = "<group>"; };
+		7870100C2C0254AE004CDA60 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7870100E2C0254AE004CDA60 /* QuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionView.swift; sourceTree = "<group>"; };
+		7870100F2C0254AE004CDA60 /* QuizView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		787010112C0254AE004CDA60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		787010122C0254AE004CDA60 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		787010132C0254AE004CDA60 /* ElonMigoApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElonMigoApp.swift; sourceTree = "<group>"; };
+		787010142C0254AE004CDA60 /* GeminiAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeminiAPI.swift; sourceTree = "<group>"; };
+		787010152C0254AE004CDA60 /* Sample-JSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
 		8B9675322C02420D005950FB /* ElonMigo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElonMigo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B9675352C02420D005950FB /* ElonMigoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElonMigoApp.swift; sourceTree = "<group>"; };
-		8B9675372C02420D005950FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		8B9675392C02420D005950FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8B96753C2C02420D005950FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		8B9675462C0242E9005950FB /* GeminiAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiAPI.swift; sourceTree = "<group>"; };
-		8B96754B2C02475F005950FB /* Quiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
-		8B96754D2C024788005950FB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
-		8B96754F2C0247D8005950FB /* QuestionOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionOption.swift; sourceTree = "<group>"; };
-		8B9675512C024834005950FB /* UserAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnswer.swift; sourceTree = "<group>"; };
-		8B9675532C024884005950FB /* Explanation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,10 +52,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7870100B2C0254AE004CDA60 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				787010062C0254AE004CDA60 /* Explanation.swift */,
+				787010072C0254AE004CDA60 /* Question.swift */,
+				787010082C0254AE004CDA60 /* QuestionOption.swift */,
+				787010092C0254AE004CDA60 /* Quiz.swift */,
+				7870100A2C0254AE004CDA60 /* UserAnswer.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		7870100D2C0254AE004CDA60 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				7870100C2C0254AE004CDA60 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		787010102C0254AE004CDA60 /* QuizUI */ = {
+			isa = PBXGroup;
+			children = (
+				7870100E2C0254AE004CDA60 /* QuestionView.swift */,
+				7870100F2C0254AE004CDA60 /* QuizView.swift */,
+			);
+			path = QuizUI;
+			sourceTree = "<group>";
+		};
+		787010162C0254AE004CDA60 /* ElonMigo */ = {
+			isa = PBXGroup;
+			children = (
+				7870100B2C0254AE004CDA60 /* Data */,
+				7870100D2C0254AE004CDA60 /* Preview Content */,
+				787010102C0254AE004CDA60 /* QuizUI */,
+				787010112C0254AE004CDA60 /* Assets.xcassets */,
+				787010122C0254AE004CDA60 /* ContentView.swift */,
+				787010132C0254AE004CDA60 /* ElonMigoApp.swift */,
+				787010142C0254AE004CDA60 /* GeminiAPI.swift */,
+				787010152C0254AE004CDA60 /* Sample-JSON.json */,
+			);
+			path = ElonMigo;
+			sourceTree = "<group>";
+		};
 		8B9675292C02420D005950FB = {
 			isa = PBXGroup;
 			children = (
-				8B9675342C02420D005950FB /* ElonMigo */,
+				787010162C0254AE004CDA60 /* ElonMigo */,
 				8B9675332C02420D005950FB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -60,39 +110,6 @@
 				8B9675322C02420D005950FB /* ElonMigo.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		8B9675342C02420D005950FB /* ElonMigo */ = {
-			isa = PBXGroup;
-			children = (
-				8B96754A2C02475A005950FB /* Data */,
-				8B9675352C02420D005950FB /* ElonMigoApp.swift */,
-				8B9675372C02420D005950FB /* ContentView.swift */,
-				8B9675392C02420D005950FB /* Assets.xcassets */,
-				8B96753B2C02420D005950FB /* Preview Content */,
-				8B9675462C0242E9005950FB /* GeminiAPI.swift */,
-			);
-			path = ElonMigo;
-			sourceTree = "<group>";
-		};
-		8B96753B2C02420D005950FB /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				8B96753C2C02420D005950FB /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		8B96754A2C02475A005950FB /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				8B96754B2C02475F005950FB /* Quiz.swift */,
-				8B96754D2C024788005950FB /* Question.swift */,
-				8B96754F2C0247D8005950FB /* QuestionOption.swift */,
-				8B9675512C024834005950FB /* UserAnswer.swift */,
-				8B9675532C024884005950FB /* Explanation.swift */,
-			);
-			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,8 +176,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B96753D2C02420D005950FB /* Preview Assets.xcassets in Resources */,
-				8B96753A2C02420D005950FB /* Assets.xcassets in Resources */,
+				787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */,
+				7870101F2C0254AE004CDA60 /* Assets.xcassets in Resources */,
+				7870101C2C0254AE004CDA60 /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,14 +189,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B96754E2C024788005950FB /* Question.swift in Sources */,
-				8B9675382C02420D005950FB /* ContentView.swift in Sources */,
-				8B9675502C0247D8005950FB /* QuestionOption.swift in Sources */,
-				8B9675472C0242E9005950FB /* GeminiAPI.swift in Sources */,
-				8B96754C2C02475F005950FB /* Quiz.swift in Sources */,
-				8B9675522C024834005950FB /* UserAnswer.swift in Sources */,
-				8B9675362C02420D005950FB /* ElonMigoApp.swift in Sources */,
-				8B9675542C024884005950FB /* Explanation.swift in Sources */,
+				7870101B2C0254AE004CDA60 /* UserAnswer.swift in Sources */,
+				787010172C0254AE004CDA60 /* Explanation.swift in Sources */,
+				787010202C0254AE004CDA60 /* ContentView.swift in Sources */,
+				787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */,
+				787010182C0254AE004CDA60 /* Question.swift in Sources */,
+				787010212C0254AE004CDA60 /* ElonMigoApp.swift in Sources */,
+				7870101A2C0254AE004CDA60 /* Quiz.swift in Sources */,
+				7870101E2C0254AE004CDA60 /* QuizView.swift in Sources */,
+				7870101D2C0254AE004CDA60 /* QuestionView.swift in Sources */,
+				787010192C0254AE004CDA60 /* QuestionOption.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,7 +332,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = L3P446LNNP;
+				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -345,7 +365,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = L3P446LNNP;
+				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
