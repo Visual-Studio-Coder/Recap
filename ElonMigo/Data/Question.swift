@@ -7,15 +7,14 @@
 
 import Foundation
 
+struct Option: Codable {
+    let text: String
+    let correct: Bool?
+}
+
 struct Question: Codable {
-    let questionType: QuestionType
+    let type: String
     let question: String
-    let options: [QuestionOption]
-    let answer: String
-    var userSelection: String = ""
-    
-    enum QuestionType: Codable {
-        case MCQ
-        case FRQ
-    }
+    let options: [Option]?
+    let answer: String?
 }

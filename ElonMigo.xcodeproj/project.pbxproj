@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		787010172C0254AE004CDA60 /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010062C0254AE004CDA60 /* Explanation.swift */; };
 		787010182C0254AE004CDA60 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010072C0254AE004CDA60 /* Question.swift */; };
-		787010192C0254AE004CDA60 /* QuestionOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010082C0254AE004CDA60 /* QuestionOption.swift */; };
 		7870101A2C0254AE004CDA60 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010092C0254AE004CDA60 /* Quiz.swift */; };
 		7870101B2C0254AE004CDA60 /* UserAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7870100A2C0254AE004CDA60 /* UserAnswer.swift */; };
 		7870101C2C0254AE004CDA60 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7870100C2C0254AE004CDA60 /* Preview Assets.xcassets */; };
@@ -28,7 +27,6 @@
 /* Begin PBXFileReference section */
 		787010062C0254AE004CDA60 /* Explanation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
 		787010072C0254AE004CDA60 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
-		787010082C0254AE004CDA60 /* QuestionOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionOption.swift; sourceTree = "<group>"; };
 		787010092C0254AE004CDA60 /* Quiz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
 		7870100A2C0254AE004CDA60 /* UserAnswer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAnswer.swift; sourceTree = "<group>"; };
 		7870100C2C0254AE004CDA60 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -61,7 +59,6 @@
 			children = (
 				787010062C0254AE004CDA60 /* Explanation.swift */,
 				787010072C0254AE004CDA60 /* Question.swift */,
-				787010082C0254AE004CDA60 /* QuestionOption.swift */,
 				787010092C0254AE004CDA60 /* Quiz.swift */,
 				7870100A2C0254AE004CDA60 /* UserAnswer.swift */,
 				8B25C4E32C02962800EC5F54 /* Motivation.swift */,
@@ -206,7 +203,6 @@
 				7870101A2C0254AE004CDA60 /* Quiz.swift in Sources */,
 				7870101E2C0254AE004CDA60 /* QuizView.swift in Sources */,
 				8B25C4DC2C02654D00EC5F54 /* QuizProgressBar.swift in Sources */,
-				787010192C0254AE004CDA60 /* QuestionOption.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,7 +336,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 420;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
@@ -375,7 +371,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 420;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;

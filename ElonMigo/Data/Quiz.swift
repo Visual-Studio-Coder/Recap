@@ -7,11 +7,15 @@
 
 import Foundation
 
+//struct Quiz: Codable {
+////    var id = UUID()
+//    var quiz_title: String
+//    let questions: [Question]
+////    var userCorrect: Int = 0
+//}
 struct Quiz: Codable {
-    var id = UUID()
-    var title: String
+    let quiz_title: String
     let questions: [Question]
-    var userCorrect: Int = 0
 }
 
 @MainActor
@@ -48,7 +52,7 @@ class QuizStorage: ObservableObject {
         _ = try await task.value
     }
 
-    func indexOfQuiz(withID id: UUID) -> Int? {
-        return history.firstIndex(where: { $0.id == id })
-    }
+//    func indexOfQuiz(withID id: UUID) -> Int? {
+//        return history.firstIndex(where: { $0.id == id })
+//    }
 }
