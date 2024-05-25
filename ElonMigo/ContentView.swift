@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var userInput = ""
     
     // Web Search
+    @State private var showingURLSheet = false
     @State private var links = [""]
     
     // Photos Picker
@@ -60,27 +61,12 @@ struct ContentView: View {
                     }
                 }
                 
-                Section("Web Search") {
-                    ForEach(links.indices, id: \.self) { index in
-                        HStack {
-                            TextField("Enter Link #\(index + 1)", text: $links[index])
-                                .textFieldStyle(.roundedBorder)
-                            
-                            Button {
-                                links.remove(at: index)
-                            } label: {
-                                Image(systemName: "minus.circle")
-                            }
-                            .buttonStyle(.bordered)
-                        }
-                    }
-                    
-                    Button {
-                        links.append("")
-                    } label: {
-                        Label("Add New Link", systemImage: "plus")
-                    }
+                Button {
+                    showingURLSheet = true
+                } label: {
+                    Label("Web Search", systemImage: "magnifyingglass")
                 }
+                .buttonStyle(.bordered)
                 
                 Divider()
                 
@@ -93,7 +79,14 @@ struct ContentView: View {
                 
                 Button {} label: {
                     Label("Generate Quiz", systemImage: "paperplane")
+                        .foregroundStyle(.white)
+                        .opacity(userInput.isEmpty ? 0.3 : 1)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(userInput.isEmpty ? Color.accentColor.opacity(0.7) : Color.accentColor)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
                 }
+                .padding(.horizontal)
             }
             .navigationTitle("ElonMigo")
             .toolbar {
@@ -104,6 +97,53 @@ struct ContentView: View {
                         Label("Settings", systemImage: "gearshape")
                     }
                 }
+            }
+            .sheet(isPresented: $showingURLSheet) {
+                NavigationStack {
+                    Form {
+                        Section {
+                            ForEach(links.indices, id: \.self) { index in
+                                TextField("Enter URL #\(index + 1)", text: $links[index])
+                                    .swipeActions(edge: .trailing) {
+                                        Button(role: .destructive) {
+                                            links.remove(at: index)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                            }
+                            .onMove(perform: { from, to in
+                                links.move(fromOffsets: from, toOffset: to)
+                            })
+                            .onDelete(perform: { offsets in
+                                links.remove(atOffsets: offsets)
+                            })
+                        }
+                        
+                        Section {
+                            Button {
+                                links.append("")
+                            } label: {
+                                Label("Add New Link", systemImage: "plus")
+                            }
+                            .disabled(links.count == 5)
+                        }
+                    }
+                    .navigationTitle("Web Search")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            EditButton()
+                        }
+                        
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") {
+                                showingURLSheet = false
+                            }
+                        }
+                    }
+                }
+                .presentationDetents([.medium, .large])
             }
             .sheet(isPresented: $showingSettingsSheet) {
                 NavigationStack {
