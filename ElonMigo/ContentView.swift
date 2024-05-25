@@ -112,13 +112,15 @@ struct ContentView: View {
                             geminiAPI!.sendMessage(userInput: userInput, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
                                 print(response)
                                 
-                                if let quiz = decodeJSON(from: response) {
+                                do {
+                                    let quiz = try decodeJSON(from: response)
                                     DispatchQueue.main.async {
                                         self.quiz = quiz
                                         gemeniGeneratingQuiz = true
                                     }
-                                } else {
-                                    showingGeminiFailAlert = true
+                                } catch {
+                                    print(error)
+                                    //showingGeminiFailAlert = true
                                 }
                             }
                         } else {
@@ -131,7 +133,6 @@ struct ContentView: View {
                         
                         Label(gemeniGeneratingQuiz ? "Generating Quiz..." : "Generate Quiz", systemImage: "paperplane")
                             .foregroundStyle(.white)
-                            //.opacity(userInput.isEmpty ? 0.3 : 1)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.accentColor)
@@ -139,11 +140,6 @@ struct ContentView: View {
                     }
                     .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0))
                     .padding(.horizontal)
-                    //                    .onChange(of: gemeniGeneratingQuiz) { status in
-                    //                        if !status {
-                    //                            showingQuizSheet = true
-                    //                        }
-                    //                    }
                     
                     Spacer()
                     
@@ -166,11 +162,11 @@ struct ContentView: View {
                 }
                 .alert("To use ElonMigo, enter your API key!", isPresented: $showingGeminiAPIAlert) {}
                 .alert("An unknown error occured while generating the quiz!", isPresented: $showingGeminiFailAlert) {}
-//                .fullScreenCover(isPresented: $showingQuizSheet) {
-//                    if let quiz = quiz {
-//                        QuizView(quiz: quiz)
-//                    }
-//                }
+                .fullScreenCover(isPresented: $showingQuizSheet) {
+                                    if let quiz = quiz {
+                                        QuizView(quiz: quiz)
+                                    }
+                                }
                 .sheet(isPresented: $showingQuizCustomizationSheet) {
                     NavigationStack {
                         Form {
@@ -179,7 +175,7 @@ struct ContentView: View {
                             } header: {
                                 Text("Customize Question Count")
                             } footer: {
-                               Text("No guarantee, but we'll try to get Gemini to generate only ^[\(numberOfQuestions) question](inflect: true).")
+                                Text("No guarantee, but we'll try to get Gemini to generate only ^[\(numberOfQuestions) question](inflect: true).")
                             }
                         }
                         .navigationTitle("Customize Quiz Properties")
