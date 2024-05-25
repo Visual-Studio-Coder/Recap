@@ -8,12 +8,12 @@
 import Foundation
 
 struct Question: Codable {
-    let questionType: String
+    let questionType: QuestionType
     let question: String
     let options: [QuestionOption]
-    let answer: String
+    let userSelection: String
     
-    enum QuestionType {
+    enum QuestionType: Codable {
         case MCQ
         case FRQ
     }
