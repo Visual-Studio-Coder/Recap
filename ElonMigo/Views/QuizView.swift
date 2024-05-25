@@ -44,14 +44,44 @@ struct QuizView: View {
                 }
             }
             
-//            if submittedQuestion {
-//                Button {
-//                    selectedIndex = -1
-//                    submittedQuestion = false
-//                } label: {
-//                    Label("Try again", systemImage: "arrow.circlepath")
-//                }
-//            }
+            //            if submittedQuestion {
+            //                Button {
+            //                    selectedIndex = -1
+            //                    submittedQuestion = false
+            //                } label: {
+            //                    Label("Try again", systemImage: "arrow.circlepath")
+            //                }
+            //            }
+            
+            Button {
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .prettyPrinted
+                
+                do {
+//                    let data = try encoder.encode(explanationPrompt)
+                } catch {
+                    print(error)
+                }
+            } label: {
+                Label("Explain", systemImage: "sparkles")
+            }
+            .symbolEffect(.bounce, value: true)
+            .buttonBorderShape(.capsule)
+            .buttonStyle(.bordered)
+            
+            Button {
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .prettyPrinted
+                
+                do {} catch {
+                    print(error)
+                }
+            } label: {
+                Label("Get a Hint", systemImage: "lightbulb")
+            }
+            .symbolEffect(.bounce, value: true)
+            .buttonBorderShape(.capsule)
+            .buttonStyle(.bordered)
             
             Button {
                 if submittedQuestion {
