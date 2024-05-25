@@ -21,10 +21,5 @@
         { "text": "Uranus", "correct": false }
       ]
     },
-    {
-      "type": "free_answer",
-      "question": "Free Answer Question?",
-      "answer": "empty test answer"
-    }
   ]
 }
