@@ -7,22 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		782566FC2C02461600FC0E7B /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782566FB2C02461600FC0E7B /* SwiftUIView.swift */; };
-		782566FE2C0246A300FC0E7B /* Sample-JSON.json in Sources */ = {isa = PBXBuildFile; fileRef = 782566FD2C0246A300FC0E7B /* Sample-JSON.json */; };
 		8B9675362C02420D005950FB /* ElonMigoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675352C02420D005950FB /* ElonMigoApp.swift */; };
 		8B9675382C02420D005950FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675372C02420D005950FB /* ContentView.swift */; };
 		8B96753A2C02420D005950FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9675392C02420D005950FB /* Assets.xcassets */; };
 		8B96753D2C02420D005950FB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B96753C2C02420D005950FB /* Preview Assets.xcassets */; };
+		8B9675452C02429E005950FB /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9675442C02429E005950FB /* GoogleGenerativeAI */; };
+		8B9675472C0242E9005950FB /* GeminiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675462C0242E9005950FB /* GeminiAPI.swift */; };
+		8B96754C2C02475F005950FB /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B96754B2C02475F005950FB /* Quiz.swift */; };
+		8B96754E2C024788005950FB /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B96754D2C024788005950FB /* Question.swift */; };
+		8B9675502C0247D8005950FB /* QuestionOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B96754F2C0247D8005950FB /* QuestionOption.swift */; };
+		8B9675522C024834005950FB /* UserAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675512C024834005950FB /* UserAnswer.swift */; };
+		8B9675542C024884005950FB /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9675532C024884005950FB /* Explanation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		782566FB2C02461600FC0E7B /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
-		782566FD2C0246A300FC0E7B /* Sample-JSON.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
 		8B9675322C02420D005950FB /* ElonMigo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElonMigo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9675352C02420D005950FB /* ElonMigoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElonMigoApp.swift; sourceTree = "<group>"; };
 		8B9675372C02420D005950FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8B9675392C02420D005950FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B96753C2C02420D005950FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8B9675462C0242E9005950FB /* GeminiAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiAPI.swift; sourceTree = "<group>"; };
+		8B96754B2C02475F005950FB /* Quiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
+		8B96754D2C024788005950FB /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		8B96754F2C0247D8005950FB /* QuestionOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionOption.swift; sourceTree = "<group>"; };
+		8B9675512C024834005950FB /* UserAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnswer.swift; sourceTree = "<group>"; };
+		8B9675532C024884005950FB /* Explanation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B9675452C02429E005950FB /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,12 +65,12 @@
 		8B9675342C02420D005950FB /* ElonMigo */ = {
 			isa = PBXGroup;
 			children = (
+				8B96754A2C02475A005950FB /* Data */,
 				8B9675352C02420D005950FB /* ElonMigoApp.swift */,
-				782566FD2C0246A300FC0E7B /* Sample-JSON.json */,
 				8B9675372C02420D005950FB /* ContentView.swift */,
-				782566FB2C02461600FC0E7B /* SwiftUIView.swift */,
 				8B9675392C02420D005950FB /* Assets.xcassets */,
 				8B96753B2C02420D005950FB /* Preview Content */,
+				8B9675462C0242E9005950FB /* GeminiAPI.swift */,
 			);
 			path = ElonMigo;
 			sourceTree = "<group>";
@@ -71,6 +81,18 @@
 				8B96753C2C02420D005950FB /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		8B96754A2C02475A005950FB /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				8B96754B2C02475F005950FB /* Quiz.swift */,
+				8B96754D2C024788005950FB /* Question.swift */,
+				8B96754F2C0247D8005950FB /* QuestionOption.swift */,
+				8B9675512C024834005950FB /* UserAnswer.swift */,
+				8B9675532C024884005950FB /* Explanation.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -89,6 +111,9 @@
 			dependencies = (
 			);
 			name = ElonMigo;
+			packageProductDependencies = (
+				8B9675442C02429E005950FB /* GoogleGenerativeAI */,
+			);
 			productName = ElonMigo;
 			productReference = 8B9675322C02420D005950FB /* ElonMigo.app */;
 			productType = "com.apple.product-type.application";
@@ -117,6 +142,9 @@
 				Base,
 			);
 			mainGroup = 8B9675292C02420D005950FB;
+			packageReferences = (
+				8B9675432C02429E005950FB /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+			);
 			productRefGroup = 8B9675332C02420D005950FB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -143,10 +171,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B96754E2C024788005950FB /* Question.swift in Sources */,
 				8B9675382C02420D005950FB /* ContentView.swift in Sources */,
-				782566FE2C0246A300FC0E7B /* Sample-JSON.json in Sources */,
+				8B9675502C0247D8005950FB /* QuestionOption.swift in Sources */,
+				8B9675472C0242E9005950FB /* GeminiAPI.swift in Sources */,
+				8B96754C2C02475F005950FB /* Quiz.swift in Sources */,
+				8B9675522C024834005950FB /* UserAnswer.swift in Sources */,
 				8B9675362C02420D005950FB /* ElonMigoApp.swift in Sources */,
-				782566FC2C02461600FC0E7B /* SwiftUIView.swift in Sources */,
+				8B9675542C024884005950FB /* Explanation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +312,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -309,7 +341,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -352,6 +384,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8B9675432C02429E005950FB /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8B9675442C02429E005950FB /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B9675432C02429E005950FB /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8B96752A2C02420D005950FB /* Project object */;
 }

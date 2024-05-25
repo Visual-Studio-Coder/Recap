@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct ElonMigoApp: App {
+    @AppStorage("apiKey") var apiKey = ""
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
