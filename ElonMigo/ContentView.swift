@@ -11,6 +11,10 @@ import PhotosUI
 struct ContentView: View {
     @AppStorage("apiKey") var apiKey = ""
     
+    @State private var showingSettingsSheet = false
+    
+    @State private var userInput = ""
+    
     // Web Search
     @State private var links = [""]
     
@@ -25,15 +29,6 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                HStack {
-                    SecureField("Top Secret API Key", text: $apiKey)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .border(.black)
-                        .cornerRadius(10.0)
-                        .padding(.horizontal)
-                }
-                
                 HStack {
                     PhotosPicker(selection: $selectedItems, maxSelectionCount: 1, matching: .images) {
                         Label("Select Photos", systemImage: "photo.on.rectangle.angled")
@@ -88,14 +83,55 @@ struct ContentView: View {
                 }
                 
                 Divider()
+                
+                TextField("What would you like to study?", text: $userInput)
+                    .padding()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
+                    .scrollDismissesKeyboard(.interactively)
+                    .padding(.horizontal)
+                
+                Button {} label: {
+                    Label("Generate Quiz", systemImage: "paperplane")
+                }
             }
             .navigationTitle("ElonMigo")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {} label: {
+                    Button {
+                        showingSettingsSheet = true
+                    } label: {
                         Label("Settings", systemImage: "gearshape")
                     }
                 }
+            }
+            .sheet(isPresented: $showingSettingsSheet) {
+                NavigationStack {
+                    Form {
+                        Section {
+                            SecureField("Top Secret Gemini API Key", text: $apiKey)
+                        } header: {
+                            Text("API Key")
+                        } footer: {
+                            Text("**Reminder:** Never share API keys.")
+                        }
+                        
+                        Section("Privacy") {
+                            Toggle("Save Quiz Results", isOn: .constant(true))
+                            Toggle("Improve Gemini for Everyone", isOn: .constant(true))
+                        }
+                    }
+                    .navigationTitle("Settings")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") {
+                                showingSettingsSheet = false
+                            }
+                        }
+                    }
+                }
+                .presentationDetents([.medium, .large])
             }
         }
     }
