@@ -12,7 +12,7 @@ struct ElonMigoApp: App {
     @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
     
     init() {
-        GeminiAPI.`init`(with: apiKey)
+        GeminiAPI.`init`(with: AppSettings.apiKey)
     }
     
     var body: some Scene {

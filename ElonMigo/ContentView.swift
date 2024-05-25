@@ -11,6 +11,14 @@ import PhotosUI
 struct ContentView: View {
     @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
     
+    // Gemini
+    let geminiAPI = GeminiAPI.shared
+    @State private var quiz: Quiz?
+    @State private var showingQuizSheet = false
+    @State private var gemeniGeneratingQuiz = false
+    @State private var showingGeminiAPIAlert = false
+    @State private var showingGeminiFailAlert = false
+    
     @State private var showingSettingsSheet = false
     
     @State private var userInput = ""
@@ -27,20 +35,21 @@ struct ContentView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
     
-    func decodeJSON(from jsonFile: String) -> Quiz? {
-        return try? JSONDecoder().decode(Quiz.self, from: Data(jsonFile.utf8))
+    func decodeJSON(from json: String) -> Quiz? {
+        return try? JSONDecoder().decode(Quiz.self, from: Data(json.utf8))
     }
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack {
+                VStack(alignment: .leading) {
                     TextField("What would you like to study?", text: $userInput)
                         .padding()
                         .clipShape(RoundedRectangle(cornerRadius: 15))
                         .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
                         .scrollDismissesKeyboard(.interactively)
                         .padding(.horizontal)
+                    
                     HStack {
                         Spacer()
                         HStack {
@@ -84,8 +93,32 @@ struct ContentView: View {
                     }
                     .padding([.bottom, .leading, .trailing])
                     
-                    Button {} label: {
-                        Label("Generate Quiz", systemImage: "paperplane")
+                    Button {
+                        print(apiKey)
+                        print(selectedOption)
+                        
+                        if !apiKey.isEmpty {
+                            geminiAPI!.sendMessage(userInput: userInput, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
+                                print(response)
+                                
+                                if let quiz = decodeJSON(from: response) {
+                                    DispatchQueue.main.async {
+                                        self.quiz = quiz
+                                        gemeniGeneratingQuiz = true
+                                    }
+                                } else {
+                                    showingGeminiFailAlert = true
+                                }
+                            }
+                        } else {
+                            showingGeminiAPIAlert = true
+                        }
+                    } label: {
+                        if gemeniGeneratingQuiz {
+                            ProgressView()
+                        }
+                        
+                        Label(gemeniGeneratingQuiz ? "Generating Quiz..." : "Generate Quiz", systemImage: "paperplane")
                             .foregroundStyle(.white)
                             .opacity(userInput.isEmpty ? 0.3 : 1)
                             .frame(maxWidth: .infinity)
@@ -93,8 +126,24 @@ struct ContentView: View {
                             .background(userInput.isEmpty ? Color.accentColor.opacity(0.7) : Color.accentColor)
                             .clipShape(RoundedRectangle(cornerRadius: 15))
                     }
+                    .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0))
                     .padding(.horizontal)
+//                    .onChange(of: gemeniGeneratingQuiz) { status in
+//                        if !status {
+//                            showingQuizSheet = true
+//                        }
+//                    }
+                    
                     Spacer()
+                    
+                    Divider()
+                    
+                    VStack {
+                        Text("Recent Quizzes")
+                            .font(.title)
+                            .bold()
+                    }
+                    .padding(.leading)
                 }
                 .navigationTitle("ElonMigo")
                 .toolbar {
@@ -106,6 +155,13 @@ struct ContentView: View {
                         }
                     }
                 }
+                .alert("To use ElonMigo, enter your API key!", isPresented: $showingGeminiAPIAlert) {}
+                .alert("An unknown error occured while generating the quiz!", isPresented: $showingGeminiFailAlert) {}
+//                .fullScreenCover(isPresented: $showingQuizSheet) {
+//                    if let quiz = quiz {
+//                        QuizView(quiz: quiz)
+//                    }
+//                }
                 .sheet(isPresented: $showingURLSheet) {
                     NavigationStack {
                         Form {
@@ -179,7 +235,6 @@ struct ContentView: View {
                             } header: {
                                 Text("Choose Model")
                             } footer: {
-                                
                                 if selectedOption == "Gemini 1.5 Flash" {
                                     Text("You will receive a **faster response** but not necessarily a smarter, more accurate quiz.")
                                 } else {
