@@ -22,6 +22,7 @@
 		8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E12C02739F00EC5F54 /* AppSettings.swift */; };
 		8B25C4E42C02962800EC5F54 /* Motivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E32C02962800EC5F54 /* Motivation.swift */; };
 		8B9675452C02429E005950FB /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9675442C02429E005950FB /* GoogleGenerativeAI */; };
+		8BF970022C02BC5900B78999 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF970012C02BC5900B78999 /* SplashView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		8B25C4E12C02739F00EC5F54 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8B25C4E32C02962800EC5F54 /* Motivation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motivation.swift; sourceTree = "<group>"; };
 		8B9675322C02420D005950FB /* ElonMigo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElonMigo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BF970012C02BC5900B78999 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				7870100F2C0254AE004CDA60 /* QuizView.swift */,
 				8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */,
+				8BF970012C02BC5900B78999 /* SplashView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 				8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */,
 				787010202C0254AE004CDA60 /* ContentView.swift in Sources */,
 				787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */,
+				8BF970022C02BC5900B78999 /* SplashView.swift in Sources */,
 				8B25C4E42C02962800EC5F54 /* Motivation.swift in Sources */,
 				787010182C0254AE004CDA60 /* Question.swift in Sources */,
 				787010212C0254AE004CDA60 /* ElonMigoApp.swift in Sources */,
