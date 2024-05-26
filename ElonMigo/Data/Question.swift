@@ -9,7 +9,7 @@ import Foundation
 
 struct Option: Codable {
     let text: String
-    let correct: Bool?
+    let correct: Bool
 }
 
 struct Question: Codable {

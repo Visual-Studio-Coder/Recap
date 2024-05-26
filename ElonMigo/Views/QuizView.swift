@@ -3,33 +3,57 @@
 //  ElonMigo
 //
 import SwiftUI
+import ConfettiSwiftUI
 
 struct QuestionView: View {
     let question: Question
-    let answerCallback: (String, Bool) -> Void
+    let answerCallback: ([String], Bool) -> Void
     
-    @Binding var selectedOption: String?
+    @State private var selectedOptions: [String] = []
     @Binding var hasAnswered: Bool?
     
     var body: some View {
         VStack {
             Spacer()
-            
             Text(question.question)
                 .bold()
                 .font(.title)
-                .padding()
-            
+                .padding([.leading, .trailing, .top])
+            Divider()
+                .padding(.horizontal)
+            HStack {
+                Text(question.type == "free_answer" ? "Enter a free response" : question.options?.filter({ $0.correct == true }).count ?? 0 > 1 ? "Select **multiple** answers" : "Select **one** answer")
+                    .font(.subheadline)
+                    .padding(.leading)
+                Spacer()
+            }
             ForEach(question.options ?? [], id: \.text) { option in
                 Button(action: {
                     if !(hasAnswered ?? false) {
-                        selectedOption = option.text
-                        hasAnswered = true
-                        let correctOption = question.options?.first(where: { $0.correct == true })
-                        answerCallback(selectedOption ?? "", selectedOption == correctOption?.text)
+                        if question.options?.filter({ $0.correct == true }).count ?? 0 > 1 {
+                            if selectedOptions.contains(option.text) {
+                                selectedOptions.removeAll(where: { $0 == option.text })
+                            } else {
+                                selectedOptions.append(option.text)
+                            }
+                        } else {
+                            selectedOptions = [option.text]
+                            hasAnswered = true
+                            let allCorrect = selectedOptions.allSatisfy { selectedOption in
+                                question.options?.contains(where: { $0.text == selectedOption && $0.correct }) ?? false
+                            } && question.options?.filter({ $0.correct }).allSatisfy { correctOption in
+                                selectedOptions.contains(correctOption.text)
+                            } ?? false
+                            answerCallback(selectedOptions, allCorrect)
+                        }
                     }
                 }) {
                     HStack {
+                        if question.options?.filter({ $0.correct == true }).count ?? 0 > 1 {
+                            Image(systemName: selectedOptions.contains(option.text) ? "checkmark.square" : "square")
+                                .padding(.trailing)
+                        }
+                        
                         Text(option.text)
                             .multilineTextAlignment(.leading)
                         
@@ -47,12 +71,40 @@ struct QuestionView: View {
                     }
                     .padding()
                 }
+                .onLongPressGesture(minimumDuration: 0, pressing: { inProgress in
+                    if inProgress {
+                        let generator = UIImpactFeedbackGenerator(style: .soft)
+                        generator.impactOccurred()
+                    }
+                }, perform: {})
                 .disabled(hasAnswered ?? false)
                 .buttonStyle(.bordered)
-                .background(selectedOption == option.text ? Color.blue.opacity(0.2) : Color.clear)
+                .background(selectedOptions.contains(option.text) ? Color.blue.opacity(0.2) : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.horizontal)
                 .padding(.vertical, 5)
+            }
+            
+            if question.options?.filter({ $0.correct == true }).count ?? 0 > 1 && !selectedOptions.isEmpty && !(hasAnswered ?? false) {
+                Button(action: {
+                    if !(hasAnswered ?? false) {
+                        hasAnswered = true
+                        let allCorrect = selectedOptions.allSatisfy { selectedOption in
+                            question.options?.contains(where: { $0.text == selectedOption && $0.correct }) ?? false
+                        } && question.options?.filter({ $0.correct }).allSatisfy { correctOption in
+                            selectedOptions.contains(correctOption.text)
+                        } ?? false
+                        answerCallback(selectedOptions, allCorrect)
+                    }
+                }) {
+                    Text("Submit")
+                        .bold()
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                .padding()
             }
             
             Spacer()
@@ -76,9 +128,10 @@ struct QuizView: View {
     @State private var isGenerating = false
     @State private var showPassMotivation = false
     @State private var showFailMotivation = false
+    @State private var confettiCounter = 0
     
     let quiz: Quiz
-    let chatService = GeminiAPI.shared
+    @ObservedObject var chatService = GeminiAPI.shared!
     
     @Binding var showQuiz: Bool
     
@@ -94,6 +147,9 @@ struct QuizView: View {
                     Spacer()
                     
                     Button {
+                        showExplanation.toggle()
+                        chatService.computerResponse = ""
+                        self.explanation = Explanation(question: "", choices: [])
                         let explanationPrompt = Explanation(question: "\(quiz.questions[selectedTab].question)", choices: [Explanation.Choice(answer_option: selectedOptions[selectedTab] ?? "", correct: selectedOptions[selectedTab] == quiz.questions[selectedTab].answer, explanation: "Insert the explanation here for why this is the correct or wrong answer.")])
                         
                         let encoder = JSONEncoder()
@@ -103,24 +159,20 @@ struct QuizView: View {
                             let data = try encoder.encode(explanationPrompt)
                             let jsonString = String(data: data, encoding: .utf8)!
                             
-                            computerResponse = ""
-                            
-                            chatService!.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title",selectedPhotosData: nil, streamContent: false, generateQuiz: false, completion: { response in
-                                let data = Data(response.utf8)
-                                let decoder = JSONDecoder()
-                                
-                                do {
-                                    let partialExplanation = try decoder.decode(Explanation.self, from: data)
-                                    
-                                    self.explanation = partialExplanation
-                                } catch {
-                                    print(error)
+                            chatService.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title",selectedPhotosData: nil, streamContent: true, generateQuiz: false) { response in
+                                DispatchQueue.main.async {
+                                        let data = Data(chatService.computerResponse.utf8)
+                                        let decoder = JSONDecoder()
+                                        
+                                        if let partialExplanation = try? decoder.decode(Explanation.self, from: data) {
+                                            // If the response can be decoded into an Explanation, update explanation and break the loop
+                                            self.explanation = partialExplanation
+                                        } else {
+                                            // If the response can't be decoded into an Explanation, show the raw JSON
+                                            print(String(chatService.computerResponse))
+                                        }
                                 }
-                                
-                                computerResponse = String(response)
-                            })
-                            
-                            showExplanation.toggle()
+                            }
                         } catch {
                             print(error)
                         }
@@ -135,7 +187,7 @@ struct QuizView: View {
                 
                 ScrollView {
                     if quiz.questions[selectedTab].type == "multiple_choice" {
-                        QuestionView(question: quiz.questions[selectedTab], answerCallback: { userAnswer, isCorrect in
+                        QuestionView(question: quiz.questions[selectedTab], answerCallback: { selectedOptions, isCorrect in
                             answeredQuestions += 1
                             
                             if isCorrect {
@@ -145,14 +197,15 @@ struct QuizView: View {
                                 showFailMotivation = true
                             }
                             
-                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: userAnswer, isCorrect: isCorrect))
+                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect))
                             
                             hasAnswered[selectedTab] = true
-                        }, selectedOption: $selectedOptions[selectedTab], hasAnswered: $hasAnswered[selectedTab])
+                        }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab])
                     } else {
                         Text(quiz.questions[selectedTab].question)
                             .bold()
                             .font(.title)
+                            .padding()
                         
                         TextField("Click here to answer...", text: $userInput)
                             .padding(.horizontal)
@@ -168,7 +221,7 @@ struct QuizView: View {
                             correctAnswers += 1
                             answeredQuestions += 1
                             
-                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: userInput, isCorrect: true))
+                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: [userInput], isCorrect: true))
                             
                             showPassMotivation = true
                         }
@@ -190,13 +243,23 @@ struct QuizView: View {
                 
                 QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
                     .frame(height: 10)
+                    .padding(.vertical)
+                HStack {
+                    Spacer()
+                    Text("\(answeredQuestions) of \(quiz.questions.count) questions answered")
+                        .bold()
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                }
+                
+                
             }
             .alert(Motivation.correctMotivation, isPresented: $showPassMotivation) {}
             .alert(Motivation.wrongMotivation, isPresented: $showFailMotivation) {}
             .sheet(isPresented: $showExplanation) {
-                VStack {
+                NavigationStack {
                     VStack {
-                        if let explanationUnwrapped = explanation {
+                        if let explanationUnwrapped = explanation, !explanationUnwrapped.question.isEmpty {
                             Text(explanationUnwrapped.question)
                                 .font(.headline)
                                 .padding()
@@ -219,8 +282,25 @@ struct QuizView: View {
                                     }
                                 }
                             }
+                            .navigationTitle(explanationUnwrapped.question)
+                            .navigationBarTitleDisplayMode(.inline)
+                        } else if !chatService.computerResponse.isEmpty {
+                            Text(quiz.questions[selectedTab].question)
+                                .font(.headline)
+                                .padding()
+                                Form {
+                                    Text("**Parsing Response from Gemini...**")
+                                    Text(chatService.computerResponse)
+                                }
+                                .onChange(of: chatService.computerResponse, { oldValue, newValue in
+                                    let generator = UIImpactFeedbackGenerator(style: .light)
+                                    generator.impactOccurred()
+                                })
                         } else {
-                            ScrollView {
+                            VStack {
+                                Text(quiz.questions[selectedTab].question)
+                                    .font(.headline)
+                                    .padding()
                                 ProgressView()
                                     .controlSize(.extraLarge)
                                     .padding(.top, 25)
@@ -231,7 +311,6 @@ struct QuizView: View {
                             }
                         }
                     }
-                    
                 }
                 .presentationDetents([.medium, .large])
             }
@@ -240,6 +319,9 @@ struct QuizView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.green)
                     .font(.system(size: 200))
+                    .onAppear {
+                        confettiCounter += 1
+                    }
                 
                 Text("🎉")
                     .font(.system(size: 60))
@@ -269,6 +351,7 @@ struct QuizView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
             }
+            .confettiCannon(counter: $confettiCounter)
         }
     }
 }
