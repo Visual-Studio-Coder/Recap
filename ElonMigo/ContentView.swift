@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Kanna
 
 struct ContentView: View {
     @EnvironmentObject var quizStorage: QuizStorage
@@ -50,6 +51,9 @@ struct ContentView: View {
         if showQuiz, let quiz = quiz {
             QuizView(quiz: quiz, showQuiz: $showQuiz)
                 .environmentObject(quizStorage)
+                .onAppear {
+                    gemeniGeneratingQuiz = false
+                }
         } else {
             NavigationStack {
                 ScrollView {
@@ -114,27 +118,53 @@ struct ContentView: View {
                         Button {
                             print(apiKey)
                             print(geminiModel)
-                            
-                            if apiKey != "" {
-                                geminiAPI!.sendMessage(userInput: userInput, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
-                                    print(response)
-                                    print(decodeJSON(from: response))
+
+                            // Create a DispatchGroup to handle multiple asynchronous tasks
+                            let group = DispatchGroup()
+
+                            var websiteContent = ""
+
+                            // Use a regular Swift for loop to iterate over the links array
+                            for link in links {
+                                if let url = URL(string: link) {
+                                    group.enter()
                                     
-                                    do {
-                                        let quiz = try decodeJSON(from: response)
-                                        
-                                        DispatchQueue.main.async {
-                                            self.quiz = quiz
-                                            self.gemeniGeneratingQuiz = true
-                                            self.showQuiz = true
+                                    DispatchQueue.global().async {
+                                        do {
+                                            let contents = try String(contentsOf: url)
+                                            let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+                                            let plainString = atr.string
+                                            websiteContent += plainString
+                                        } catch {
+                                            // contents could not be loaded
                                         }
-                                    } catch {
-                                        print(error)
-                                        showingGeminiFailAlert = true
+                                        group.leave()
                                     }
                                 }
-                            } else {
-                                showingGeminiAPIAlert = true
+                            }
+
+                            group.notify(queue: .main) {
+                                if apiKey != "" {
+                                    let message = userInput + "Attached Website Content:" + websiteContent
+                                    geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
+                                        print(response)
+                                        
+                                        do {
+                                            let quiz = try decodeJSON(from: response)
+                                            
+                                            DispatchQueue.main.async {
+                                                self.quiz = quiz
+                                                self.gemeniGeneratingQuiz = true
+                                                self.showQuiz = true
+                                            }
+                                        } catch {
+                                            print(error)
+                                            self.showingGeminiFailAlert = true
+                                        }
+                                    }
+                                } else {
+                                    self.showingGeminiAPIAlert = true
+                                }
                             }
                         } label: {
                             if gemeniGeneratingQuiz {
@@ -156,7 +186,7 @@ struct ContentView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                             }
                         }
-                        .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0))
+                        .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
                         .padding(.horizontal)
                         
                         Spacer()

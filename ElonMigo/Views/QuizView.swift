@@ -18,6 +18,7 @@ struct QuestionView: View {
             Text(question.question)
                 .bold()
                 .font(.title)
+                .padding()
             
             ForEach(question.options ?? [], id: \.text) { option in
                 Button(action: {
