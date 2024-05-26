@@ -1,5 +1,5 @@
 {
-  "originHash" : "603d777a60e41eb1e4c0965fb7a03d2ae2fb030336327bb350b8c02aa76ec68c",
+  "originHash" : "fb9ac36071f364d419c527ac181073d029907ab8c2d0a2cf5e1dbf2b4a353436",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -8,15 +8,6 @@
       "state" : {
         "revision" : "5d750b80651da9721c37c5eb1fc0b6750d1884d3",
         "version" : "0.5.3"
-      }
-    },
-    {
-      "identity" : "kanna",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tid-kijyun/Kanna.git",
-      "state" : {
-        "revision" : "41c3d28ea0eac07e4551b28def9de1ede702e739",
-        "version" : "5.3.0"
       }
     }
   ],

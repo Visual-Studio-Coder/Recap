@@ -32,7 +32,9 @@ struct QuestionView: View {
                     HStack {
                         Text(option.text)
                             .multilineTextAlignment(.leading)
+                        
                         Spacer()
+                        
                         if hasAnswered ?? false {
                             if option.correct == true {
                                 Image(systemName: "checkmark.circle.fill")
@@ -72,6 +74,8 @@ struct QuizView: View {
     @State private var userInput = ""
     @State private var computerResponse = ""
     @State private var isGenerating = false
+    @State private var showPassMotivation = false
+    @State private var showFailMotivation = false
     
     let quiz: Quiz
     let chatService = GeminiAPI.shared
@@ -136,6 +140,9 @@ struct QuizView: View {
                             
                             if isCorrect {
                                 correctAnswers += 1
+                                showPassMotivation = true
+                            } else {
+                                showFailMotivation = true
                             }
                             
                             userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: userAnswer, isCorrect: isCorrect))
@@ -162,6 +169,8 @@ struct QuizView: View {
                             answeredQuestions += 1
                             
                             userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: userInput, isCorrect: true))
+                            
+                            showPassMotivation = true
                         }
                         
                         selectedTab += 1
@@ -182,6 +191,8 @@ struct QuizView: View {
                 QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
                     .frame(height: 10)
             }
+            .alert(Motivation.correctMotivation, isPresented: $showPassMotivation) {}
+            .alert(Motivation.wrongMotivation, isPresented: $showFailMotivation) {}
             .sheet(isPresented: $showExplanation) {
                 VStack {
                     VStack {
@@ -228,13 +239,13 @@ struct QuizView: View {
             VStack {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.green)
-                    .font(.system(size: 250))
+                    .font(.system(size: 200))
                 
                 Text("🎉")
-                    .font(.system(size: 100))
+                    .font(.system(size: 60))
                 
                 Text("\(100 * correctAnswers / answeredQuestions)%")
-                    .font(.system(size: 150))
+                    .font(.system(size: 100))
                     .bold()
                 
                 Text("\(correctAnswers) out of \(answeredQuestions) correct")
