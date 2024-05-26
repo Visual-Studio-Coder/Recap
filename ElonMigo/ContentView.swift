@@ -11,7 +11,7 @@ import PhotosUI
 struct ContentView: View {
     @EnvironmentObject var quizStorage: QuizStorage
     
-    @AppStorage("apiKey") private var apiKey = ""
+    @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
@@ -23,6 +23,7 @@ struct ContentView: View {
     @State private var showingGeminiAPIAlert = false
     @State private var showingGeminiFailAlert = false
     
+    @State private var showQuiz = false
     @State private var showingSettingsSheet = false
     
     @State private var userInput = ""
@@ -40,18 +41,15 @@ struct ContentView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
     
-    //    func decodeJSON(from json: String) -> Quiz? {
-    //        return try? JSONDecoder().decode(Quiz.self, from: Data(json.utf8))
-    //    }
-    
     func decodeJSON(from jsonString: String) -> Quiz? {
         let jsonData = jsonString.data(using: .utf8)!
-        return try! JSONDecoder().decode(Quiz.self, from: jsonData)
+        return try? JSONDecoder().decode(Quiz.self, from: jsonData)
     }
     
     var body: some View {
-        if let quiz = quiz {
-            QuizView(quiz: quiz)
+        if showQuiz, let quiz = quiz {
+            QuizView(quiz: quiz, showQuiz: $showQuiz)
+                .environmentObject(quizStorage)
         } else {
             NavigationStack {
                 ScrollView {
@@ -113,10 +111,6 @@ struct ContentView: View {
                         }
                         .padding([.bottom, .leading, .trailing])
                         
-#if targetEnvironment(simulator)
-                        Text(apiKey)
-#endif
-                        
                         Button {
                             print(apiKey)
                             print(geminiModel)
@@ -128,13 +122,15 @@ struct ContentView: View {
                                     
                                     do {
                                         let quiz = try decodeJSON(from: response)
+                                        
                                         DispatchQueue.main.async {
                                             self.quiz = quiz
-                                            gemeniGeneratingQuiz = true
+                                            self.gemeniGeneratingQuiz = true
+                                            self.showQuiz = true
                                         }
                                     } catch {
                                         print(error)
-                                        //showingGeminiFailAlert = true
+                                        showingGeminiFailAlert = true
                                     }
                                 }
                             } else {
@@ -142,34 +138,46 @@ struct ContentView: View {
                             }
                         } label: {
                             if gemeniGeneratingQuiz {
-                                ProgressView()
-                            }
-                            
-                            Label(gemeniGeneratingQuiz ? "Generating Quiz..." : "Generate Quiz", systemImage: "paperplane")
+                                HStack {
+                                    ProgressView()
+                                    Text("Generating Quiz...")
+                                }
                                 .foregroundStyle(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(Color.accentColor)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
+                            } else {
+                                Label("Generate Quiz", systemImage: "paperplane")
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.accentColor)
+                                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                            }
                         }
                         .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0))
                         .padding(.horizontal)
                         
                         Spacer()
                         
-                        VStack {
-                            Text("Recent Quizzes")
-                                .font(.title)
-                                .bold()
-                        }
-                        .padding(.leading)
-                        
-                        if quizStorage.history.isEmpty {
-                            Image(systemName: "pencil.and.list.clipboard")
+                        if !quizStorage.history.isEmpty {
+                            VStack {
+                                Text("Recent Quizzes")
+                                    .font(.title)
+                                    .bold()
+                            }
+                            .padding(.leading)
                             
-                            Text("Take a Quiz")
-                            
-                            Text("ElonMigo gives you suggestions when you take a quiz.")
+                            ForEach(quizStorage.history.indices) { i in
+                                HStack {
+                                    Text(quizStorage.history[i].quiz_title)
+                                        .bold()
+                                    
+                                    Text("\(quizStorage.history[i].questions.count) Questions")
+                                }
+                                .padding()
+                            }
                         }
                     }
                     .navigationTitle("ElonMigo")
@@ -249,6 +257,7 @@ struct ContentView: View {
                             .toolbar {
                                 ToolbarItem(placement: .topBarLeading) {
                                     EditButton()
+                                        .disabled(links.isEmpty)
                                 }
                                 
                                 ToolbarItem(placement: .topBarTrailing) {

@@ -4,147 +4,197 @@
 //
 import SwiftUI
 
-struct QuizView: View {
-    let quiz: Quiz
-    let geminiAPI = GeminiAPI.shared
+struct QuestionView: View {
+    let question: Question
+    let answerCallback: (String, Bool) -> Void
     
-    @State var selectedTab = 0
-    
-    @State private var selectedIndex = -1
-    @State private var submittedQuestion = false
-    
-    @State private var geminiResponse = ""
-    @State private var explanation = Explanation(question: "", choices: [])
-    @State private var showExplanationSheet = false
+    @Binding var selectedOption: String?
+    @Binding var hasAnswered: Bool?
     
     var body: some View {
         VStack {
-            ScrollView {
-                Text(quiz.questions[selectedTab].question)
-                    .font(.largeTitle)
-                    .bold()
-                
-                Spacer()
-                
-                if let arr = quiz.questions[selectedTab].options {
-                    ForEach(Array(zip(arr.indices, arr)), id: \.0) { index, option in
-                        if quiz.questions[selectedTab].type == "multiple_choice" {
-                            Button {
-                                selectedIndex = index
-                            } label: {
-                                HStack {
-                                    if submittedQuestion {
-                                        if option.correct ?? false {
-                                            Image(systemName: "checkmark.circle")
-                                                .foregroundStyle(.green)
-                                        } else {
-                                            Image(systemName: "xmark.circle")
-                                                .foregroundStyle(.red)
-                                        }
-                                    }
-                                    
-                                    Text(option.text)
-                                        .font(.title3)
-                                    
-                                    Spacer()
-                                }
-                                .padding(.leading, 15)
+            Spacer()
+            
+            Text(question.question)
+                .bold()
+                .font(.title)
+            
+            ForEach(question.options ?? [], id: \.text) { option in
+                Button(action: {
+                    if !(hasAnswered ?? false) {
+                        selectedOption = option.text
+                        hasAnswered = true
+                        let correctOption = question.options?.first(where: { $0.correct == true })
+                        answerCallback(selectedOption ?? "", selectedOption == correctOption?.text)
+                    }
+                }) {
+                    HStack {
+                        Text(option.text)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                        if hasAnswered ?? false {
+                            if option.correct == true {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                            } else if option.correct == false {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.red)
                             }
-                            .disabled(submittedQuestion)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
-                            .background(index == selectedIndex ? .green : .secondary.opacity(0.2))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .padding(.vertical, 2)
-                            .padding(.horizontal)
-                            .opacity((submittedQuestion && index != selectedIndex) ? 0.6 : 1)
-                        } else {
-                            TextField("Your answer", text: .constant(""))
-                                .padding()
                         }
                     }
-                }
-            }
-            
-            //            if submittedQuestion {
-            //                Button {
-            //                    selectedIndex = -1
-            //                    submittedQuestion = false
-            //                } label: {
-            //                    Label("Try again", systemImage: "arrow.circlepath")
-            //                }
-            //            }
-            
-            //            Button {
-            //                let explanationPrompt = Explanation(question: "\(quiz.questions[selectedTab].question)", choices: [Explanation.UserChoice(answerOption: quiz.questions[selectedTab].userSelection, correct: quiz.questions[selectedTab].userSelection == quiz.questions[selectedTab].answer, explanation: "Insert the explanation here for why this is the correct or wrong answer.")])
-            //
-            //                let encoder = JSONEncoder()
-            //                encoder.outputFormatting = .prettyPrinted
-            //
-            //                do {
-            //                    let data = try encoder.encode(explanationPrompt)
-            //                    let jsonString = String(data: data, encoding: .utf8)!
-            //                    geminiResponse = ""
-            //                    geminiAPI!.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title", selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
-            //                        let data = Data(response.utf8)
-            //                        let decoder = JSONDecoder()
-            //
-            //                        do {
-            //                            let partialExplanation = try decoder.decode(Explanation.self, from: data)
-            //                            self.explanation = partialExplanation
-            //                        } catch {
-            //                            print(error)
-            //                        }
-            //
-            //                        geminiResponse = String(response)
-            //                    })
-            //
-            //                    showExplanationSheet = true
-            //                } catch {
-            //                    print(error)
-            //                }
-            //            } label: {
-            //                Label("Explain", systemImage: "sparkles")
-            //            }
-            //            .symbolEffect(.bounce, value: showExplanationSheet)
-            //            .buttonBorderShape(.capsule)
-            //            .buttonStyle(.bordered)
-            
-            Button {
-                if submittedQuestion {
-                    selectedTab += 1
-                    selectedIndex = -1
-                    submittedQuestion = false
-                } else {
-                    submittedQuestion = true
-                }
-            } label: {
-                Text(submittedQuestion ? "Next" : "Submit")
-                    .foregroundStyle(.white)
-                    .opacity(selectedIndex == -1 ? 0.3 : 1)
-                    .frame(maxWidth: .infinity)
                     .padding()
-                    .background(selectedIndex == -1 ? Color.accentColor.opacity(0.7) : Color.accentColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
+                .disabled(hasAnswered ?? false)
+                .buttonStyle(.bordered)
+                .background(selectedOption == option.text ? Color.blue.opacity(0.2) : Color.clear)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding(.horizontal)
+                .padding(.vertical, 5)
             }
-            .padding(.horizontal)
-            .sheet(isPresented: $showExplanationSheet) {
-                NavigationStack {
-                    VStack {
-                        if explanation.choices.isEmpty {
-                            ProgressView()
-                                .controlSize(.extraLarge)
+            
+            Spacer()
+        }
+    }
+}
+
+struct QuizView: View {
+    @EnvironmentObject var quizStorage: QuizStorage
+    
+    @State private var selectedTab = 0
+    @State private var correctAnswers = 0
+    @State private var answeredQuestions = 0
+    @State private var selectedOptions = [Int: String]()
+    @State private var hasAnswered = [Int: Bool]()
+    @State private var userAnswers = [UserAnswer]()
+    @State private var showExplanation = false
+    @State private var explanation: Explanation?
+    @State private var userInput = ""
+    @State private var computerResponse = ""
+    @State private var isGenerating = false
+    
+    let quiz: Quiz
+    let chatService = GeminiAPI.shared
+    
+    @Binding var showQuiz: Bool
+    
+    var body: some View {
+        if selectedTab < quiz.questions.count {
+            VStack(alignment: .leading) {
+                HStack {
+                    Text(quiz.quiz_title)
+                        .bold()
+                        .padding()
+                        .lineLimit(1)
+                    
+                    Spacer()
+                    
+                    Button {
+                        let explanationPrompt = Explanation(question: "\(quiz.questions[selectedTab].question)", choices: [Explanation.Choice(answer_option: selectedOptions[selectedTab] ?? "", correct: selectedOptions[selectedTab] == quiz.questions[selectedTab].answer, explanation: "Insert the explanation here for why this is the correct or wrong answer.")])
+                        
+                        let encoder = JSONEncoder()
+                        encoder.outputFormatting = .prettyPrinted
+                        
+                        do {
+                            let data = try encoder.encode(explanationPrompt)
+                            let jsonString = String(data: data, encoding: .utf8)!
                             
-                            Text("Loading...")
-                                .padding(.top)
-                        } else {
+                            computerResponse = ""
+                            
+                            chatService!.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title",selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
+                                let data = Data(response.utf8)
+                                let decoder = JSONDecoder()
+                                
+                                do {
+                                    let partialExplanation = try decoder.decode(Explanation.self, from: data)
+                                    
+                                    self.explanation = partialExplanation
+                                } catch {
+                                    print(error)
+                                }
+                                
+                                computerResponse = String(response)
+                            })
+                            
+                            showExplanation.toggle()
+                        } catch {
+                            print(error)
+                        }
+                    } label: {
+                        Label("Explain", systemImage: "sparkle")
+                    }
+                    .symbolEffect(.bounce, value: showExplanation)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+                    .padding(.horizontal)
+                }
+                
+                ScrollView {
+                    if quiz.questions[selectedTab].type == "multiple_choice" {
+                        QuestionView(question: quiz.questions[selectedTab], answerCallback: { userAnswer, isCorrect in
+                            answeredQuestions += 1
+                            
+                            if isCorrect {
+                                correctAnswers += 1
+                            }
+                            
+                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: userAnswer, isCorrect: isCorrect))
+                            
+                            hasAnswered[selectedTab] = true
+                        }, selectedOption: $selectedOptions[selectedTab], hasAnswered: $hasAnswered[selectedTab])
+                    } else {
+                        Text(quiz.questions[selectedTab].question)
+                            .bold()
+                            .font(.title)
+                        
+                        TextField("Click here to answer...", text: $userInput)
+                            .padding(.horizontal)
+                            .onChange(of: userInput) {
+                                hasAnswered[selectedTab] = !userInput.isEmpty
+                            }
+                    }
+                }
+                
+                Button {
+                    withAnimation {
+                        if quiz.questions[selectedTab].type != "multiple_choice" {
+                            correctAnswers += 1
+                            answeredQuestions += 1
+                            
+                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: userInput, isCorrect: true))
+                        }
+                        
+                        selectedTab += 1
+                    }
+                } label: {
+                    Spacer()
+                    
+                    Text("Next")
+                        .bold()
+                        .padding(6)
+                    
+                    Spacer()
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.horizontal)
+                .disabled(hasAnswered[selectedTab] == nil)
+                
+                QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
+                    .frame(height: 10)
+            }
+            .sheet(isPresented: $showExplanation) {
+                VStack {
+                    VStack {
+                        if let explanationUnwrapped = explanation {
+                            Text(explanationUnwrapped.question)
+                                .font(.headline)
+                                .padding()
                             Form {
-                                ForEach(explanation.choices, id: \.explanation) { i in
+                                ForEach(explanationUnwrapped.choices, id: \.answer_option) { choice in
                                     Section {
                                         Label {
-                                            Text(i.answer_option)
+                                            Text("\(choice.answer_option)")
                                         } icon: {
-                                            if i.correct {
+                                            if choice.correct {
                                                 Image(systemName: "checkmark.circle.fill")
                                                     .foregroundStyle(.green)
                                             } else {
@@ -153,29 +203,64 @@ struct QuizView: View {
                                             }
                                         }
                                         
-                                        Text(i.explanation)
+                                        Text(choice.explanation)
                                     }
                                 }
                             }
-                        }
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button("Done") {
-                                showExplanationSheet = false
+                        } else {
+                            ScrollView {
+                                ProgressView()
+                                    .controlSize(.extraLarge)
+                                    .padding(.top, 25)
+                                
+                                Text("Generating explanation...")
+                                    .bold()
+                                    .padding(.top)
                             }
                         }
                     }
+                    
                 }
+                .presentationDetents([.medium, .large])
             }
-            
-            QuizProgressBar(current: Float(submittedQuestion ? selectedTab + 1 : selectedTab), total: Float(quiz.questions.count))
-            
-            Text("\(selectedTab) out of \(quiz.questions.count) answered")
+        } else {
+            VStack {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+                    .font(.system(size: 250))
+                
+                Text("🎉")
+                    .font(.system(size: 100))
+                
+                Text("\(100 * correctAnswers / answeredQuestions)%")
+                    .font(.system(size: 150))
+                    .bold()
+                
+                Text("\(correctAnswers) out of \(answeredQuestions) correct")
+                
+                Spacer()
+                
+                Button {
+                    withAnimation {
+                        quizStorage.history.append(quiz)
+                        showQuiz = false
+                    }
+                } label: {
+                    Spacer()
+                    
+                    Text("Done")
+                        .bold()
+                        .padding(6)
+                    
+                    Spacer()
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.horizontal)
+            }
         }
     }
 }
 
 #Preview {
-    QuizView(quiz: Quiz(title: "Quiz 1", questions: [Question(type: "multiple_choice", question: "Select Elon Musk #1", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Jeff Bezos #2", options: [Option(text: "Elon Musk", correct: false), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: true), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Elon Musk #3", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk")]))
+    QuizView(quiz: Quiz(quiz_title: "Long Quiz Title Long Quiz Title", questions: [Question(type: "free_answer", question: "Explain how Elon Musk bought X.", options: [], answer: ""), Question(type: "multiple_choice", question: "Select Elon Musk #1", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Jeff Bezos #2", options: [Option(text: "Elon Musk", correct: false), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: true), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Elon Musk #3", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk")]), showQuiz: .constant(true))
 }
