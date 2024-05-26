@@ -1,5 +1,7 @@
 # ElonMigo
 
+## Made with 💖 & 😀 by [Aaron Ma](https://github.com/aaronhma) & [Vaibhav Satishkumar](https://github.com/Visual-Studio-Coder)
+
 [View our DevPost submission ↗](https://devpost.com/software/elonmigo)
 
 ![AppIcon](https://github.com/aaronhma/ElonMigo/blob/master/ElonMigo/Assets.xcassets/AppIcon.appiconset/ElonMigo.png)
