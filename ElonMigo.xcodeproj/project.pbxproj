@@ -18,7 +18,6 @@
 		787010212C0254AE004CDA60 /* ElonMigoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010132C0254AE004CDA60 /* ElonMigoApp.swift */; };
 		787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010142C0254AE004CDA60 /* GeminiAPI.swift */; };
 		787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 787010152C0254AE004CDA60 /* Sample-JSON.json */; };
-		787010312C02C57A004CDA60 /* Kanna in Frameworks */ = {isa = PBXBuildFile; productRef = 787010302C02C57A004CDA60 /* Kanna */; };
 		8B25C4DC2C02654D00EC5F54 /* QuizProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */; };
 		8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E12C02739F00EC5F54 /* AppSettings.swift */; };
 		8B25C4E42C02962800EC5F54 /* Motivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E32C02962800EC5F54 /* Motivation.swift */; };
@@ -50,7 +49,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				787010312C02C57A004CDA60 /* Kanna in Frameworks */,
 				8B9675452C02429E005950FB /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,7 +136,6 @@
 			name = ElonMigo;
 			packageProductDependencies = (
 				8B9675442C02429E005950FB /* GoogleGenerativeAI */,
-				787010302C02C57A004CDA60 /* Kanna */,
 			);
 			productName = ElonMigo;
 			productReference = 8B9675322C02420D005950FB /* ElonMigo.app */;
@@ -170,7 +167,6 @@
 			mainGroup = 8B9675292C02420D005950FB;
 			packageReferences = (
 				8B9675432C02429E005950FB /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
-				7870102F2C02C57A004CDA60 /* XCRemoteSwiftPackageReference "Kanna" */,
 			);
 			productRefGroup = 8B9675332C02420D005950FB /* Products */;
 			projectDirPath = "";
@@ -344,7 +340,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 420;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
@@ -363,11 +359,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -379,7 +375,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 420;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
@@ -398,11 +394,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -430,14 +426,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7870102F2C02C57A004CDA60 /* XCRemoteSwiftPackageReference "Kanna" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tid-kijyun/Kanna.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.3.0;
-			};
-		};
 		8B9675432C02429E005950FB /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/generative-ai-swift";
@@ -449,11 +437,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		787010302C02C57A004CDA60 /* Kanna */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7870102F2C02C57A004CDA60 /* XCRemoteSwiftPackageReference "Kanna" */;
-			productName = Kanna;
-		};
 		8B9675442C02429E005950FB /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8B9675432C02429E005950FB /* XCRemoteSwiftPackageReference "generative-ai-swift" */;

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import PhotosUI
-import Kanna
+//import Kanna
 
 struct ContentView: View {
     @EnvironmentObject var quizStorage: QuizStorage
