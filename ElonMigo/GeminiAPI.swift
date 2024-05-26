@@ -1,7 +1,7 @@
 import GoogleGenerativeAI
 import UIKit
 
-class GeminiAPI {
+class GeminiAPI: ObservableObject {
     
     static var shared: GeminiAPI? = nil
     
@@ -63,24 +63,38 @@ class GeminiAPI {
         if streamContent {
             Task {
                 do {
+                    var validJsonReceived = false
                     if let imagesData = selectedPhotosData {
                         let response = try await chat.sendMessageStream(
                             "Notes:", userInput,
                             imagesData.compactMap { data in
                                 UIImage(data: data)
                             })
-                        //print("geminiInteraction log:", response.text ?? "No response received")
                         
                         for try await chunk in response {
+                            if validJsonReceived {
+                                break
+                            }
+                            
                             if let text = chunk.text {
-                                print(text)
-                                self.computerResponse += text
+                                DispatchQueue.main.async {
+                                    self.computerResponse += text
+                                    print(self.computerResponse)
+                                }
                             }
-                            DispatchQueue.main.async {
-                                completion(self.computerResponse)
-                                
+                            
+                            let data = Data(self.computerResponse.utf8)
+                            let decoder = JSONDecoder()
+                            
+                            // Try decoding the computerResponse into an Explanation
+                            if let _ = try? decoder.decode(Explanation.self, from: data) {
+                                // If it's successful, set validJsonReceived to true
+                                validJsonReceived = true
                             }
-                            //self.computerResponse = response.text ?? "No response received"
+                        }
+                        
+                        DispatchQueue.main.async {
+                            completion(self.computerResponse)
                         }
                         
                     } else {
@@ -89,15 +103,29 @@ class GeminiAPI {
                             quizPrompt
                         )
                         for try await chunk in response {
+                            if validJsonReceived {
+                                break
+                            }
+                            
                             if let text = chunk.text {
-                                print(text)
-                                self.computerResponse += text
+                                DispatchQueue.main.async {
+                                    self.computerResponse += text
+                                    print(self.computerResponse)
+                                }
                             }
-                            DispatchQueue.main.async {
-                                completion(self.computerResponse)
-                                
+                            
+                            let data = Data(self.computerResponse.utf8)
+                            let decoder = JSONDecoder()
+                            
+                            // Try decoding the computerResponse into an Explanation
+                            if let _ = try? decoder.decode(Explanation.self, from: data) {
+                                // If it's successful, set validJsonReceived to true
+                                validJsonReceived = true
                             }
-                            //self.computerResponse = response.text ?? "No response received"
+                        }
+                        
+                        DispatchQueue.main.async {
+                            completion(self.computerResponse)
                         }
                     }
                 } catch {
@@ -107,6 +135,7 @@ class GeminiAPI {
                     }
                 }
             }
+        
         } else {
             
             Task {
