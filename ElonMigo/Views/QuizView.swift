@@ -101,7 +101,7 @@ struct QuizView: View {
                             
                             computerResponse = ""
                             
-                            chatService!.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title",selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
+                            chatService!.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title",selectedPhotosData: nil, streamContent: false, generateQuiz: false, completion: { response in
                                 let data = Data(response.utf8)
                                 let decoder = JSONDecoder()
                                 
