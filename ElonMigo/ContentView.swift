@@ -183,10 +183,12 @@ struct ContentView: View {
                                         } catch {
                                             print(error)
                                             self.showingGeminiFailAlert = true
+                                            gemeniGeneratingQuiz = false
                                         }
                                     }
                                 } else {
                                     self.showingGeminiAPIAlert = true
+                                    gemeniGeneratingQuiz = false
                                 }
                             }
                         } label: {
@@ -223,7 +225,12 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .alert("To use ElonMigo, enter your API key!", isPresented: $showingGeminiAPIAlert) {}
+                    .alert("To use ElonMigo, enter your API key!", isPresented: $showingGeminiAPIAlert) {
+                        Button("Open Settings") {
+                            showingSettingsSheet.toggle()
+                        }
+                    }
+
                     .alert("An unknown error occured while generating the quiz!", isPresented: $showingGeminiFailAlert) {}
                     //                .fullScreenCover(isPresented: $showingQuizSheet) {
                     //                    if let quiz = quiz {
