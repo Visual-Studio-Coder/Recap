@@ -57,8 +57,29 @@ struct ContentView: View {
         } else {
             NavigationStack {
                 ScrollView {
+                    if !quizStorage.history.isEmpty {
+                        VStack {
+                            Text("Recent Quizzes")
+                                .font(.title)
+                                .bold()
+                        }
+                        .padding(.leading)
+                        List {
+                            ForEach(quizStorage.history.indices) { i in
+                                VStack {
+                                    Text(quizStorage.history[i].quiz_title)
+                                        .bold()
+                                    
+                                    Text("\(quizStorage.history[i].questions.count) Questions")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .padding()
+                            }
+                        }
+                    }
                     VStack(alignment: .leading) {
-                        TextField("What would you like to study?", text: $userInput)
+                        Spacer()
+                        TextField("What would you like to quiz yourself on?", text: $userInput)
                             .padding()
                             .clipShape(RoundedRectangle(cornerRadius: 15))
                             .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
@@ -188,27 +209,6 @@ struct ContentView: View {
                         }
                         .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
                         .padding(.horizontal)
-                        
-                        Spacer()
-                        
-                        if !quizStorage.history.isEmpty {
-                            VStack {
-                                Text("Recent Quizzes")
-                                    .font(.title)
-                                    .bold()
-                            }
-                            .padding(.leading)
-                            
-                            ForEach(quizStorage.history.indices) { i in
-                                HStack {
-                                    Text(quizStorage.history[i].quiz_title)
-                                        .bold()
-                                    
-                                    Text("\(quizStorage.history[i].questions.count) Questions")
-                                }
-                                .padding()
-                            }
-                        }
                     }
                     .navigationTitle("ElonMigo")
                     .navigationBarTitleDisplayMode(.inline)
