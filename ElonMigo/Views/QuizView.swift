@@ -315,14 +315,8 @@ struct QuizView: View {
                 .presentationDetents([.medium, .large])
             }
         } else {
+            //ScrollView {
             VStack {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
-                    .font(.system(size: 200))
-                    .onAppear {
-                        confettiCounter += 1
-                    }
-                
                 Text("🎉")
                     .font(.system(size: 60))
                 
@@ -331,6 +325,72 @@ struct QuizView: View {
                     .bold()
                 
                 Text("\(correctAnswers) out of \(answeredQuestions) correct")
+                //button to share results:
+                Button {
+                    //use sharelink in swiftui
+                } label: {
+                    Spacer()
+                    
+                    Text("Share Results")
+                        .bold()
+                        .padding(6)
+                    
+                    Spacer()
+                }                
+                //make it so i can see ALL the answers, which one I selected, and which one's were correct
+                Form {
+                    ForEach(userAnswers, id: \.question.question) { userAnswer in
+                        Section {
+                            VStack {
+                                HStack {
+                                    //did they get it correct or incorrect
+                                    if userAnswer.isCorrect {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundStyle(.green)
+                                        Text("You got this question correct!")
+                                    } else {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundStyle(.red)
+                                        Text("You got this question incorrect.")
+                                    }
+                                    Spacer()
+                                    Text("Question \(userAnswers.firstIndex(where: { $0.question.question == userAnswer.question.question })! + 1)")
+                                        .bold()
+                                        .foregroundStyle(.secondary)
+                                        .font(.footnote)
+                                        .multilineTextAlignment(.leading)
+                                }
+                                Text(userAnswer.question.question)
+                                    .bold()
+                            }
+                            if userAnswer.question.type == "multiple_choice" {
+                                ForEach(userAnswer.question.options ?? [], id: \.text) { option in
+                                    HStack {
+                                        Text(option.text)
+                                        Spacer()
+                                        if userAnswer.userAnswer.contains(option.text) {
+                                            if option.correct {
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .foregroundStyle(.green)
+                                            } else {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundStyle(.red)
+                                            }
+                                        } else if option.correct {
+                                            Image(systemName: "checkmark.circle")
+                                                .foregroundStyle(.green)
+                                        } else {
+                                            Image(systemName: "circle")
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+                            } else {
+                                Text(userAnswer.userAnswer.joined(separator: ", "))
+                            }
+                        }
+                    }
+                }
                 
                 Spacer()
                 
@@ -352,6 +412,7 @@ struct QuizView: View {
                 .padding(.horizontal)
             }
             .confettiCannon(counter: $confettiCounter)
+        //}
         }
     }
 }
