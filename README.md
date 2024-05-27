@@ -20,7 +20,8 @@
 
 ## Why us?
 - We are the first quizzing iOS app to use Gemini's large context window to deliver you accurate quizzes.
-- We are closing the financial gap by making this free to use more accessible than ever before.
+- We are closing the financial gap by making this free to use more and more accessible than ever before.
+- We care about your privacy
 
 ## Disclaimers
 - In no way are we associated with Elon Musk or KhanMigo
