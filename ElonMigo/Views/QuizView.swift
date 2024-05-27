@@ -348,10 +348,18 @@ struct QuizView: View {
                                         Image(systemName: "checkmark.circle.fill")
                                             .foregroundStyle(.green)
                                         Text("You got this question correct!")
+                                        .bold()
+                                        .foregroundStyle(.secondary)
+                                        .font(.footnote)
+                                        .multilineTextAlignment(.leading)
                                     } else {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundStyle(.red)
                                         Text("You got this question incorrect.")
+                                        .bold()
+                                        .foregroundStyle(.secondary)
+                                        .font(.footnote)
+                                        .multilineTextAlignment(.leading)
                                     }
                                     Spacer()
                                     Text("Question \(userAnswers.firstIndex(where: { $0.question.question == userAnswer.question.question })! + 1)")
@@ -362,6 +370,7 @@ struct QuizView: View {
                                 }
                                 Text(userAnswer.question.question)
                                     .bold()
+                                    .multilineTextAlignment(.leading)
                             }
                             if userAnswer.question.type == "multiple_choice" {
                                 ForEach(userAnswer.question.options ?? [], id: \.text) { option in
