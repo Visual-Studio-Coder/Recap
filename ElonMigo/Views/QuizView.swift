@@ -15,10 +15,13 @@ struct QuestionView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text(question.question)
-                .bold()
-                .font(.title)
-                .padding([.leading, .trailing, .top])
+            HStack {
+                Text(question.question)
+                    .bold()
+                    .font(.title)
+                    .padding([.leading, .trailing, .top])
+                Spacer()
+            }
             Divider()
                 .padding(.horizontal)
             HStack {
@@ -368,9 +371,13 @@ struct QuizView: View {
                                         .font(.footnote)
                                         .multilineTextAlignment(.leading)
                                 }
-                                Text(userAnswer.question.question)
-                                    .bold()
-                                    .multilineTextAlignment(.leading)
+                                HStack {
+                                    Text(userAnswer.question.question)
+                                        .bold()
+                                        .multilineTextAlignment(.leading)
+                                    Spacer()
+                                }
+                                .padding(.vertical)
                             }
                             if userAnswer.question.type == "multiple_choice" {
                                 ForEach(userAnswer.question.options ?? [], id: \.text) { option in
