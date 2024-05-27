@@ -344,7 +344,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 420;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = L3P446LNNP;
+				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
@@ -359,7 +359,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.6.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aaronhma.ElonMigo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.click.ElonMigo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -379,7 +379,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 420;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = L3P446LNNP;
+				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
@@ -394,7 +394,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.6.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aaronhma.ElonMigo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.click.ElonMigo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
