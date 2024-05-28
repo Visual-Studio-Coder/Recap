@@ -205,10 +205,13 @@ struct QuizView: View {
                             hasAnswered[selectedTab] = true
                         }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab])
                     } else {
-                        Text(quiz.questions[selectedTab].question)
-                            .bold()
-                            .font(.title)
-                            .padding()
+                        HStack {
+                            Text(quiz.questions[selectedTab].question)
+                                .bold()
+                                .font(.title)
+                                .padding()
+                            Spacer()
+                        }
                         
                         TextField("Click here to answer...", text: $userInput)
                             .padding(.horizontal)
@@ -231,6 +234,8 @@ struct QuizView: View {
                         
                         selectedTab += 1
                     }
+                    selectedOptions = [:]
+                    userInput = ""
                 } label: {
                     Spacer()
                     
@@ -285,8 +290,6 @@ struct QuizView: View {
                                     }
                                 }
                             }
-                            .navigationTitle(explanationUnwrapped.question)
-                            .navigationBarTitleDisplayMode(.inline)
                         } else if !chatService.computerResponse.isEmpty {
                             Text(quiz.questions[selectedTab].question)
                                 .font(.headline)
@@ -311,6 +314,7 @@ struct QuizView: View {
                                 Text("Generating explanation...")
                                     .bold()
                                     .padding(.top)
+                                Spacer()
                             }
                         }
                     }
@@ -340,7 +344,9 @@ struct QuizView: View {
                     
                     Spacer()
                 }                
-                //make it so i can see ALL the answers, which one I selected, and which one's were correct
+                .onAppear {
+                    confettiCounter += 1
+                }
                 Form {
                     ForEach(userAnswers, id: \.question.question) { userAnswer in
                         Section {
