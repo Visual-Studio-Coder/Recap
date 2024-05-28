@@ -326,6 +326,7 @@ struct QuizView: View {
             VStack {
                 Text("🎉")
                     .font(.system(size: 60))
+                    .confettiCannon(counter: $confettiCounter)
                 
                 Text("\(100 * correctAnswers / answeredQuestions)%")
                     .font(.system(size: 100))
@@ -433,7 +434,6 @@ struct QuizView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
             }
-            .confettiCannon(counter: $confettiCounter)
         //}
         }
     }
