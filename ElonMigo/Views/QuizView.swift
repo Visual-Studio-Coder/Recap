@@ -142,10 +142,21 @@ struct QuizView: View {
         if selectedTab < quiz.questions.count {
             VStack(alignment: .leading) {
                 HStack {
-                    Text(quiz.quiz_title)
-                        .bold()
-                        .padding()
-                        .lineLimit(1)
+                    //show quiz title in menu on tap
+                    Menu {
+                        Button {
+                            //do nothing
+                        } label: {
+                            Text(quiz.quiz_title)
+                                .bold()
+                        }
+                    } label: {
+                        Text(quiz.quiz_title)
+                            .bold()
+                            .padding()
+                            .lineLimit(1)
+                            .foregroundStyle(.primary)
+                    }
                     
                     Spacer()
                     
@@ -295,8 +306,16 @@ struct QuizView: View {
                                 .font(.headline)
                                 .padding()
                                 Form {
-                                    Text("**Parsing Response from Gemini...**")
-                                    Text(chatService.computerResponse)
+                                    Text("**Formatting Response from Gemini...**")
+                                    Text(chatService.computerResponse
+                                        .replacingOccurrences(of: "}", with: "")
+                                        .replacingOccurrences(of: "{", with: "")
+                                        .replacingOccurrences(of: ":", with: "")
+                                        .replacingOccurrences(of: "\"", with: "")
+                                        .replacingOccurrences(of: "]", with: "")
+                                        .replacingOccurrences(of: "[", with: "")
+                                        .replacingOccurrences(of: "\n", with: "")
+                                        .replacingOccurrences(of: " ", with: ""))
                                 }
                                 .onChange(of: chatService.computerResponse, { oldValue, newValue in
                                     let generator = UIImpactFeedbackGenerator(style: .light)
