@@ -66,7 +66,7 @@ struct ContentView: View {
                                 .bold()
                         }
                         .padding(.leading)
-                        List {
+                        //List {
                             ForEach(quizStorage.history.indices) { i in
                                 VStack {
                                     Text(quizStorage.history[i].quiz_title)
@@ -77,7 +77,7 @@ struct ContentView: View {
                                 }
                                 .padding()
                             }
-                        }
+                        //}
                     }
                     VStack(alignment: .leading) {
                         Spacer()
@@ -232,11 +232,6 @@ struct ContentView: View {
                     }
 
                     .alert("An unknown error occured while generating the quiz!", isPresented: $showingGeminiFailAlert) {}
-                    //                .fullScreenCover(isPresented: $showingQuizSheet) {
-                    //                    if let quiz = quiz {
-                    //                        QuizView(quiz: quiz)
-                    //                    }
-                    //                }
                     .sheet(isPresented: $showingQuizCustomizationSheet) {
                         NavigationStack {
                             Form {
