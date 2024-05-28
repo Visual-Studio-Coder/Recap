@@ -306,16 +306,8 @@ struct QuizView: View {
                                 .font(.headline)
                                 .padding()
                                 Form {
-                                    Text("**Formatting Response from Gemini...**")
-                                    Text(chatService.computerResponse
-                                        .replacingOccurrences(of: "}", with: "")
-                                        .replacingOccurrences(of: "{", with: "")
-                                        .replacingOccurrences(of: ":", with: "")
-                                        .replacingOccurrences(of: "\"", with: "")
-                                        .replacingOccurrences(of: "]", with: "")
-                                        .replacingOccurrences(of: "[", with: "")
-                                        .replacingOccurrences(of: "\n", with: "")
-                                        .replacingOccurrences(of: " ", with: ""))
+                                    Text("**Receiving Response from Gemini...**")
+                                    Text(chatService.computerResponse)
                                 }
                                 .onChange(of: chatService.computerResponse, { oldValue, newValue in
                                     let generator = UIImpactFeedbackGenerator(style: .light)
