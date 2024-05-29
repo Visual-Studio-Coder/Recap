@@ -110,10 +110,10 @@ struct ContentView: View {
                             }
                             .buttonStyle(.bordered)
                             .clipShape(RoundedRectangle(cornerRadius: 100))
-                            .onChange(of: selectedItems) { items in
+                            .onChange(of: selectedItems) {
                                 selectedPhotosData = []
                                 
-                                for i in items {
+                                for i in selectedItems {
                                     Task {
                                         if let data = try? await i.loadTransferable(type: Data.self) {
                                             selectedPhotosData.append(data)
@@ -174,7 +174,7 @@ struct ContentView: View {
                                         print(response)
                                         
                                         do {
-                                            let quiz = try decodeJSON(from: response)
+                                            let quiz = decodeJSON(from: response)
                                             
                                             DispatchQueue.main.async {
                                                 self.quiz = quiz
