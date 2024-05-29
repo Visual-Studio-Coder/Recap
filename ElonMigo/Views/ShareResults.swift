@@ -55,7 +55,7 @@ struct ShareResults: View {
                                 }
                                 Divider()
                                 HStack {
-                                    Text("Incorrect")
+                                    Text("Total Questions")
                                         .foregroundStyle(.secondary)
                                         .font(.caption)
                                     Spacer()
@@ -70,21 +70,23 @@ struct ShareResults: View {
                         .foregroundColor(.white)
                         .padding()
                     }
-                    .padding()
-                    //.padding([.leading, .trailing, .top])
+                    //.padding()
+                    
             }
+            .padding([.leading, .trailing, .top])
             
             Label {
                 Text("Download ElonMigo Today!")
                     .font(.caption)
+                    .bold()
                     .foregroundStyle(.secondary)
-                    .padding([.leading, .trailing, .bottom])
             } icon: {
                 Image(uiImage: #imageLiteral(resourceName: "AppIcon"))
                     .resizable()
-                    .frame(width: 30, height: 30)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(width: 20, height: 20)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
             }
+            .padding([.leading, .trailing, .bottom], 4)
 
         }
         .background(LinearGradient(colors: [.blue.opacity(0.2), .blue.opacity(0.3), .blue.opacity(0.4), .blue.opacity(0.5), .blue.opacity(0.6), .blue.opacity(0.7), .blue.opacity(0.8), .blue.opacity(0.9), .blue.opacity(1), .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
