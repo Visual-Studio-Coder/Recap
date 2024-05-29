@@ -19,6 +19,7 @@
 		787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010142C0254AE004CDA60 /* GeminiAPI.swift */; };
 		787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 787010152C0254AE004CDA60 /* Sample-JSON.json */; };
 		787010342C0389BF004CDA60 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 787010332C0389BF004CDA60 /* ConfettiSwiftUI */; };
+		787010362C0630C4004CDA60 /* ShareResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010352C0630C4004CDA60 /* ShareResults.swift */; };
 		8B25C4DC2C02654D00EC5F54 /* QuizProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */; };
 		8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E12C02739F00EC5F54 /* AppSettings.swift */; };
 		8B25C4E42C02962800EC5F54 /* Motivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E32C02962800EC5F54 /* Motivation.swift */; };
@@ -38,6 +39,7 @@
 		787010132C0254AE004CDA60 /* ElonMigoApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElonMigoApp.swift; sourceTree = "<group>"; };
 		787010142C0254AE004CDA60 /* GeminiAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeminiAPI.swift; sourceTree = "<group>"; };
 		787010152C0254AE004CDA60 /* Sample-JSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
+		787010352C0630C4004CDA60 /* ShareResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareResults.swift; sourceTree = "<group>"; };
 		8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizProgressBar.swift; sourceTree = "<group>"; };
 		8B25C4E12C02739F00EC5F54 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8B25C4E32C02962800EC5F54 /* Motivation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motivation.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				7870100F2C0254AE004CDA60 /* QuizView.swift */,
 				8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */,
 				8BF970012C02BC5900B78999 /* SplashView.swift */,
+				787010352C0630C4004CDA60 /* ShareResults.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */,
 				787010202C0254AE004CDA60 /* ContentView.swift in Sources */,
 				787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */,
+				787010362C0630C4004CDA60 /* ShareResults.swift in Sources */,
 				8BF970022C02BC5900B78999 /* SplashView.swift in Sources */,
 				8B25C4E42C02962800EC5F54 /* Motivation.swift in Sources */,
 				787010182C0254AE004CDA60 /* Question.swift in Sources */,

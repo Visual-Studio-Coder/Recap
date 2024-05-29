@@ -132,6 +132,8 @@ struct QuizView: View {
     @State private var showPassMotivation = false
     @State private var showFailMotivation = false
     @State private var confettiCounter = 0
+    @State private var renderedImage = Image(systemName: "photo")
+    @Environment(\.displayScale) var displayScale
     
     let quiz: Quiz
     @ObservedObject var chatService = GeminiAPI.shared!
@@ -345,17 +347,9 @@ struct QuizView: View {
                 
                 Text("\(correctAnswers) out of \(answeredQuestions) correct")
                 //button to share results:
-                Button {
-                    //use sharelink in swiftui
-                } label: {
-                    Spacer()
-                    
-                    Text("Share Results")
-                        .bold()
-                        .padding(6)
-                    
-                    Spacer()
-                }                
+                //ShareLink(item: <#T##URL#>, subject: <#T##Text?#>, message: <#T##Text?#>, label: <#T##() -> View#>)
+                ShareLink("Share Results", item: renderedImage, preview: SharePreview(Text("I got a \(correctAnswers) out of \(quiz.questions.count) on ElonMigo!"), image: renderedImage))
+                             
                 .onAppear {
                     confettiCounter += 1
                 }
@@ -445,9 +439,22 @@ struct QuizView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
             }
+            .onChange(of: correctAnswers) { _ in render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
+            .onAppear { render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
         //}
         }
     }
+    @MainActor func render(quizTitle: String, correctCount: Double, wrongCount: Double) {
+        //let renderer = ImageRenderer(content: RenderView(text: text))
+        let renderer = ImageRenderer(content: ShareResults(quizTitle: quizTitle, correctCount: correctCount, totalCount: wrongCount))
+
+            // make sure and use the correct display scale for this device
+            renderer.scale = displayScale
+
+            if let uiImage = renderer.uiImage {
+                renderedImage = Image(uiImage: uiImage)
+            }
+        }
 }
 
 #Preview {
