@@ -12,7 +12,7 @@ import PhotosUI
 struct ContentView: View {
     @EnvironmentObject var quizStorage: QuizStorage
     
-    @AppStorage("apiKey") private var apiKey = AppSettings.apiKey
+    @AppStorage("apiKey") private var apiKey = ""
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
@@ -335,6 +335,9 @@ struct ContentView: View {
                                     } else {
                                         Text("You will receive a **smarter response** but not necessarily a in a short amount of time.")
                                     }
+                                }
+                                .onChange(of: selectedOption) {
+                                    selectedOption = selectedOption
                                 }
                                 
                                 Section("Privacy") {
