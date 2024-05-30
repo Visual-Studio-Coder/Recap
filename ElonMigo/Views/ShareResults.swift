@@ -81,7 +81,7 @@ struct ShareResults: View {
                     .bold()
                     .foregroundStyle(.secondary)
             } icon: {
-                Image(uiImage: #imageLiteral(resourceName: "AppIcon"))
+                Image(uiImage: #imageLiteral(resourceName: "ElonMigoTransparent"))
                     .resizable()
                     .frame(width: 20, height: 20)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
