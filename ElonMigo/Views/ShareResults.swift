@@ -81,7 +81,7 @@ struct ShareResults: View {
                     .bold()
                     .foregroundStyle(.secondary)
             } icon: {
-                Image(uiImage: #imageLiteral(resourceName: "AppIcon"))
+                Image(uiImage: #imageLiteral(resourceName: "RecapTransparent"))
                     .resizable()
                     .frame(width: 20, height: 20)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
