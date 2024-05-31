@@ -29,7 +29,7 @@ class GeminiAPI: ObservableObject {
         )
         
         self.model = GenerativeModel(
-            name: "gemini-1.5-pro-latest",
+            name: "gemini-1.5-pro",
             apiKey: key,
             generationConfig: config,
             safetySettings: [
