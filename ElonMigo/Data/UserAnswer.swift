@@ -4,4 +4,10 @@ struct UserAnswer: Identifiable {
     let question: Question
     let userAnswer: [String]
     let isCorrect: Bool
+    let correctAnswer: String?
+}
+struct GradingResult: Codable {
+    var expectedAnswer: String
+    var isCorrect: Bool
+    var feedback: String
 }

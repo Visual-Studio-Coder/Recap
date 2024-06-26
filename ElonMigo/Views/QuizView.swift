@@ -126,13 +126,18 @@ struct QuizView: View {
     @State private var userAnswers = [UserAnswer]()
     @State private var showExplanation = false
     @State private var explanation: Explanation?
+    @State private var gradingResult: GradingResult?
     @State private var userInput = ""
+    @State private var isGradingInProgress = false
     @State private var computerResponse = ""
     @State private var isGenerating = false
     @State private var showPassMotivation = false
     @State private var showFailMotivation = false
     @State private var confettiCounter = 0
     @State private var renderedImage = Image(systemName: "photo")
+    @State private var showFullFeedback = false
+    @State private var showFullExpectedAnswer = false
+    @State private var gradingCompleted: Bool = false // Add this state variable
     @Environment(\.displayScale) var displayScale
     
     let quiz: Quiz
@@ -177,16 +182,16 @@ struct QuizView: View {
                             
                             chatService.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title",selectedPhotosData: nil, streamContent: true, generateQuiz: false) { response in
                                 DispatchQueue.main.async {
-                                        let data = Data(chatService.computerResponse.utf8)
-                                        let decoder = JSONDecoder()
-                                        
-                                        if let partialExplanation = try? decoder.decode(Explanation.self, from: data) {
-                                            // If the response can be decoded into an Explanation, update explanation and break the loop
-                                            self.explanation = partialExplanation
-                                        } else {
-                                            // If the response can't be decoded into an Explanation, show the raw JSON
-                                            print(String(chatService.computerResponse))
-                                        }
+                                    let data = Data(chatService.computerResponse.utf8)
+                                    let decoder = JSONDecoder()
+                                    
+                                    if let partialExplanation = try? decoder.decode(Explanation.self, from: data) {
+                                        // If the response can be decoded into an Explanation, update explanation and break the loop
+                                        self.explanation = partialExplanation
+                                    } else {
+                                        // If the response can't be decoded into an Explanation, show the raw JSON
+                                        print(String(chatService.computerResponse))
+                                    }
                                 }
                             }
                         } catch {
@@ -213,7 +218,7 @@ struct QuizView: View {
                                 showFailMotivation = true
                             }
                             
-                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect))
+                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
                             
                             hasAnswered[selectedTab] = true
                         }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab])
@@ -231,36 +236,125 @@ struct QuizView: View {
                             .onChange(of: userInput) {
                                 hasAnswered[selectedTab] = !userInput.isEmpty
                             }
+                            .disabled(isGradingInProgress || gradingResult != nil)
+                            .scrollDismissesKeyboard(.interactively)
+                        if hasAnswered[selectedTab] == true {
+                            if let gradingResult = gradingResult {
+                                //use a groupbox in swiftui please
+                                    GroupBox {
+                                        VStack(alignment: .leading) {
+                                            Label {
+                                                Text("Expected Answer:")
+                                                    .bold()
+                                            } icon: {
+                                                Image(systemName: showFullExpectedAnswer ? "chevron.down" : "chevron.right")
+                                            }
+                                            .onTapGesture {
+                                                withAnimation(.spring()) {
+                                                    showFullExpectedAnswer.toggle()
+                                                }
+                                            }
+                                            .foregroundStyle(.secondary)
+                                            if showFullExpectedAnswer {
+                                                Text("\(gradingResult.expectedAnswer)")
+                                                    .opacity(showFullExpectedAnswer ? 1 : 0)
+                                                    .animation(.easeInOut)
+                                                    .onTapGesture {
+                                                        withAnimation(.spring()) {
+                                                            showFullExpectedAnswer.toggle()
+                                                        }
+                                                    }
+                                            } else {
+                                                Text("\(gradingResult.expectedAnswer)")
+                                                    .lineLimit(showFullExpectedAnswer ? nil : 3)
+                                                    .truncationMode(.tail)
+                                                    //.opacity(showFullExpectedAnswer ? 1 : 0)
+                                                    .animation(.easeInOut)
+                                                    .onTapGesture {
+                                                        withAnimation(.spring()) {
+                                                            showFullExpectedAnswer.toggle()
+                                                        }
+                                                    }
+                                            }
+                                            Divider()
+                                            Label {
+                                                Text("Feedback:")
+                                                    .bold()
+                                            } icon: {
+                                                Image(systemName: showFullFeedback ? "chevron.down" : "chevron.right")
+                                            }
+                                            .foregroundStyle(.secondary)
+                                            .onTapGesture {
+                                                withAnimation(.spring()) {
+                                                    showFullFeedback.toggle()
+                                                }
+                                            }
+                                            if showFullFeedback {
+                                                Text("\(gradingResult.feedback)")
+                                                    .opacity(showFullFeedback ? 1 : 0)
+                                                    .animation(.easeInOut)
+                                                    .onTapGesture {
+                                                        withAnimation(.spring()) {
+                                                            showFullFeedback.toggle()
+                                                        }
+                                                    }
+                                            } else {
+                                                Text("\(gradingResult.feedback)")
+                                                    .lineLimit(showFullFeedback ? nil : 3)
+                                                    .truncationMode(.tail)
+                                                    //.opacity(showFullFeedback ? 1 : 0)
+                                                    .animation(.easeInOut)
+                                                    .onTapGesture {
+                                                        withAnimation(.spring()) {
+                                                            showFullFeedback.toggle()
+                                                        }
+                                                    }
+                                            }
+                                            
+                                        }
+                                    } label: {
+                                        Label("\(gradingResult.isCorrect ? "Correct!" : "Wrong")", systemImage: "\(gradingResult.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")")
+                                            .font(.subheadline)
+                                            .foregroundStyle(gradingResult.isCorrect ? .green : .red)
+                                    }
+                                    .padding()
+                                    .animation(.easeInOut)
+                                    .transition(.opacity)
+                                    .id(gradingResult.feedback) // Add an identifier to the GroupBox to trigger animation when gradingResult changes
+                                
+                            }
+                        }
                     }
                 }
-                
+
                 Button {
                     withAnimation {
-                        if quiz.questions[selectedTab].type != "multiple_choice" {
-                            correctAnswers += 1
-                            answeredQuestions += 1
-                            
-                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: [userInput], isCorrect: true))
-                            
-                            showPassMotivation = true
+                        if quiz.questions[selectedTab].type == "free_answer" && !gradingCompleted {
+                            // If it's a free response question and grading hasn't been completed, start grading
+                            gradeFreeResponse()
+                        } else {
+                            // For other question types, or if grading is completed, proceed to the next question
+                            selectedTab += 1
+                            gradingCompleted = false // Reset grading completion state
+                            gradingResult = nil
+                            userInput = ""
+                            selectedOptions = [:] // Reset selected options after moving to the next question
                         }
-                        
-                        selectedTab += 1
                     }
-                    selectedOptions = [:]
-                    userInput = ""
                 } label: {
-                    Spacer()
-                    
-                    Text("Next")
-                        .bold()
-                        .padding(6)
-                    
-                    Spacer()
+                    if isGradingInProgress && quiz.questions[selectedTab].type == "free_answer" {
+                        ProgressView() // Show progress view if grading is in progress
+                    } else {
+                        Spacer()
+                        Text(gradingCompleted ? "Next" : (quiz.questions[selectedTab].type == "free_answer" ? "Submit Answer" : "Next"))
+                            .bold()
+                            .padding(6)
+                        Spacer()
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
-                .disabled(hasAnswered[selectedTab] == nil)
+                .disabled(hasAnswered[selectedTab] == nil || (quiz.questions[selectedTab].type == "free_answer" && isGradingInProgress))
                 
                 QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
                     .frame(height: 10)
@@ -307,14 +401,14 @@ struct QuizView: View {
                             Text(quiz.questions[selectedTab].question)
                                 .font(.headline)
                                 .padding()
-                                Form {
-                                    Text("**Receiving Response from Gemini...**")
-                                    Text(chatService.computerResponse)
-                                }
-                                .onChange(of: chatService.computerResponse, { oldValue, newValue in
-                                    let generator = UIImpactFeedbackGenerator(style: .light)
-                                    generator.impactOccurred()
-                                })
+                            Form {
+                                Text("**Receiving Response from Gemini...**")
+                                Text(chatService.computerResponse)
+                            }
+                            .onChange(of: chatService.computerResponse, { oldValue, newValue in
+                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                generator.impactOccurred()
+                            })
                         } else {
                             VStack {
                                 Text(quiz.questions[selectedTab].question)
@@ -349,10 +443,10 @@ struct QuizView: View {
                 //button to share results:
                 //ShareLink(item: <#T##URL#>, subject: <#T##Text?#>, message: <#T##Text?#>, label: <#T##() -> View#>)
                 ShareLink("Share Results", item: renderedImage, preview: SharePreview(Text("I got a \(correctAnswers) out of \(quiz.questions.count) on ElonMigo!"), image: renderedImage))
-                             
-                .onAppear {
-                    confettiCounter += 1
-                }
+                
+                    .onAppear {
+                        confettiCounter += 1
+                    }
                 Form {
                     ForEach(userAnswers, id: \.question.question) { userAnswer in
                         Section {
@@ -363,18 +457,18 @@ struct QuizView: View {
                                         Image(systemName: "checkmark.circle.fill")
                                             .foregroundStyle(.green)
                                         Text("You got this question correct!")
-                                        .bold()
-                                        .foregroundStyle(.secondary)
-                                        .font(.footnote)
-                                        .multilineTextAlignment(.leading)
+                                            .bold()
+                                            .foregroundStyle(.secondary)
+                                            .font(.footnote)
+                                            .multilineTextAlignment(.leading)
                                     } else {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundStyle(.red)
                                         Text("You got this question incorrect.")
-                                        .bold()
-                                        .foregroundStyle(.secondary)
-                                        .font(.footnote)
-                                        .multilineTextAlignment(.leading)
+                                            .bold()
+                                            .foregroundStyle(.secondary)
+                                            .font(.footnote)
+                                            .multilineTextAlignment(.leading)
                                     }
                                     Spacer()
                                     Text("Question \(userAnswers.firstIndex(where: { $0.question.question == userAnswer.question.question })! + 1)")
@@ -414,7 +508,21 @@ struct QuizView: View {
                                     }
                                 }
                             } else {
-                                Text(userAnswer.userAnswer.joined(separator: ", "))
+                                Text("Your Answer:")
+                                    .bold()
+                                    .foregroundStyle(.secondary)
+                                Text(userAnswer.userAnswer.joined(separator: ","))
+                                Divider()
+                                Text("Expected Answer:")
+                                    .bold()
+                                    .foregroundStyle(.secondary)
+//                                if let correctAnswer = userAnswer.correctAnswer {
+//                                    
+//                                    Text(correctAnswer.joined(separator: ","))
+//                                }
+                                if let correctAnswer = userAnswer.correctAnswer {
+                                    Text(correctAnswer)
+                                }
                             }
                         }
                     }
@@ -425,6 +533,7 @@ struct QuizView: View {
                 Button {
                     withAnimation {
                         quizStorage.history.append(quiz)
+                        chatService.clearChat()
                         showQuiz = false
                     }
                 } label: {
@@ -441,20 +550,76 @@ struct QuizView: View {
             }
             .onChange(of: correctAnswers) { _ in render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
             .onAppear { render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
-        //}
+            //}
+        }
+    }
+    // Assuming gradingResult, correctAnswers, answeredQuestions, and userAnswers are @State properties or are properly managed to reflect UI updates.
+
+    func gradeFreeResponse() {
+        guard quiz.questions[selectedTab].type == "free_answer" else { return }
+        
+        isGradingInProgress = true
+        
+        let sampleJSON = """
+        {
+          "expectedAnswer": "Example expected answer",
+          "isCorrect": true,
+          "feedback": "Example feedback"
+        }
+        """
+        
+        let gradingPrompt = "Question: \(quiz.questions[selectedTab].question). The user's response is: \(userInput). Grade this free response, keeping the answers as short as humanly possible, and only output **THIS JSON STRUCTURE** and nothing else: \(sampleJSON). DO NOT RETURN ANY QUIZ INFORMATION OR GENERATE ANY QUIZZES. ONLY GRADE THIS ANSWER. THERE SHOULD BE ONLY ONE JSON"
+        
+        chatService.sendMessage(userInput: gradingPrompt, selectedPhotosData: nil, streamContent: false, generateQuiz: false) { response in
+            print("Grading response received: \(response)") // This prints the raw response
+            
+            DispatchQueue.main.async {
+                let data = Data(response.utf8)
+                let decoder = JSONDecoder()
+                
+                do {
+                    let result = try decoder.decode(GradingResult.self, from: data)
+                    // Directly update the @State property
+                    self.gradingResult = result
+                    print("Decoded grading result: \(result)")
+                    
+                    if result.isCorrect {
+                        self.correctAnswers += 1
+                        //self.showPassMotivation = true
+                        //gradingResult = nil
+                    }
+                    self.answeredQuestions += 1
+                    
+                    self.userAnswers.append(UserAnswer(question: self.quiz.questions[self.selectedTab], userAnswer: [self.userInput], isCorrect: result.isCorrect, correctAnswer: result.expectedAnswer))
+                    
+                    // Optionally, show feedback to the user based on gradingResult.feedback
+                    
+                    //self.selectedTab += 1
+                    //self.userInput = ""
+                    DispatchQueue.main.async {
+                        self.gradingCompleted = true
+                        self.isGradingInProgress = false
+                    }
+                } catch {
+                    // If the response can't be decoded into a GradingResult, print the error and the raw response
+                    print("Failed to decode grading result: \(error)")
+                    print("Raw response: \(response)")
+                    self.isGradingInProgress = false
+                }
+            }
         }
     }
     @MainActor func render(quizTitle: String, correctCount: Double, wrongCount: Double) {
         //let renderer = ImageRenderer(content: RenderView(text: text))
         let renderer = ImageRenderer(content: ShareResults(quizTitle: quizTitle, correctCount: correctCount, totalCount: wrongCount))
-
-            // make sure and use the correct display scale for this device
-            renderer.scale = displayScale
-
-            if let uiImage = renderer.uiImage {
-                renderedImage = Image(uiImage: uiImage)
-            }
+        
+        // make sure and use the correct display scale for this device
+        renderer.scale = displayScale
+        
+        if let uiImage = renderer.uiImage {
+            renderedImage = Image(uiImage: uiImage)
         }
+    }
 }
 
 #Preview {

@@ -19,6 +19,10 @@ class GeminiAPI: ObservableObject {
         self.shared = GeminiAPI(key: key)
     }
     
+    func clearChat() {
+        chat?.history.removeAll()
+    }
+    
     private func initializeModel() {
         let config = GenerationConfig(
             temperature: 1,
