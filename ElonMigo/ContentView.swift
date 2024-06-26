@@ -7,16 +7,59 @@
 
 import SwiftUI
 import PhotosUI
-//import Kanna
+import Combine
 
+@MainActor
+class UserPreferences: ObservableObject {
+    static let shared = UserPreferences()
+    
+    @Published var somePreference: Bool {
+        didSet {
+            UserDefaults.standard.set(somePreference, forKey: "somePreference")
+        }
+    }
+    
+    @Published var apiKey: String {
+        didSet {
+            UserDefaults.standard.set(apiKey, forKey: "apiKey")
+        }
+    }
+    
+    @Published var selectedOption: String {
+        didSet {
+            UserDefaults.standard.set(selectedOption, forKey: "model")
+        }
+    }
+    
+    @Published var numberOfQuestions: Int {
+        didSet {
+            UserDefaults.standard.set(numberOfQuestions, forKey: "numberOfQuestions")
+        }
+    }
+    
+    @Published var geminiModel: String {
+        didSet {
+            UserDefaults.standard.set(geminiModel, forKey: "geminiModel")
+        }
+    }
+    
+    init() {
+        self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
+        self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
+        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-1.5-pro-latest"
+        self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
+        self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
+    }
+}
 struct ContentView: View {
     @EnvironmentObject var quizStorage: QuizStorage
+    @EnvironmentObject var userPreferences: UserPreferences
     
     @AppStorage("apiKey") private var apiKey = ""
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
-    @AppStorage("model") private var selectedOption = "gemini-1.5-pro-latest"
+    //@AppStorage("model") private var selectedOption = "gemini-1.5-pro-latest"
     let options = ["Gemini 1.5 Pro", "Gemini 1.5 Flash"]
     
     @State private var quiz: Quiz?
@@ -30,10 +73,10 @@ struct ContentView: View {
     @State private var showingSettingsSheet = false
     
     @State private var userInput = ""
-    @AppStorage("numberOfQuestions") private var numberOfQuestions = 5
+    //@AppStorage("numberOfQuestions") private var numberOfQuestions = 5
     
     // Settings
-    @AppStorage("geminiModel") private var geminiModel = AppSettings.geminiModel
+    //@AppStorage("geminiModel") private var geminiModel = AppSettings.geminiModel
     let geminiModels = ["1.5 Pro", "1.5 Flash"]
     
     // Web Search
@@ -81,11 +124,10 @@ struct ContentView: View {
                     }
                     VStack(alignment: .leading) {
                         Spacer()
-                        TextField("What would you like to quiz yourself on?", text: $userInput)
+                        TextField("What would you like to quiz yourself on?", text: $userInput, axis: .vertical)
                             .padding()
                             .clipShape(RoundedRectangle(cornerRadius: 15))
                             .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
-                            .scrollDismissesKeyboard(.interactively)
                             .padding(.horizontal)
                         
                         HStack {
@@ -140,8 +182,8 @@ struct ContentView: View {
                         
                         Button {
                             gemeniGeneratingQuiz = true
-                            print(apiKey)
-                            print(geminiModel)
+                            print(userPreferences.apiKey)
+                            print(userPreferences.geminiModel)
                             
                             // Create a DispatchGroup to handle multiple asynchronous tasks
                             let group = DispatchGroup()
@@ -236,11 +278,11 @@ struct ContentView: View {
                         NavigationStack {
                             Form {
                                 Section {
-                                    Stepper("Number of Questions: \(numberOfQuestions)", value: $numberOfQuestions)
+                                    Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions)
                                 } header: {
                                     Text("Customize Question Count")
                                 } footer: {
-                                    Text("No guarantee, but we'll try to get Gemini to generate only ^[\(numberOfQuestions) question](inflect: true).")
+                                    Text("No guarantee, but we'll try to get Gemini to generate only ^[\(userPreferences.numberOfQuestions) question](inflect: true).")
                                 }
                             }
                             .navigationTitle("Quiz Settings")
@@ -307,7 +349,10 @@ struct ContentView: View {
                         NavigationStack {
                             Form {
                                 Section {
-                                    SecureField("Top Secret Gemini API Key", text: $apiKey)
+                                    SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
+                                        .onChange(of: userPreferences.selectedOption) { newValue in
+                                            print("Selected option changed to: \(newValue)")
+                                        }
                                 } header: {
                                     Text("API Key")
                                 } footer: {
@@ -315,7 +360,7 @@ struct ContentView: View {
                                 }
                                 
                                 Section {
-                                    Picker("Preferred Model", selection: $selectedOption) {
+                                    Picker("Preferred Model", selection: $userPreferences.selectedOption) {
                                         ForEach(options, id: \.self) { option in
                                             HStack {
                                                 if option == "Gemini 1.5 Flash" {
@@ -329,15 +374,16 @@ struct ContentView: View {
                                 } header: {
                                     Text("Choose Model")
                                 } footer: {
-                                    
-                                    if selectedOption == "Gemini 1.5 Flash" {
+                                    if userPreferences.selectedOption == "Gemini 1.5 Flash" {
                                         Text("You will receive a **faster response** but not necessarily a smarter, more accurate quiz.")
                                     } else {
-                                        Text("You will receive a **smarter response** but not necessarily a in a short amount of time.")
+                                        Text("You will receive a **smarter response** but not necessarily in a short amount of time.")
                                     }
                                 }
-                                .onChange(of: selectedOption) {
-                                    selectedOption = selectedOption
+                                .onChange(of: userPreferences.selectedOption) { newValue in
+                                    // Perform any additional actions when the selected option changes.
+                                    // This block can be used to trigger side effects of changing the option.
+                                    // If no additional action is needed, this `.onChange` modifier can be removed.
                                 }
                                 
                                 Section("Privacy") {
@@ -358,6 +404,7 @@ struct ContentView: View {
                         .presentationDetents([.medium, .large])
                     }
                 }
+                    .scrollDismissesKeyboard(.interactively)
             }
         }
     }

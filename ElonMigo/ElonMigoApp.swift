@@ -18,10 +18,12 @@ struct RecapApp: App {
     }
     
     @StateObject private var quizStorage = QuizStorage()
+    @StateObject private var userPreferences = UserPreferences()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(userPreferences)
                 .environmentObject(quizStorage)
                 .splashView {
                     ZStack {
