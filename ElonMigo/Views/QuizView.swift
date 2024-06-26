@@ -512,7 +512,6 @@ struct QuizView: View {
                                     .bold()
                                     .foregroundStyle(.secondary)
                                 Text(userAnswer.userAnswer.joined(separator: ","))
-                                Divider()
                                 Text("Expected Answer:")
                                     .bold()
                                     .foregroundStyle(.secondary)
