@@ -1,5 +1,5 @@
 import Foundation
-struct UserAnswer: Identifiable {
+struct UserAnswer: Identifiable, Codable {
     let id = UUID()
     let question: Question
     let userAnswer: [String]

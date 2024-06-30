@@ -7,21 +7,18 @@
 
 import Foundation
 
-//struct Quiz: Codable {
-////    var id = UUID()
-//    var quiz_title: String
-//    let questions: [Question]
-////    var userCorrect: Int = 0
-//}
+// Assuming UserAnswer is defined in the same file or imported
+
 struct Quiz: Codable {
     let quiz_title: String
     let questions: [Question]
+    var userAnswers: [UserAnswer]? // Optional to handle quizzes without answers
 }
 
 @MainActor
 class QuizStorage: ObservableObject {
     @Published var history: [Quiz] = []
-
+    
     private static func fileURL() throws -> URL {
         try FileManager.default.url(for: .documentDirectory,
                                     in: .userDomainMask,
@@ -29,30 +26,34 @@ class QuizStorage: ObservableObject {
                                     create: false)
         .appendingPathComponent("quiz.data")
     }
-
-    func load() async throws {
-        let task = Task<[Quiz], Error> {
+    
+    func load() async {
+        do {
             let fileURL = try Self.fileURL()
-            guard let data = try? Data(contentsOf: fileURL) else {
-                return []
-            }
+            let data = try Data(contentsOf: fileURL)
             let history = try JSONDecoder().decode([Quiz].self, from: data)
-            return history
+            DispatchQueue.main.async {
+                self.history = history
+            }
+        } catch {
+            print("Failed to load quizzes: \(error)")
         }
-        let history = try await task.value
-        self.history = history
     }
-
-    func save(history: [Quiz]) async throws {
-        let task = Task {
+    
+    func save(history: [Quiz]) async {
+        do {
             let data = try JSONEncoder().encode(history)
             let outfile = try Self.fileURL()
             try data.write(to: outfile)
+        } catch {
+            print("Failed to save quizzes: \(error)")
         }
-        _ = try await task.value
     }
-
-//    func indexOfQuiz(withID id: UUID) -> Int? {
-//        return history.firstIndex(where: { $0.id == id })
-//    }
+    
+    func addQuiz(_ quiz: Quiz, userAnswers: [UserAnswer]) async {
+        var newQuiz = quiz
+        newQuiz.userAnswers = userAnswers // Assign user answers to the quiz
+        history.append(newQuiz)
+        await save(history: history)
+    }
 }

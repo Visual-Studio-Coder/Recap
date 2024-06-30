@@ -231,7 +231,7 @@ struct QuizView: View {
                             Spacer()
                         }
                         
-                        TextField("Click here to answer...", text: $userInput)
+                        TextField("Click here to answer...", text: $userInput, axis: .vertical)
                             .padding(.horizontal)
                             .onChange(of: userInput) {
                                 hasAnswered[selectedTab] = !userInput.isEmpty
@@ -241,131 +241,136 @@ struct QuizView: View {
                         if hasAnswered[selectedTab] == true {
                             if let gradingResult = gradingResult {
                                 //use a groupbox in swiftui please
-                                    GroupBox {
-                                        VStack(alignment: .leading) {
-                                            Label {
-                                                Text("Expected Answer:")
-                                                    .bold()
-                                            } icon: {
-                                                Image(systemName: showFullExpectedAnswer ? "chevron.down" : "chevron.right")
-                                            }
-                                            .onTapGesture {
-                                                withAnimation(.spring()) {
-                                                    showFullExpectedAnswer.toggle()
-                                                }
-                                            }
-                                            .foregroundStyle(.secondary)
-                                            if showFullExpectedAnswer {
-                                                Text("\(gradingResult.expectedAnswer)")
-                                                    .opacity(showFullExpectedAnswer ? 1 : 0)
-                                                    .animation(.easeInOut)
-                                                    .onTapGesture {
-                                                        withAnimation(.spring()) {
-                                                            showFullExpectedAnswer.toggle()
-                                                        }
-                                                    }
-                                            } else {
-                                                Text("\(gradingResult.expectedAnswer)")
-                                                    .lineLimit(showFullExpectedAnswer ? nil : 3)
-                                                    .truncationMode(.tail)
-                                                    //.opacity(showFullExpectedAnswer ? 1 : 0)
-                                                    .animation(.easeInOut)
-                                                    .onTapGesture {
-                                                        withAnimation(.spring()) {
-                                                            showFullExpectedAnswer.toggle()
-                                                        }
-                                                    }
-                                            }
-                                            Divider()
-                                            Label {
-                                                Text("Feedback:")
-                                                    .bold()
-                                            } icon: {
-                                                Image(systemName: showFullFeedback ? "chevron.down" : "chevron.right")
-                                            }
-                                            .foregroundStyle(.secondary)
-                                            .onTapGesture {
-                                                withAnimation(.spring()) {
-                                                    showFullFeedback.toggle()
-                                                }
-                                            }
-                                            if showFullFeedback {
-                                                Text("\(gradingResult.feedback)")
-                                                    .opacity(showFullFeedback ? 1 : 0)
-                                                    .animation(.easeInOut)
-                                                    .onTapGesture {
-                                                        withAnimation(.spring()) {
-                                                            showFullFeedback.toggle()
-                                                        }
-                                                    }
-                                            } else {
-                                                Text("\(gradingResult.feedback)")
-                                                    .lineLimit(showFullFeedback ? nil : 3)
-                                                    .truncationMode(.tail)
-                                                    //.opacity(showFullFeedback ? 1 : 0)
-                                                    .animation(.easeInOut)
-                                                    .onTapGesture {
-                                                        withAnimation(.spring()) {
-                                                            showFullFeedback.toggle()
-                                                        }
-                                                    }
-                                            }
-                                            
+                                GroupBox {
+                                    VStack(alignment: .leading) {
+                                        Label {
+                                            Text("Expected Answer:")
+                                                .bold()
+                                        } icon: {
+                                            Image(systemName: "chevron.right")
+                                                .rotationEffect(showFullExpectedAnswer ? .degrees(90) : .degrees(0))
                                         }
-                                    } label: {
-                                        Label("\(gradingResult.isCorrect ? "Correct!" : "Wrong")", systemImage: "\(gradingResult.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")")
-                                            .font(.subheadline)
-                                            .foregroundStyle(gradingResult.isCorrect ? .green : .red)
+                                        .onTapGesture {
+                                            withAnimation(.spring()) {
+                                                showFullExpectedAnswer.toggle()
+                                            }
+                                        }
+                                        .foregroundStyle(.secondary)
+                                        if showFullExpectedAnswer {
+                                            Text("\(gradingResult.expectedAnswer)")
+                                                .opacity(showFullExpectedAnswer ? 1 : 0)
+                                                .animation(.easeInOut)
+                                                .onTapGesture {
+                                                    withAnimation(.spring()) {
+                                                        showFullExpectedAnswer.toggle()
+                                                    }
+                                                }
+                                        } else {
+                                            Text("\(gradingResult.expectedAnswer)")
+                                                .lineLimit(showFullExpectedAnswer ? nil : 3)
+                                                .truncationMode(.tail)
+                                            //.opacity(showFullExpectedAnswer ? 1 : 0)
+                                                .animation(.easeInOut)
+                                                .onTapGesture {
+                                                    withAnimation(.spring()) {
+                                                        showFullExpectedAnswer.toggle()
+                                                    }
+                                                }
+                                        }
+                                        Divider()
+                                        Label {
+                                            Text("Feedback:")
+                                                .bold()
+                                        } icon: {
+                                            Image(systemName: "chevron.right")
+                                                .rotationEffect(showFullFeedback ? .degrees(90) : .degrees(0))
+                                        }
+                                        .foregroundStyle(.secondary)
+                                        .onTapGesture {
+                                            withAnimation(.spring()) {
+                                                showFullFeedback.toggle()
+                                            }
+                                        }
+                                        if showFullFeedback {
+                                            Text("\(gradingResult.feedback)")
+                                                .opacity(showFullFeedback ? 1 : 0)
+                                                .animation(.easeInOut)
+                                                .onTapGesture {
+                                                    withAnimation(.spring()) {
+                                                        showFullFeedback.toggle()
+                                                    }
+                                                }
+                                        } else {
+                                            Text("\(gradingResult.feedback)")
+                                                .lineLimit(showFullFeedback ? nil : 3)
+                                                .truncationMode(.tail)
+                                            //.opacity(showFullFeedback ? 1 : 0)
+                                                .animation(.easeInOut)
+                                                .onTapGesture {
+                                                    withAnimation(.spring()) {
+                                                        showFullFeedback.toggle()
+                                                    }
+                                                }
+                                        }
+                                        
                                     }
-                                    .padding()
-                                    .animation(.easeInOut)
-                                    .transition(.opacity)
-                                    .id(gradingResult.feedback) // Add an identifier to the GroupBox to trigger animation when gradingResult changes
+                                } label: {
+                                    Label("\(gradingResult.isCorrect ? "Correct!" : "Wrong")", systemImage: "\(gradingResult.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")")
+                                        .font(.subheadline)
+                                        .foregroundStyle(gradingResult.isCorrect ? .green : .red)
+                                }
+                                .padding()
+                                .animation(.easeInOut)
+                                .transition(.opacity)
+                                .id(gradingResult.feedback) // Add an identifier to the GroupBox to trigger animation when gradingResult changes
                                 
                             }
                         }
                     }
                 }
-
-                Button {
-                    withAnimation {
-                        if quiz.questions[selectedTab].type == "free_answer" && !gradingCompleted {
-                            // If it's a free response question and grading hasn't been completed, start grading
-                            gradeFreeResponse()
+                VStack {
+                    Button {
+                        withAnimation {
+                            if quiz.questions[selectedTab].type == "free_answer" && !gradingCompleted {
+                                // If it's a free response question and grading hasn't been completed, start grading
+                                gradeFreeResponse()
+                            } else {
+                                // For other question types, or if grading is completed, proceed to the next question
+                                selectedTab += 1
+                                gradingCompleted = false // Reset grading completion state
+                                gradingResult = nil
+                                userInput = ""
+                                selectedOptions = [:] // Reset selected options after moving to the next question
+                            }
+                        }
+                    } label: {
+                        if isGradingInProgress && quiz.questions[selectedTab].type == "free_answer" {
+                            ProgressView() // Show progress view if grading is in progress
                         } else {
-                            // For other question types, or if grading is completed, proceed to the next question
-                            selectedTab += 1
-                            gradingCompleted = false // Reset grading completion state
-                            gradingResult = nil
-                            userInput = ""
-                            selectedOptions = [:] // Reset selected options after moving to the next question
+                            Spacer()
+                            Text(gradingCompleted ? "Next" : (quiz.questions[selectedTab].type == "free_answer" ? "Submit Answer" : "Next"))
+                                .bold()
+                                .padding(6)
+                            Spacer()
                         }
                     }
-                } label: {
-                    if isGradingInProgress && quiz.questions[selectedTab].type == "free_answer" {
-                        ProgressView() // Show progress view if grading is in progress
-                    } else {
+                    .buttonStyle(.borderedProminent)
+                    .padding(.horizontal)
+                    .disabled(hasAnswered[selectedTab] == nil || (quiz.questions[selectedTab].type == "free_answer" && isGradingInProgress))
+                    QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
+                        .frame(height: 10)
+                        .padding(.vertical)
+                    
+                    HStack {
                         Spacer()
-                        Text(gradingCompleted ? "Next" : (quiz.questions[selectedTab].type == "free_answer" ? "Submit Answer" : "Next"))
+                        Text("\(answeredQuestions) of \(quiz.questions.count) questions answered")
                             .bold()
-                            .padding(6)
+                            .multilineTextAlignment(.center)
                         Spacer()
                     }
                 }
-                .buttonStyle(.borderedProminent)
-                .padding(.horizontal)
-                .disabled(hasAnswered[selectedTab] == nil || (quiz.questions[selectedTab].type == "free_answer" && isGradingInProgress))
+                .ignoresSafeArea(.keyboard)
                 
-                QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
-                    .frame(height: 10)
-                    .padding(.vertical)
-                HStack {
-                    Spacer()
-                    Text("\(answeredQuestions) of \(quiz.questions.count) questions answered")
-                        .bold()
-                        .multilineTextAlignment(.center)
-                    Spacer()
-                }
                 
                 
             }
@@ -481,9 +486,12 @@ struct QuizView: View {
                                     Text(userAnswer.question.question)
                                         .bold()
                                         .multilineTextAlignment(.leading)
+                                    //                                    if userAnswer.question.type == "multiple_choice" {
+                                    //                                        Spacer()
+                                    //                                    }
                                     Spacer()
                                 }
-                                .padding(.vertical)
+                                //                                .padding(.vertical)
                             }
                             if userAnswer.question.type == "multiple_choice" {
                                 ForEach(userAnswer.question.options ?? [], id: \.text) { option in
@@ -508,19 +516,19 @@ struct QuizView: View {
                                     }
                                 }
                             } else {
-                                Text("Your Answer:")
-                                    .bold()
-                                    .foregroundStyle(.secondary)
-                                Text(userAnswer.userAnswer.joined(separator: ","))
-                                Text("Expected Answer:")
-                                    .bold()
-                                    .foregroundStyle(.secondary)
-//                                if let correctAnswer = userAnswer.correctAnswer {
-//                                    
-//                                    Text(correctAnswer.joined(separator: ","))
-//                                }
-                                if let correctAnswer = userAnswer.correctAnswer {
-                                    Text(correctAnswer)
+                                VStack(alignment: .leading) {
+                                    Text("Your Answer:")
+                                        .bold()
+                                        .foregroundStyle(.secondary)
+                                    Text(userAnswer.userAnswer.joined(separator: ","))
+                                }
+                                VStack(alignment: .leading) {
+                                    Text("Expected Answer:")
+                                        .bold()
+                                        .foregroundStyle(.secondary)
+                                    if let correctAnswer = userAnswer.correctAnswer {
+                                        Text(correctAnswer)
+                                    }
                                 }
                             }
                         }
@@ -531,9 +539,13 @@ struct QuizView: View {
                 
                 Button {
                     withAnimation {
-                        quizStorage.history.append(quiz)
                         chatService.clearChat()
                         showQuiz = false
+                    }
+
+                    // Add the quiz to the history and save it asynchronously
+                    Task {
+                        await quizStorage.addQuiz(quiz, userAnswers: userAnswers)
                     }
                 } label: {
                     Spacer()
@@ -553,7 +565,7 @@ struct QuizView: View {
         }
     }
     // Assuming gradingResult, correctAnswers, answeredQuestions, and userAnswers are @State properties or are properly managed to reflect UI updates.
-
+    
     func gradeFreeResponse() {
         guard quiz.questions[selectedTab].type == "free_answer" else { return }
         
@@ -584,8 +596,10 @@ struct QuizView: View {
                     
                     if result.isCorrect {
                         self.correctAnswers += 1
-                        //self.showPassMotivation = true
+                        self.showPassMotivation = true
                         //gradingResult = nil
+                    } else {
+                        self.showFailMotivation = true
                     }
                     self.answeredQuestions += 1
                     
