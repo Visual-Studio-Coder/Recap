@@ -104,21 +104,67 @@ struct ContentView: View {
                 ScrollView {
                     if !quizStorage.history.isEmpty {
                         VStack {
-                            Text("Recent Quizzes")
-                                .font(.title)
-                                .bold()
+                            
+                                Text("Recent Quizzes")
+                                    .font(.title)
+                                    .bold()
+                                Spacer()
+                                Button(action: {
+                                    quizStorage.history.removeAll()
+                                    Task {
+                                        await quizStorage.save(history: [])
+                                    }
+                                }) {
+                                    Label("Clear History", systemImage: "trash")
+                                }
+                                .foregroundColor(.red)
+                            
                         }
                         .padding(.leading)
                         //List {
-                            ForEach(quizStorage.history.indices) { i in
-                                VStack {
-                                    Text(quizStorage.history[i].quiz_title)
-                                        .bold()
+                        ForEach(quizStorage.history.indices.reversed(), id: \.self) { i in
+                                Menu {
+                                    Button(action: {
+                                        quiz = quizStorage.history[i]
+                                        withAnimation {
+                                            showQuiz.toggle()
+                                        }
+                                    }) {
+                                        Label("Take Quiz Again", systemImage: "arrow.clockwise")
+                                    }
                                     
-                                    Text("\(quizStorage.history[i].questions.count) Questions")
-                                        .foregroundStyle(.secondary)
+                                    Button(action: {
+                                        // Implement action to view past results
+                                    }) {
+                                        Label("View Past Results", systemImage: "text.book.closed")
+                                    }
+                                    
+                                    Button(action: {
+                                        // Implement action to regenerate the quiz
+                                    }) {
+                                        Label("Regenerate Quiz", systemImage: "gobackward")
+                                    }
+                                } label: {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(quizStorage.history[i].quiz_title)
+                                                .bold()
+                                            
+                                            Text("\(quizStorage.history[i].questions.count) Questions")
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+//                                        if quizStorage.history[i].userAnswers != nil {
+//                                            Text("\(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count)/\(quizStorage.history[i].questions.count) (\(Int((Double(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count) / Double(quizStorage.history[i].questions.count)) * 100))%)")
+//                                                .foregroundStyle(.secondary)
+//                                        }
+                                        if let userAnswers = quizStorage.history[i].userAnswers {
+                                            Text("\((userAnswers.filter { $0.isCorrect }.count))/\(quizStorage.history[i].questions.count) (\(String(format: "%.0f", (Double(userAnswers.filter { $0.isCorrect }.count) / Double(quizStorage.history[i].questions.count) * 100)))%)")
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                    .padding()
                                 }
-                                .padding()
                             }
                         //}
                     }
@@ -140,7 +186,7 @@ struct ContentView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 100))
                             Spacer()
                             HStack {
-                                PhotosPicker(selection: $selectedItems, maxSelectionCount: 1, matching: .images) {
+                                PhotosPicker(selection: $selectedItems, maxSelectionCount: 5, matching: .images) {
                                     if selectedItems.count == 1 {
                                         Label("\(selectedItems.count != 0 ? "\(selectedItems.count) Selected" : "")", systemImage: "photo")
                                     } else if selectedItems.count == 0 {

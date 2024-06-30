@@ -25,6 +25,11 @@ struct ElonMigoApp: App {
             ContentView()
                 .environmentObject(userPreferences)
                 .environmentObject(quizStorage)
+                .onAppear {
+                    Task {
+                        await quizStorage.load()
+                    }
+                }
                 .splashView {
                     ZStack {
                         LinearGradient(colors: [.brown.opacity(0.1), .brown.opacity(0.2), .brown.opacity(0.3), .brown.opacity(0.4), .brown.opacity(0.5), .brown.opacity(0.6), .brown.opacity(0.7), .brown.opacity(0.8), .brown.opacity(0.9), .brown], startPoint: .topLeading, endPoint: .bottomTrailing)
