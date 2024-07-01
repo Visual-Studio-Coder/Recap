@@ -87,10 +87,16 @@ struct ContentView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
     
-    func decodeJSON(from jsonString: String) -> Quiz? {
+    func decodeJSON(from jsonString: String) -> (quiz: Quiz?, error: String?) {
         let jsonData = jsonString.data(using: .utf8)!
-        return try? JSONDecoder().decode(Quiz.self, from: jsonData)
+        do {
+            let quiz = try JSONDecoder().decode(Quiz.self, from: jsonData)
+            return (quiz, nil)
+        } catch let error {
+            return (nil, error.localizedDescription)
+        }
     }
+
     
     var body: some View {
         if showQuiz, let quiz = quiz {
@@ -105,67 +111,70 @@ struct ContentView: View {
                     if !quizStorage.history.isEmpty {
                         VStack {
                             
-                                Text("Recent Quizzes")
-                                    .font(.title)
-                                    .bold()
-                                Spacer()
-                                Button(action: {
-                                    quizStorage.history.removeAll()
-                                    Task {
-                                        await quizStorage.save(history: [])
-                                    }
-                                }) {
-                                    Label("Clear History", systemImage: "trash")
+                            Text("Recent Quizzes")
+                                .font(.title)
+                                .bold()
+                            Spacer()
+                            Button(action: {
+                                quizStorage.history.removeAll()
+                                Task {
+                                    await quizStorage.save(history: [])
                                 }
-                                .foregroundColor(.red)
+                            }) {
+                                Label("Clear History", systemImage: "trash")
+                            }
+                            .foregroundColor(.red)
                             
                         }
                         .padding(.leading)
                         //List {
                         ForEach(quizStorage.history.indices.reversed(), id: \.self) { i in
-                                Menu {
-                                    Button(action: {
-                                        quiz = quizStorage.history[i]
-                                        withAnimation {
-                                            showQuiz.toggle()
-                                        }
-                                    }) {
-                                        Label("Take Quiz Again", systemImage: "arrow.clockwise")
+                            Menu {
+                                //share quiz
+                                ShareLink(item: ExportableQuiz(quiz: quizStorage.history[i]), preview: SharePreview(quizStorage.history[i].quiz_title, icon: "square.and.arrow.up"))
+                                Button(action: {
+                                    //remove current quiz:
+                                    quiz = quizStorage.history[i]
+                                    withAnimation {
+                                        showQuiz.toggle()
                                     }
-                                    
-                                    Button(action: {
-                                        // Implement action to view past results
-                                    }) {
-                                        Label("View Past Results", systemImage: "text.book.closed")
-                                    }
-                                    
-                                    Button(action: {
-                                        // Implement action to regenerate the quiz
-                                    }) {
-                                        Label("Regenerate Quiz", systemImage: "gobackward")
-                                    }
-                                } label: {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(quizStorage.history[i].quiz_title)
-                                                .bold()
-                                            
-                                            Text("\(quizStorage.history[i].questions.count) Questions")
-                                                .foregroundStyle(.secondary)
-                                        }
-                                        Spacer()
-//                                        if quizStorage.history[i].userAnswers != nil {
-//                                            Text("\(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count)/\(quizStorage.history[i].questions.count) (\(Int((Double(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count) / Double(quizStorage.history[i].questions.count)) * 100))%)")
-//                                                .foregroundStyle(.secondary)
-//                                        }
-                                        if let userAnswers = quizStorage.history[i].userAnswers {
-                                            Text("\((userAnswers.filter { $0.isCorrect }.count))/\(quizStorage.history[i].questions.count) (\(String(format: "%.0f", (Double(userAnswers.filter { $0.isCorrect }.count) / Double(quizStorage.history[i].questions.count) * 100)))%)")
-                                                .foregroundStyle(.secondary)
-                                        }
-                                    }
-                                    .padding()
+                                    quizStorage.history.remove(at: i)
+                                }) {
+                                    Label("Take Quiz Again", systemImage: "arrow.clockwise")
                                 }
+                                Button(action: {
+                                    // Implement action to view past results
+                                }) {
+                                    Label("View Past Results", systemImage: "text.book.closed")
+                                }
+                                
+                                Button(action: {
+                                    // Implement action to regenerate the quiz
+                                }) {
+                                    Label("Regenerate Quiz", systemImage: "gobackward")
+                                }
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(quizStorage.history[i].quiz_title)
+                                            .bold()
+                                        
+                                        Text("\(quizStorage.history[i].questions.count) Questions")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    Spacer()
+                                    //                                        if quizStorage.history[i].userAnswers != nil {
+                                    //                                            Text("\(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count)/\(quizStorage.history[i].questions.count) (\(Int((Double(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count) / Double(quizStorage.history[i].questions.count)) * 100))%)")
+                                    //                                                .foregroundStyle(.secondary)
+                                    //                                        }
+                                    if let userAnswers = quizStorage.history[i].userAnswers {
+                                        Text("\((userAnswers.filter { $0.isCorrect }.count))/\(quizStorage.history[i].questions.count) (\(String(format: "%.0f", (Double(userAnswers.filter { $0.isCorrect }.count) / Double(quizStorage.history[i].questions.count) * 100)))%)")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .padding()
                             }
+                        }
                         //}
                     }
                     VStack(alignment: .leading) {
@@ -259,20 +268,19 @@ struct ContentView: View {
                                 if apiKey != "" {
                                     let message = userInput + "Attached Website Content:" + websiteContent
                                     geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
-                                        print(response)
-                                        
-                                        do {
-                                            let quiz = decodeJSON(from: response)
-                                            
+                                        //print(response)
+                                        let (quiz, error) = decodeJSON(from: response)
+                                        if let quiz = quiz {
                                             DispatchQueue.main.async {
                                                 self.quiz = quiz
                                                 self.showQuiz = true
                                             }
-                                        } catch {
-                                            print(error)
+                                        } else {
+                                            print("Failed to decode json: \(error ?? "Unknown error")")
                                             self.showingGeminiFailAlert = true
                                             gemeniGeneratingQuiz = false
                                         }
+
                                     }
                                 } else {
                                     self.showingGeminiAPIAlert = true
@@ -318,7 +326,7 @@ struct ContentView: View {
                             showingSettingsSheet.toggle()
                         }
                     }
-
+                    
                     .alert("An unknown error occured while generating the quiz!", isPresented: $showingGeminiFailAlert) {}
                     .sheet(isPresented: $showingQuizCustomizationSheet) {
                         NavigationStack {
@@ -343,6 +351,12 @@ struct ContentView: View {
                         }
                         .presentationDetents([.large, .medium])
                     }
+                    .onOpenURL { url in
+            // Handle the URL to load the quiz
+            Task {
+                await loadQuiz(from: url)
+            }
+        }
                     .sheet(isPresented: $showingURLSheet) {
                         NavigationStack {
                             Form {
@@ -450,8 +464,39 @@ struct ContentView: View {
                         .presentationDetents([.medium, .large])
                     }
                 }
-                    .scrollDismissesKeyboard(.interactively)
+                .scrollDismissesKeyboard(.interactively)
             }
+        }
+    }
+    func loadQuiz(from url: URL) async {
+        do {
+            print(url)
+            let data = try Data(contentsOf: url)
+            // Step 1: Deserialize the JSON data into a mutable structure
+            if let fullQuizDictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+               var quizDictionary = fullQuizDictionary["quiz"] as? [String: Any] {
+                // Step 2: Remove the userAnswers field
+                quizDictionary.removeValue(forKey: "userAnswers")
+                
+                // Step 3: Serialize the modified structure (without the quiz wrapper) back into JSON data
+                let modifiedData = try JSONSerialization.data(withJSONObject: quizDictionary, options: [])
+                
+                // Step 4: Convert modified data to a pretty-printed string for verification
+                if let prettyPrintedString = String(data: modifiedData, encoding: .utf8) {
+                    print("Modified JSON:\n\(prettyPrintedString)")
+                }
+                
+                // Step 5: Decode the modified JSON data into the Quiz object
+                // Assuming the Quiz struct is designed to directly decode this modified structure
+                let quiz1 = try JSONDecoder().decode(Quiz.self, from: modifiedData)
+                // Assuming you have a way to update your quiz data
+                self.quiz = quiz1
+                showQuiz.toggle()
+            } else {
+                print("Could not deserialize JSON into a dictionary.")
+            }
+        } catch {
+            print("Failed to load quiz: \(error.localizedDescription)")
         }
     }
 }

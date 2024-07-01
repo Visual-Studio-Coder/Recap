@@ -6,13 +6,24 @@
 //
 
 import Foundation
-
-// Assuming UserAnswer is defined in the same file or imported
+import CoreTransferable
+import UniformTypeIdentifiers
 
 struct Quiz: Codable {
     let quiz_title: String
     let questions: [Question]
     var userAnswers: [UserAnswer]? // Optional to handle quizzes without answers
+}
+
+struct ExportableQuiz: Codable, Transferable {
+    var quiz: Quiz
+    static var transferRepresentation: some TransferRepresentation {
+        CodableRepresentation(contentType: .elonmigoExportType)
+    }
+}
+
+extension UTType {
+    static var elonmigoExportType = UTType(exportedAs: "com.click.ElonMigo.elonmigo")
 }
 
 @MainActor
@@ -26,6 +37,8 @@ class QuizStorage: ObservableObject {
                                     create: false)
         .appendingPathComponent("quiz.data")
     }
+
+
     
     func load() async {
         do {

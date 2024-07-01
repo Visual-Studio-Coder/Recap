@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7814B1652C335C7B005B9530 /* ElonMigo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7814B1642C335C7B005B9530 /* ElonMigo.png */; };
 		787010172C0254AE004CDA60 /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010062C0254AE004CDA60 /* Explanation.swift */; };
 		787010182C0254AE004CDA60 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010072C0254AE004CDA60 /* Question.swift */; };
 		7870101A2C0254AE004CDA60 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010092C0254AE004CDA60 /* Quiz.swift */; };
@@ -28,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7814B1622C335C08005B9530 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7814B1642C335C7B005B9530 /* ElonMigo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ElonMigo.png; sourceTree = "<group>"; };
 		787010062C0254AE004CDA60 /* Explanation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
 		787010072C0254AE004CDA60 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		787010092C0254AE004CDA60 /* Quiz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
@@ -103,6 +106,8 @@
 				787010132C0254AE004CDA60 /* ElonMigoApp.swift */,
 				787010142C0254AE004CDA60 /* GeminiAPI.swift */,
 				787010152C0254AE004CDA60 /* Sample-JSON.json */,
+				7814B1642C335C7B005B9530 /* ElonMigo.png */,
+				7814B1622C335C08005B9530 /* Info.plist */,
 			);
 			path = ElonMigo;
 			sourceTree = "<group>";
@@ -163,7 +168,7 @@
 				};
 			};
 			buildConfigurationList = 8B96752D2C02420D005950FB /* Build configuration list for PBXProject "ElonMigo" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -190,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */,
+				7814B1652C335C7B005B9530 /* ElonMigo.png in Resources */,
 				7870101F2C0254AE004CDA60 /* Assets.xcassets in Resources */,
 				7870101C2C0254AE004CDA60 /* Preview Assets.xcassets in Resources */,
 			);
@@ -351,6 +357,7 @@
 				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ElonMigo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -386,6 +393,7 @@
 				DEVELOPMENT_TEAM = SU5789R8HD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ElonMigo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

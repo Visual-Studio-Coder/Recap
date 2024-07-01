@@ -138,6 +138,7 @@ struct QuizView: View {
     @State private var showFullFeedback = false
     @State private var showFullExpectedAnswer = false
     @State private var gradingCompleted: Bool = false // Add this state variable
+    @State private var showingGeminiQuotaLimit = false
     @Environment(\.displayScale) var displayScale
     
     let quiz: Quiz
@@ -615,6 +616,7 @@ struct QuizView: View {
                     }
                 } catch {
                     // If the response can't be decoded into a GradingResult, print the error and the raw response
+                    showingGeminiQuotaLimit.toggle()
                     print("Failed to decode grading result: \(error)")
                     print("Raw response: \(response)")
                     self.isGradingInProgress = false
