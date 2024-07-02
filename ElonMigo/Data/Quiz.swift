@@ -17,6 +17,7 @@ struct Quiz: Codable {
 
 struct ExportableQuiz: Codable, Transferable {
     var quiz: Quiz
+    //let prompt: String?
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .elonmigoExportType)
     }

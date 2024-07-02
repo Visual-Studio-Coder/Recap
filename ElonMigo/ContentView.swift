@@ -71,6 +71,7 @@ struct ContentView: View {
     
     @State private var showQuiz = false
     @State private var showingSettingsSheet = false
+    @State private var showingQuizResults = false
     
     @State private var userInput = ""
     //@AppStorage("numberOfQuestions") private var numberOfQuestions = 5
@@ -96,7 +97,7 @@ struct ContentView: View {
             return (nil, error.localizedDescription)
         }
     }
-
+    
     
     var body: some View {
         if showQuiz, let quiz = quiz {
@@ -143,7 +144,10 @@ struct ContentView: View {
                                     Label("Take Quiz Again", systemImage: "arrow.clockwise")
                                 }
                                 Button(action: {
-                                    // Implement action to view past results
+                                    DispatchQueue.main.async {
+                                        quiz = quizStorage.history[i]
+                                    }
+                                    showingQuizResults.toggle()
                                 }) {
                                     Label("View Past Results", systemImage: "text.book.closed")
                                 }
@@ -280,7 +284,7 @@ struct ContentView: View {
                                             self.showingGeminiFailAlert = true
                                             gemeniGeneratingQuiz = false
                                         }
-
+                                        
                                     }
                                 } else {
                                     self.showingGeminiAPIAlert = true
@@ -328,6 +332,19 @@ struct ContentView: View {
                     }
                     
                     .alert("An unknown error occured while generating the quiz!", isPresented: $showingGeminiFailAlert) {}
+                    .sheet(isPresented: $showingQuizResults) {
+                        if quiz != nil {
+                            if quiz!.userAnswers != nil {
+                                NavigationStack {
+                                    QuizResultsView(userAnswers: quiz!.userAnswers!)
+                                        .navigationTitle(Text("\(quiz!.quiz_title) Results"))
+                                        .navigationBarTitleDisplayMode(.inline)
+                                }
+                                .presentationDetents([.large, .medium])
+                            }
+                        }
+                        
+                    }
                     .sheet(isPresented: $showingQuizCustomizationSheet) {
                         NavigationStack {
                             Form {
@@ -352,11 +369,11 @@ struct ContentView: View {
                         .presentationDetents([.large, .medium])
                     }
                     .onOpenURL { url in
-            // Handle the URL to load the quiz
-            Task {
-                await loadQuiz(from: url)
-            }
-        }
+                        // Handle the URL to load the quiz
+                        Task {
+                            await loadQuiz(from: url)
+                        }
+                    }
                     .sheet(isPresented: $showingURLSheet) {
                         NavigationStack {
                             Form {
@@ -405,6 +422,7 @@ struct ContentView: View {
                         }
                         .presentationDetents([.medium, .large])
                     }
+                    //show
                     .sheet(isPresented: $showingSettingsSheet) {
                         NavigationStack {
                             Form {
@@ -497,6 +515,94 @@ struct ContentView: View {
             }
         } catch {
             print("Failed to load quiz: \(error.localizedDescription)")
+        }
+    }
+}
+
+struct QuizResultsView: View {
+    let userAnswers: [UserAnswer]
+    var body: some View {
+        Form {
+            ForEach(userAnswers, id: \.question.question) { userAnswer in
+                Section {
+                    VStack {
+                        HStack {
+                            //did they get it correct or incorrect
+                            if userAnswer.isCorrect {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(.green)
+                                Text("You got this question correct!")
+                                    .bold()
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
+                                    .multilineTextAlignment(.leading)
+                            } else {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.red)
+                                Text("You got this question incorrect.")
+                                    .bold()
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            Spacer()
+                            Text("Question \(userAnswers.firstIndex(where: { $0.question.question == userAnswer.question.question })! + 1)")
+                                .bold()
+                                .foregroundStyle(.secondary)
+                                .font(.footnote)
+                                .multilineTextAlignment(.leading)
+                        }
+                        HStack {
+                            Text(userAnswer.question.question)
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            //                                    if userAnswer.question.type == "multiple_choice" {
+                            //                                        Spacer()
+                            //                                    }
+                            Spacer()
+                        }
+                        //                                .padding(.vertical)
+                    }
+                    if userAnswer.question.type == "multiple_choice" {
+                        ForEach(userAnswer.question.options ?? [], id: \.text) { option in
+                            HStack {
+                                Text(option.text)
+                                Spacer()
+                                if userAnswer.userAnswer.contains(option.text) {
+                                    if option.correct {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundStyle(.green)
+                                    } else {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundStyle(.red)
+                                    }
+                                } else if option.correct {
+                                    Image(systemName: "checkmark.circle")
+                                        .foregroundStyle(.green)
+                                } else {
+                                    Image(systemName: "circle")
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    } else {
+                        VStack(alignment: .leading) {
+                            Text("Your Answer:")
+                                .bold()
+                                .foregroundStyle(.secondary)
+                            Text(userAnswer.userAnswer.joined(separator: ","))
+                        }
+                        VStack(alignment: .leading) {
+                            Text("Expected Answer:")
+                                .bold()
+                                .foregroundStyle(.secondary)
+                            if let correctAnswer = userAnswer.correctAnswer {
+                                Text(correctAnswer)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
