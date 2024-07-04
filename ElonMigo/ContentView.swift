@@ -548,6 +548,22 @@ struct ContentView: View {
                                 Button("Clear All") {
                                     showingClearHistoryActionSheet = true
                                 }
+                                .foregroundColor(.red)
+                                .actionSheet(isPresented: $showingClearHistoryActionSheet) {
+                                    ActionSheet(
+                                        title: Text("Are you sure you want to clear history?"),
+                                        buttons: [
+                                            .destructive(Text("Clear"), action: {
+                                                quizStorage.history.removeAll()
+                                                Task {
+                                                    await quizStorage.save(history: [])
+                                                }
+                                                showingAllQuizzes = false
+                                            }),
+                                            .cancel()
+                                        ]
+                                    )
+                                }
                             }
                         }
                     }
