@@ -214,10 +214,42 @@ struct ContentView: View {
                             .onChange(of: selectedItems) {
                                 selectedPhotosData = []
                                 
-                                for i in selectedItems {
-                                    Task {
-                                        if let data = try? await i.loadTransferable(type: Data.self) {
-                                            selectedPhotosData.append(data)
+                                // Define the maximum allowed dimension for an image.
+                                let largestImageDimension: CGFloat = 768.0
+                                
+                                // Use a concurrent loop to process images in parallel.
+                                Task {
+                                    await withTaskGroup(of: Data?.self) { group in
+                                        for item in selectedItems {
+                                            group.addTask {
+                                                return try? await item.loadTransferable(type: Data.self)
+                                            }
+                                        }
+                                        
+                                        // Process each image as it finishes loading.
+                                        for await result in group {
+                                            if let data = result, let image = UIImage(data: data) {
+                                                // Check if the image fits within the largest allowed dimension.
+                                                if image.size.fits(largestDimension: largestImageDimension) {
+                                                    // If it fits, use the original image data.
+                                                    await MainActor.run {
+                                                        selectedPhotosData.append(data)
+                                                    }
+                                                } else {
+                                                    // If it doesn't fit, resize the image.
+                                                    guard let resizedImage = image.preparingThumbnail(of: CGSize(width: largestImageDimension, height: largestImageDimension).aspectFit(largestDimension: largestImageDimension)) else {
+                                                        continue
+                                                    }
+                                                    
+                                                    // Convert the resized image back to Data, if possible.
+                                                    if let resizedImageData = resizedImage.jpegData(compressionQuality: 1.0) {
+                                                        // Append the resized image data to the selectedPhotosData array.
+                                                        await MainActor.run {
+                                                            selectedPhotosData.append(resizedImageData)
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -613,5 +645,21 @@ struct QuizResultsView: View {
         
         ContentView()
             .environmentObject(quizStorage)
+    }
+}
+extension CGSize {
+    func fits(largestDimension length: CGFloat) -> Bool {
+        return width <= length && height <= length
+    }
+
+    func aspectFit(largestDimension length: CGFloat) -> CGSize {
+        let aspectRatio = width / height
+        if width > height {
+            let width = min(self.width, length)
+            return CGSize(width: width, height: round(width / aspectRatio))
+        } else {
+            let height = min(self.height, length)
+            return CGSize(width: round(height * aspectRatio), height: height)
+        }
     }
 }
