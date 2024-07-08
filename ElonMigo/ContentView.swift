@@ -143,7 +143,7 @@ struct ContentView: View {
                         .padding(.leading)
                         
                         //List {
-                        ForEach(quizStorage.history.indices.prefix(3), id: \.self) { i in
+                        ForEach(quizStorage.history.indices.reversed().prefix(3), id: \.self) { i in
                             Menu {
                                 //share quiz
                                 ShareLink(item: ExportableQuiz(quiz: quizStorage.history[i]), preview: SharePreview(quizStorage.history[i].quiz_title, icon: "square.and.arrow.up"))
@@ -481,7 +481,7 @@ struct ContentView: View {
                 .sheet(isPresented: $showingAllQuizzes) {
                     NavigationStack {
                         List {
-                            ForEach(quizStorage.history.indices, id: \.self) { i in
+                            ForEach(quizStorage.history.indices.reversed(), id: \.self) { i in
                                 Menu {
                                     //share quiz
                                     ShareLink(item: ExportableQuiz(quiz: quizStorage.history[i]), preview: SharePreview(quizStorage.history[i].quiz_title, icon: "square.and.arrow.up"))
