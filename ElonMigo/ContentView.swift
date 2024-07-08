@@ -210,11 +210,83 @@ struct ContentView: View {
                 }
                     
                 VStack(alignment: .leading) {
-                    TextField("What would you like to quiz yourself on?", text: $userInput, axis: .vertical)
-                        .padding()
-                        .clipShape(RoundedRectangle(cornerRadius: 15))
-                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
-                        .padding(.horizontal)
+                    HStack {
+                        TextField("What would you like to quiz yourself on?", text: $userInput, axis: .vertical)
+                            .padding()
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                            .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
+                            //.padding(.horizontal)
+                        Button {
+                            gemeniGeneratingQuiz = true
+                            print(userPreferences.apiKey)
+                            print(userPreferences.geminiModel)
+                            
+                            // Create a DispatchGroup to handle multiple asynchronous tasks
+                            let group = DispatchGroup()
+                            
+                            var websiteContent = ""
+                            
+                            // Use a regular Swift for loop to iterate over the links array
+                            for link in links {
+                                if let url = URL(string: link) {
+                                    group.enter()
+                                    
+                                    DispatchQueue.global().async {
+                                        do {
+                                            let contents = try String(contentsOf: url)
+                                            let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+                                            let plainString = atr.string
+                                            websiteContent += plainString
+                                        } catch {
+                                            // contents could not be loaded
+                                        }
+                                        group.leave()
+                                    }
+                                }
+                            }
+                            
+                            group.notify(queue: .main) {
+                                if apiKey != "" {
+                                    let message = userInput + "Attached Website Content:" + websiteContent
+                                    geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
+                                        //print(response)
+                                        let (quiz, error) = decodeJSON(from: response)
+                                        if let quiz = quiz {
+                                            DispatchQueue.main.async {
+                                                self.quiz = quiz
+                                                self.showQuiz = true
+                                            }
+                                        } else {
+                                            print("Failed to decode json: \(error ?? "Unknown error")")
+                                            self.showingGeminiFailAlert = true
+                                            gemeniGeneratingQuiz = false
+                                        }
+                                        
+                                    }
+                                } else {
+                                    self.showingGeminiAPIAlert = true
+                                    gemeniGeneratingQuiz = false
+                                }
+                            }
+                        } label: {
+                            if gemeniGeneratingQuiz {
+                                ProgressView()
+                                    //.foregroundStyle(.white)
+                                    .frame(width: 30, height: 30)
+                                    .padding(.trailing)
+                                    //.background(Color.accentColor)
+                                    //.clipShape(RoundedRectangle(cornerRadius: 15))
+                            } else {
+                                Image(systemName: "paperplane")
+                                    //.foregroundStyle(.white)
+                                    .frame(width: 30, height: 30)
+                                    .padding(.trailing)
+                                    //.background(Color.accentColor)
+                                    //.clipShape(RoundedRectangle(cornerRadius: 15))
+                            }
+                        }
+                        .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
+                    }
                     
                     HStack {
                         Button {
@@ -293,83 +365,9 @@ struct ContentView: View {
                         }
                         .buttonStyle(.bordered)
                         .clipShape(RoundedRectangle(cornerRadius: 100.00))
+                        
                     }
                     .padding([.bottom, .leading, .trailing])
-                    
-                    Button {
-                        gemeniGeneratingQuiz = true
-                        print(userPreferences.apiKey)
-                        print(userPreferences.geminiModel)
-                        
-                        // Create a DispatchGroup to handle multiple asynchronous tasks
-                        let group = DispatchGroup()
-                        
-                        var websiteContent = ""
-                        
-                        // Use a regular Swift for loop to iterate over the links array
-                        for link in links {
-                            if let url = URL(string: link) {
-                                group.enter()
-                                
-                                DispatchQueue.global().async {
-                                    do {
-                                        let contents = try String(contentsOf: url)
-                                        let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
-                                        let plainString = atr.string
-                                        websiteContent += plainString
-                                    } catch {
-                                        // contents could not be loaded
-                                    }
-                                    group.leave()
-                                }
-                            }
-                        }
-                        
-                        group.notify(queue: .main) {
-                            if apiKey != "" {
-                                let message = userInput + "Attached Website Content:" + websiteContent
-                                geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
-                                    //print(response)
-                                    let (quiz, error) = decodeJSON(from: response)
-                                    if let quiz = quiz {
-                                        DispatchQueue.main.async {
-                                            self.quiz = quiz
-                                            self.showQuiz = true
-                                        }
-                                    } else {
-                                        print("Failed to decode json: \(error ?? "Unknown error")")
-                                        self.showingGeminiFailAlert = true
-                                        gemeniGeneratingQuiz = false
-                                    }
-                                    
-                                }
-                            } else {
-                                self.showingGeminiAPIAlert = true
-                                gemeniGeneratingQuiz = false
-                            }
-                        }
-                    } label: {
-                        if gemeniGeneratingQuiz {
-                            HStack {
-                                ProgressView()
-                                Text("Generating Quiz...")
-                            }
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.accentColor)
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                        } else {
-                            Label("Generate Quiz", systemImage: "paperplane")
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.accentColor)
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                        }
-                    }
-                    .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
-                    .padding(.horizontal)
                 }
                 .navigationTitle("ElonMigo")
                 .navigationBarTitleDisplayMode(.inline)
