@@ -4,6 +4,7 @@
 //
 import SwiftUI
 import ConfettiSwiftUI
+import MarkdownUI
 
 struct QuestionView: View {
     let question: Question
@@ -16,7 +17,7 @@ struct QuestionView: View {
         VStack {
             Spacer()
             HStack {
-                Text(question.question)
+                Markdown(question.question.replacingOccurrences(of: "<`>", with: "```"))
                     .bold()
                     .font(.title)
                     .padding([.leading, .trailing, .top])
@@ -57,7 +58,7 @@ struct QuestionView: View {
                                 .padding(.trailing)
                         }
                         
-                        Text(option.text)
+                        Markdown(option.text.replacingOccurrences(of: "<`>", with: "```"))
                             .multilineTextAlignment(.leading)
                         
                         Spacer()
@@ -258,7 +259,7 @@ struct QuizView: View {
                                         }
                                         .foregroundStyle(.secondary)
                                         if showFullExpectedAnswer {
-                                            Text("\(gradingResult.expectedAnswer)")
+                                            Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
                                                 .opacity(showFullExpectedAnswer ? 1 : 0)
                                                 .animation(.easeInOut)
                                                 .onTapGesture {
@@ -267,7 +268,7 @@ struct QuizView: View {
                                                     }
                                                 }
                                         } else {
-                                            Text("\(gradingResult.expectedAnswer)")
+                                            Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
                                                 .lineLimit(showFullExpectedAnswer ? nil : 3)
                                                 .truncationMode(.tail)
                                             //.opacity(showFullExpectedAnswer ? 1 : 0)
@@ -293,7 +294,7 @@ struct QuizView: View {
                                             }
                                         }
                                         if showFullFeedback {
-                                            Text("\(gradingResult.feedback)")
+                                            Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
                                                 .opacity(showFullFeedback ? 1 : 0)
                                                 .animation(.easeInOut)
                                                 .onTapGesture {
@@ -302,7 +303,7 @@ struct QuizView: View {
                                                     }
                                                 }
                                         } else {
-                                            Text("\(gradingResult.feedback)")
+                                            Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
                                                 .lineLimit(showFullFeedback ? nil : 3)
                                                 .truncationMode(.tail)
                                             //.opacity(showFullFeedback ? 1 : 0)
@@ -381,14 +382,14 @@ struct QuizView: View {
                 NavigationStack {
                     VStack {
                         if let explanationUnwrapped = explanation, !explanationUnwrapped.question.isEmpty {
-                            Text(explanationUnwrapped.question)
+                            Markdown(explanationUnwrapped.question.replacingOccurrences(of: "<`>", with: "```"))
                                 .font(.headline)
                                 .padding()
                             Form {
                                 ForEach(explanationUnwrapped.choices, id: \.answer_option) { choice in
                                     Section {
                                         Label {
-                                            Text("\(choice.answer_option)")
+                                            Markdown("\(choice.answer_option.replacingOccurrences(of: "<`>", with: "```"))")
                                         } icon: {
                                             if choice.correct {
                                                 Image(systemName: "checkmark.circle.fill")
@@ -399,17 +400,17 @@ struct QuizView: View {
                                             }
                                         }
                                         
-                                        Text(choice.explanation)
+                                        Markdown(choice.explanation.replacingOccurrences(of: "<`>", with: "```"))
                                     }
                                 }
                             }
                         } else if !chatService.computerResponse.isEmpty {
-                            Text(quiz.questions[selectedTab].question)
+                            Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
                                 .font(.headline)
                                 .padding()
                             Form {
                                 Text("**Receiving Response from Gemini...**")
-                                Text(chatService.computerResponse)
+                                Markdown(chatService.computerResponse.replacingOccurrences(of: "<`>", with: "```"))
                             }
                             .onChange(of: chatService.computerResponse, { oldValue, newValue in
                                 let generator = UIImpactFeedbackGenerator(style: .light)
