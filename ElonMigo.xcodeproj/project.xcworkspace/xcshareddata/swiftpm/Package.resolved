@@ -1,5 +1,5 @@
 {
-  "originHash" : "6458d0782198504601ab6422ff3c62d4ab4d4fb568e5c6f5c42439eaa4e53b33",
+  "originHash" : "e9355e887b20ce9e8df10a5dba882cae8df445e37f7b42803d2276144e77ed72",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -17,6 +17,24 @@
       "state" : {
         "revision" : "54784005b57c2235a7669e0c12e8dafa68f0ca5f",
         "version" : "0.5.4"
+      }
+    },
+    {
+      "identity" : "networkimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/NetworkImage",
+      "state" : {
+        "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
+        "version" : "6.0.0"
+      }
+    },
+    {
+      "identity" : "swift-markdown-ui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/swift-markdown-ui",
+      "state" : {
+        "revision" : "9a8119b37e09a770367eeb26e05267c75d854053",
+        "version" : "2.3.1"
       }
     }
   ],

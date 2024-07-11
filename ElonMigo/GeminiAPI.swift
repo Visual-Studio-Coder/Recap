@@ -30,6 +30,35 @@ class GeminiAPI: ObservableObject {
             topK: 64,
             maxOutputTokens: 128000,
             responseMIMEType: "application/json"
+//            responseSchema:
+//                ///Users/vaibhavsatishkumar/Downloads/ElonMigo/ElonMigo/GeminiAPI.swift:33:29 Cannot convert value of type 'String' to expected argument type 'Schema?'
+//                Schema(
+//                    type: .object,
+//                    properties: [
+//                        "quiz_title": Schema(type: .string),
+//                        "questions": Schema(
+//                            type: .array,
+//                            items: Schema(
+//                                type: .object,
+//                                properties: [
+//                                    "type": Schema(type: .string),
+//                                    "question": Schema(type: .string),
+//                                    "options": Schema(
+//                                        type: .array,
+//                                        items: Schema(
+//                                            type: .object,
+//                                            properties: [
+//                                                "text": Schema(type: .string),
+//                                                "correct": Schema(type: .boolean)
+//                                            ]
+//                                        )
+//                                    ),
+//                                    "answer": Schema(type: .string)
+//                                ]
+//                            )
+//                        )
+//                    ]
+//                )
         )
         
         self.model = GenerativeModel(
@@ -43,7 +72,7 @@ class GeminiAPI: ObservableObject {
                 SafetySetting(harmCategory: .dangerousContent, threshold: .blockNone),
             ],
             systemInstruction:
-                "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true, but if all answers are true and you decide to use \"all of the above\", PLEASE MAKE THE OTHER ANSWERS FALSE. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes."
+                "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true, but if all answers are true and you decide to use \"all of the above\", PLEASE MAKE THE OTHER ANSWERS FALSE. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes. Markdown is supported but instead of using the backtick character in codeblocks (not inline codeblocks), replace it with <`>"
         )
         
         if let model = self.model {
