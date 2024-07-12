@@ -5,8 +5,11 @@
 import SwiftUI
 import ConfettiSwiftUI
 import MarkdownUI
+import Splash
 
 struct QuestionView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     let question: Question
     let answerCallback: ([String], Bool) -> Void
     
@@ -18,6 +21,7 @@ struct QuestionView: View {
             Spacer()
             HStack {
                 Markdown(question.question.replacingOccurrences(of: "<`>", with: "```"))
+                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                     .bold()
                     .font(.title)
                     .padding([.leading, .trailing, .top])
@@ -59,6 +63,7 @@ struct QuestionView: View {
                         }
                         
                         Markdown(option.text.replacingOccurrences(of: "<`>", with: "```"))
+                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                             .multilineTextAlignment(.leading)
                         
                         Spacer()
@@ -114,6 +119,15 @@ struct QuestionView: View {
             Spacer()
         }
     }
+    private var theme: Splash.Theme {
+        // NOTE: We are ignoring the Splash theme font
+        switch self.colorScheme {
+        case .dark:
+          return .wwdc17(withFont: .init(size: 16))
+        default:
+          return .sunset(withFont: .init(size: 16))
+        }
+      }
 }
 
 struct QuizView: View {
@@ -141,6 +155,7 @@ struct QuizView: View {
     @State private var gradingCompleted: Bool = false // Add this state variable
     @State private var showingGeminiQuotaLimit = false
     @Environment(\.displayScale) var displayScale
+    @Environment(\.colorScheme) private var colorScheme
     
     let quiz: Quiz
     @ObservedObject var chatService = GeminiAPI.shared!
@@ -260,6 +275,7 @@ struct QuizView: View {
                                         .foregroundStyle(.secondary)
                                         if showFullExpectedAnswer {
                                             Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
+                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                                 .opacity(showFullExpectedAnswer ? 1 : 0)
                                                 .animation(.easeInOut)
                                                 .onTapGesture {
@@ -269,6 +285,7 @@ struct QuizView: View {
                                                 }
                                         } else {
                                             Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
+                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                                 .lineLimit(showFullExpectedAnswer ? nil : 3)
                                                 .truncationMode(.tail)
                                             //.opacity(showFullExpectedAnswer ? 1 : 0)
@@ -295,6 +312,7 @@ struct QuizView: View {
                                         }
                                         if showFullFeedback {
                                             Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
+                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                                 .opacity(showFullFeedback ? 1 : 0)
                                                 .animation(.easeInOut)
                                                 .onTapGesture {
@@ -304,6 +322,7 @@ struct QuizView: View {
                                                 }
                                         } else {
                                             Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
+                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                                 .lineLimit(showFullFeedback ? nil : 3)
                                                 .truncationMode(.tail)
                                             //.opacity(showFullFeedback ? 1 : 0)
@@ -383,6 +402,7 @@ struct QuizView: View {
                     VStack {
                         if let explanationUnwrapped = explanation, !explanationUnwrapped.question.isEmpty {
                             Markdown(explanationUnwrapped.question.replacingOccurrences(of: "<`>", with: "```"))
+                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                 .font(.headline)
                                 .padding()
                             Form {
@@ -390,6 +410,7 @@ struct QuizView: View {
                                     Section {
                                         Label {
                                             Markdown("\(choice.answer_option.replacingOccurrences(of: "<`>", with: "```"))")
+                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                         } icon: {
                                             if choice.correct {
                                                 Image(systemName: "checkmark.circle.fill")
@@ -401,16 +422,19 @@ struct QuizView: View {
                                         }
                                         
                                         Markdown(choice.explanation.replacingOccurrences(of: "<`>", with: "```"))
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                     }
                                 }
                             }
                         } else if !chatService.computerResponse.isEmpty {
                             Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
+                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                 .font(.headline)
                                 .padding()
                             Form {
                                 Text("**Receiving Response from Gemini...**")
                                 Markdown(chatService.computerResponse.replacingOccurrences(of: "<`>", with: "```"))
+                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                             }
                             .onChange(of: chatService.computerResponse, { oldValue, newValue in
                                 let generator = UIImpactFeedbackGenerator(style: .light)
@@ -418,8 +442,9 @@ struct QuizView: View {
                             })
                         } else {
                             VStack {
-                                Text(quiz.questions[selectedTab].question)
-                                    .font(.headline)
+                                Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
+                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                    //.font(.headline)
                                     .padding()
                                 ProgressView()
                                     .controlSize(.extraLarge)
@@ -485,8 +510,9 @@ struct QuizView: View {
                                         .multilineTextAlignment(.leading)
                                 }
                                 HStack {
-                                    Text(userAnswer.question.question)
-                                        .bold()
+                                    Markdown(userAnswer.question.question.replacingOccurrences(of: "<`>", with: "```"))
+                                        .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                        //.bold()
                                         .multilineTextAlignment(.leading)
                                     //                                    if userAnswer.question.type == "multiple_choice" {
                                     //                                        Spacer()
@@ -498,7 +524,8 @@ struct QuizView: View {
                             if userAnswer.question.type == "multiple_choice" {
                                 ForEach(userAnswer.question.options ?? [], id: \.text) { option in
                                     HStack {
-                                        Text(option.text)
+                                        Markdown(option.text.replacingOccurrences(of: "<`>", with: "```"))
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                         Spacer()
                                         if userAnswer.userAnswer.contains(option.text) {
                                             if option.correct {
@@ -529,7 +556,8 @@ struct QuizView: View {
                                         .bold()
                                         .foregroundStyle(.secondary)
                                     if let correctAnswer = userAnswer.correctAnswer {
-                                        Text(correctAnswer)
+                                        Markdown(correctAnswer.replacingOccurrences(of: "<`>", with: "```"))
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                     }
                                 }
                             }
@@ -624,6 +652,15 @@ struct QuizView: View {
                 }
             }
         }
+    }
+    private var theme: Splash.Theme {
+      // NOTE: We are ignoring the Splash theme font
+      switch self.colorScheme {
+      case .dark:
+        return .wwdc17(withFont: .init(size: 16))
+      default:
+        return .sunset(withFont: .init(size: 16))
+      }
     }
     @MainActor func render(quizTitle: String, correctCount: Double, wrongCount: Double) {
         //let renderer = ImageRenderer(content: RenderView(text: text))

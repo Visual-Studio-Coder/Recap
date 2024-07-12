@@ -8,6 +8,8 @@
 import SwiftUI
 import PhotosUI
 import Combine
+import MarkdownUI
+import Splash
 
 @MainActor
 class UserPreferences: ObservableObject {
@@ -54,6 +56,7 @@ class UserPreferences: ObservableObject {
 struct ContentView: View {
     @EnvironmentObject var quizStorage: QuizStorage
     @EnvironmentObject var userPreferences: UserPreferences
+    @Environment(\.colorScheme) private var colorScheme
     
     @AppStorage("apiKey") private var apiKey = ""
     
@@ -208,14 +211,14 @@ struct ContentView: View {
                     }
                     .scrollDismissesKeyboard(.interactively)
                 }
-                    
+                
                 VStack(alignment: .leading) {
                     HStack {
                         TextField("What would you like to quiz yourself on?", text: $userInput, axis: .vertical)
                             .padding()
                             .clipShape(RoundedRectangle(cornerRadius: 15))
                             .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
-                            //.padding(.horizontal)
+                        //.padding(.horizontal)
                         Button {
                             gemeniGeneratingQuiz = true
                             print(userPreferences.apiKey)
@@ -271,18 +274,18 @@ struct ContentView: View {
                         } label: {
                             if gemeniGeneratingQuiz {
                                 ProgressView()
-                                    //.foregroundStyle(.white)
+                                //.foregroundStyle(.white)
                                     .frame(width: 30, height: 30)
                                     .padding(.trailing)
-                                    //.background(Color.accentColor)
-                                    //.clipShape(RoundedRectangle(cornerRadius: 15))
+                                //.background(Color.accentColor)
+                                //.clipShape(RoundedRectangle(cornerRadius: 15))
                             } else {
                                 Image(systemName: "paperplane")
-                                    //.foregroundStyle(.white)
+                                //.foregroundStyle(.white)
                                     .frame(width: 30, height: 30)
                                     .padding(.trailing)
-                                    //.background(Color.accentColor)
-                                    //.clipShape(RoundedRectangle(cornerRadius: 15))
+                                //.background(Color.accentColor)
+                                //.clipShape(RoundedRectangle(cornerRadius: 15))
                             }
                         }
                         .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
@@ -537,11 +540,11 @@ struct ContentView: View {
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement:
-                                            .cancellationAction) {
-                                Button("Done") {
-                                    showingAllQuizzes = false
-                                }
-                            }
+                                    .cancellationAction) {
+                                        Button("Done") {
+                                            showingAllQuizzes = false
+                                        }
+                                    }
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Clear All") {
                                     showingClearHistoryActionSheet = true
@@ -628,6 +631,15 @@ struct ContentView: View {
             }
         }
     }
+    private var theme: Splash.Theme {
+      // NOTE: We are ignoring the Splash theme font
+      switch self.colorScheme {
+      case .dark:
+        return .wwdc17(withFont: .init(size: 16))
+      default:
+        return .sunset(withFont: .init(size: 16))
+      }
+    }
     func loadQuiz(from url: URL) async {
         do {
             print(url)
@@ -662,6 +674,7 @@ struct ContentView: View {
 }
 
 struct QuizResultsView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let userAnswers: [UserAnswer]
     var body: some View {
         Form {
@@ -695,8 +708,9 @@ struct QuizResultsView: View {
                                 .multilineTextAlignment(.leading)
                         }
                         HStack {
-                            Text(userAnswer.question.question)
-                                .bold()
+                            Markdown(userAnswer.question.question.replacingOccurrences(of: "<`>", with: "```"))
+                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                            //.bold()
                                 .multilineTextAlignment(.leading)
                             //                                    if userAnswer.question.type == "multiple_choice" {
                             //                                        Spacer()
@@ -708,7 +722,8 @@ struct QuizResultsView: View {
                     if userAnswer.question.type == "multiple_choice" {
                         ForEach(userAnswer.question.options ?? [], id: \.text) { option in
                             HStack {
-                                Text(option.text)
+                                Markdown(option.text.replacingOccurrences(of: "<`>", with: "```"))
+                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                 Spacer()
                                 if userAnswer.userAnswer.contains(option.text) {
                                     if option.correct {
@@ -739,7 +754,8 @@ struct QuizResultsView: View {
                                 .bold()
                                 .foregroundStyle(.secondary)
                             if let correctAnswer = userAnswer.correctAnswer {
-                                Text(correctAnswer)
+                                Markdown(correctAnswer.replacingOccurrences(of: "<`>", with: "```"))
+                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                             }
                         }
                     }
@@ -747,6 +763,15 @@ struct QuizResultsView: View {
             }
         }
     }
+    private var theme: Splash.Theme {
+        // NOTE: We are ignoring the Splash theme font
+        switch self.colorScheme {
+        case .dark:
+          return .wwdc17(withFont: .init(size: 16))
+        default:
+          return .sunset(withFont: .init(size: 16))
+        }
+      }
 }
 
 #Preview {

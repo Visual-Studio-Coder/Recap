@@ -1,5 +1,5 @@
 {
-  "originHash" : "e9355e887b20ce9e8df10a5dba882cae8df445e37f7b42803d2276144e77ed72",
+  "originHash" : "fe2e4b8d9a87e8bd29c6b3e55ceaa3d4293a9777575b88316342738349157f8f",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
         "version" : "6.0.0"
+      }
+    },
+    {
+      "identity" : "splash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JohnSundell/Splash",
+      "state" : {
+        "revision" : "7f4df436eb78fe64fe2c32c58006e9949fa28ad8",
+        "version" : "0.16.0"
       }
     },
     {
