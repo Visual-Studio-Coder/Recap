@@ -168,11 +168,20 @@ struct QuizView: View {
                 HStack {
                     //show quiz title in menu on tap
                     Menu {
-                        Button {
-                            //do nothing
-                        } label: {
-                            Text(quiz.quiz_title)
-                                .bold()
+                        Section(quiz.quiz_title) {
+                            Button(role: .destructive) {
+                                withAnimation {
+                                    chatService.clearChat()
+                                    showQuiz = false
+                                } 
+
+                                // Add the quiz to the history and save it asynchronously
+                                Task {
+                                    await quizStorage.addQuiz(quiz, userAnswers: userAnswers)
+                                }
+                            } label: {
+                                Label("Exit Quiz", systemImage: "rectangle.portrait.and.arrow.forward")
+                            }
                         }
                     } label: {
                         Text(quiz.quiz_title)
