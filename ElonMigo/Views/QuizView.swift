@@ -82,14 +82,15 @@ struct QuestionView: View {
                 }
                 .onLongPressGesture(minimumDuration: 0, pressing: { inProgress in
                     if inProgress {
-                        let generator = UIImpactFeedbackGenerator(style: .soft)
+                        let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
                     }
                 }, perform: {})
                 .disabled(hasAnswered ?? false)
                 .buttonStyle(.bordered)
                 .background(selectedOptions.contains(option.text) ? Color.blue.opacity(0.2) : Color.clear)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .cornerRadius(10)
                 .padding(.horizontal)
                 .padding(.vertical, 5)
             }
@@ -118,6 +119,7 @@ struct QuestionView: View {
             
             Spacer()
         }
+        .transition(.slide)
     }
     private var theme: Splash.Theme {
         // NOTE: We are ignoring the Splash theme font
@@ -184,9 +186,8 @@ struct QuizView: View {
                             }
                         }
                     } label: {
-                        Text(quiz.quiz_title)
-                            .bold()
-                            .padding()
+                        Label(quiz.quiz_title, systemImage: "chevron.backward")
+                            .padding([.leading, .bottom, .top])
                             .lineLimit(1)
                             .foregroundStyle(.primary)
                     }
@@ -248,6 +249,7 @@ struct QuizView: View {
                             
                             hasAnswered[selectedTab] = true
                         }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab])
+                        .transition(.slide)
                     } else {
                         HStack {
                             Text(quiz.questions[selectedTab].question)
@@ -256,8 +258,10 @@ struct QuizView: View {
                                 .padding()
                             Spacer()
                         }
+                        .transition(.slide)
                         
                         TextField("Click here to answer...", text: $userInput, axis: .vertical)
+                            .transition(.slide)
                             .padding(.horizontal)
                             .onChange(of: userInput) {
                                 hasAnswered[selectedTab] = !userInput.isEmpty
@@ -351,13 +355,15 @@ struct QuizView: View {
                                 }
                                 .padding()
                                 .animation(.easeInOut)
-                                .transition(.opacity)
+                                .transition(.slide)
                                 .id(gradingResult.feedback) // Add an identifier to the GroupBox to trigger animation when gradingResult changes
                                 
                             }
                         }
                     }
+                        
                 }
+                Spacer()
                 VStack {
                     Button {
                         withAnimation {
@@ -387,10 +393,13 @@ struct QuizView: View {
                     .buttonStyle(.borderedProminent)
                     .padding(.horizontal)
                     .disabled(hasAnswered[selectedTab] == nil || (quiz.questions[selectedTab].type == "free_answer" && isGradingInProgress))
+                    .transition(.slide)
+                    // .ignoresSafeArea(.keyboard)
+                    // Spacer()
                     QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
                         .frame(height: 10)
                         .padding(.vertical)
-                    
+                        .ignoresSafeArea(.keyboard)
                     HStack {
                         Spacer()
                         Text("\(answeredQuestions) of \(quiz.questions.count) questions answered")
@@ -398,6 +407,8 @@ struct QuizView: View {
                             .multilineTextAlignment(.center)
                         Spacer()
                     }
+                    .ignoresSafeArea(.keyboard)
+                    .transition(.slide)
                 }
                 .ignoresSafeArea(.keyboard)
                 
@@ -598,6 +609,7 @@ struct QuizView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
             }
+            .transition(.slide)
             .onChange(of: correctAnswers) { _ in render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
             .onAppear { render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
             //}
