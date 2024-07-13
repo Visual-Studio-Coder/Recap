@@ -89,7 +89,7 @@ struct QuestionView: View {
                 .disabled(hasAnswered ?? false)
                 .buttonStyle(.bordered)
                 .background(selectedOptions.contains(option.text) ? Color.blue.opacity(0.2) : Color.clear)
-//                .clipShape(RoundedRectangle(cornerRadius: 10))
+                //                .clipShape(RoundedRectangle(cornerRadius: 10))
                 .cornerRadius(10)
                 .padding(.horizontal)
                 .padding(.vertical, 5)
@@ -125,11 +125,11 @@ struct QuestionView: View {
         // NOTE: We are ignoring the Splash theme font
         switch self.colorScheme {
         case .dark:
-          return .wwdc17(withFont: .init(size: 16))
+            return .wwdc17(withFont: .init(size: 16))
         default:
-          return .sunset(withFont: .init(size: 16))
+            return .sunset(withFont: .init(size: 16))
         }
-      }
+    }
 }
 
 struct QuizView: View {
@@ -175,8 +175,8 @@ struct QuizView: View {
                                 withAnimation {
                                     chatService.clearChat()
                                     showQuiz = false
-                                } 
-
+                                }
+                                
                                 // Add the quiz to the history and save it asynchronously
                                 Task {
                                     await quizStorage.addQuiz(quiz, userAnswers: userAnswers)
@@ -186,10 +186,16 @@ struct QuizView: View {
                             }
                         }
                     } label: {
-                        Label(quiz.quiz_title, systemImage: "chevron.backward")
-                            .padding([.leading, .bottom, .top])
-                            .lineLimit(1)
-                            .foregroundStyle(.primary)
+                        HStack(spacing: 2) {
+                            Image(systemName: "chevron.backward")
+                                .foregroundStyle(.primary)
+                                .bold()
+                            
+                            Text(quiz.quiz_title)
+                                .foregroundStyle(.primary)
+                                .lineLimit(1)
+                        }
+                        .padding([.leading, .top, .bottom])
                     }
                     
                     Spacer()
@@ -361,7 +367,7 @@ struct QuizView: View {
                             }
                         }
                     }
-                        
+                    
                 }
                 Spacer()
                 VStack {
@@ -464,7 +470,7 @@ struct QuizView: View {
                             VStack {
                                 Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
                                     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                    //.font(.headline)
+                                //.font(.headline)
                                     .padding()
                                 ProgressView()
                                     .controlSize(.extraLarge)
@@ -532,7 +538,7 @@ struct QuizView: View {
                                 HStack {
                                     Markdown(userAnswer.question.question.replacingOccurrences(of: "<`>", with: "```"))
                                         .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                        //.bold()
+                                    //.bold()
                                         .multilineTextAlignment(.leading)
                                     //                                    if userAnswer.question.type == "multiple_choice" {
                                     //                                        Spacer()
@@ -592,7 +598,7 @@ struct QuizView: View {
                         chatService.clearChat()
                         showQuiz = false
                     }
-
+                    
                     // Add the quiz to the history and save it asynchronously
                     Task {
                         await quizStorage.addQuiz(quiz, userAnswers: userAnswers)
@@ -675,13 +681,13 @@ struct QuizView: View {
         }
     }
     private var theme: Splash.Theme {
-      // NOTE: We are ignoring the Splash theme font
-      switch self.colorScheme {
-      case .dark:
-        return .wwdc17(withFont: .init(size: 16))
-      default:
-        return .sunset(withFont: .init(size: 16))
-      }
+        // NOTE: We are ignoring the Splash theme font
+        switch self.colorScheme {
+        case .dark:
+            return .wwdc17(withFont: .init(size: 16))
+        default:
+            return .sunset(withFont: .init(size: 16))
+        }
     }
     @MainActor func render(quizTitle: String, correctCount: Double, wrongCount: Double) {
         //let renderer = ImageRenderer(content: RenderView(text: text))
