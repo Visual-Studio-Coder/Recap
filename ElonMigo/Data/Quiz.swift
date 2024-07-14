@@ -23,10 +23,6 @@ struct ExportableQuiz: Codable, Transferable {
     }
 }
 
-extension UTType {
-    static var elonmigoExportType = UTType(exportedAs: "com.click.ElonMigo.elonmigo")
-}
-
 @MainActor
 class QuizStorage: ObservableObject {
     @Published var history: [Quiz] = []

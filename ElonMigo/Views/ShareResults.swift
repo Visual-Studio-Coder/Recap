@@ -67,7 +67,7 @@ struct ShareResults: View {
                                 }
                             }
                         }
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .padding()
                     }
                     //.padding()

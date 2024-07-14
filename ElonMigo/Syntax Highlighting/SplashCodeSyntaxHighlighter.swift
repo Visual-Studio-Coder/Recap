@@ -17,9 +17,3 @@ struct SplashCodeSyntaxHighlighter: CodeSyntaxHighlighter {
     return self.syntaxHighlighter.highlight(content)
   }
 }
-
-extension CodeSyntaxHighlighter where Self == SplashCodeSyntaxHighlighter {
-  static func splash(theme: Splash.Theme) -> Self {
-    SplashCodeSyntaxHighlighter(theme: theme)
-  }
-}

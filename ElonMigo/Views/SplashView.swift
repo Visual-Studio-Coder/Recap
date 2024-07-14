@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-extension View {
-    func splashView<SplashContent: View>(@ViewBuilder splashContent: @escaping () -> SplashContent) -> some View {
-        self.modifier(SplashView(splashContent: splashContent))
-    }
-}
-
 struct SplashView<SplashContent: View>: ViewModifier {
     private let splashContent: () -> SplashContent
     

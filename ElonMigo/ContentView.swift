@@ -7,7 +7,6 @@
 
 import SwiftUI
 import PhotosUI
-import Combine
 import MarkdownUI
 import Splash
 
@@ -18,6 +17,12 @@ class UserPreferences: ObservableObject {
     @Published var somePreference: Bool {
         didSet {
             UserDefaults.standard.set(somePreference, forKey: "somePreference")
+        }
+    }
+    
+    @Published var chatGPTAPIKey: String {
+        didSet {
+            UserDefaults.standard.set(chatGPTAPIKey, forKey: "chatGPTAPIKey")
         }
     }
     
@@ -45,12 +50,20 @@ class UserPreferences: ObservableObject {
         }
     }
     
+    @Published var gptModel: String {
+        didSet {
+            UserDefaults.standard.set(gptModel, forKey: "gptModel")
+        }
+    }
+    
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
+        self.chatGPTAPIKey = UserDefaults.standard.string(forKey: "chatGPTAPIKey") ?? ""
         self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
         self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-1.5-pro-latest"
         self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
         self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
+        self.gptModel = UserDefaults.standard.string(forKey: "gptModel") ?? AppSettings.gptModel
     }
 }
 struct ContentView: View {
@@ -69,7 +82,8 @@ struct ContentView: View {
     // Gemini
     let geminiAPI = GeminiAPI.shared
     //@AppStorage("model") private var selectedOption = "gemini-1.5-pro-latest"
-    let options = ["Gemini 1.5 Pro", "Gemini 1.5 Flash"]
+    let options = ["gemini-1.5-pro-latest", "gemini-1.5-flash"]
+    let gptOptions = ["gpt-3.5-turbo", "gpt-4-turbo", "gpt-4o"]
     
     @State private var quiz: Quiz?
     @State private var showingQuizSheet = false
@@ -146,7 +160,7 @@ struct ContentView: View {
                                 ]
                             )
                         }
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                         
                     }
                     .padding(.leading)
@@ -211,7 +225,7 @@ struct ContentView: View {
                         }) {
                             Text("Show All Quizzes")
                                 .font(.headline)
-                                .foregroundColor(.blue)
+                                .foregroundStyle(.blue)
                         }
                     }
                 }
@@ -221,6 +235,7 @@ struct ContentView: View {
             VStack(alignment: .leading) {
                 HStack {
                     TextField("What would you like to quiz yourself on?", text: $userInput, axis: .vertical)
+                        .autocorrectionDisabled()
                         .focused($focus, equals: .quizPrompt)
                         .padding()
                         .clipShape(RoundedRectangle(cornerRadius: 15))
@@ -375,9 +390,110 @@ struct ContentView: View {
                     }
                     .buttonStyle(.bordered)
                     .clipShape(RoundedRectangle(cornerRadius: 100.00))
-                    
                 }
                 .padding([.bottom, .leading, .trailing])
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        if !userInput.isEmpty {
+                            ZStack(alignment: .topTrailing) {
+                                VStack {
+                                    Image(systemName: "text.quote")
+                                        .interpolation(.none)
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                        .padding([.top, .bottom], 5)
+                                    
+                                    Text(userInput)
+                                        .lineLimit(1)
+                                        .padding(.horizontal, 2)
+                                }
+                                .frame(width: 100, height: 100)
+                                .background(Color.accentColor.opacity(0.4))
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                                
+                                Button {
+                                    userInput = ""
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .foregroundStyle(.white)
+                                        .padding(2)
+                                        .background(.red)
+                                        .clipShape(Circle())
+                                        .padding(.trailing, 3)
+                                }
+                            }
+                        }
+                        
+                        ForEach(selectedPhotosData, id: \.self) { photoData in
+                            if let image = UIImage(data: photoData) {
+                                ZStack(alignment: .topTrailing) {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .frame(width: 100, height: 100)
+                                        .cornerRadius(16.0)
+                                    
+                                    Button {
+                                        if let index = selectedPhotosData.firstIndex(of: photoData) {
+                                            selectedPhotosData.remove(at: index)
+                                        }
+                                        
+//                                                if let index = selectedItems.flatMap({
+//                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
+//                                                        data
+//                                                    }
+//                                                }).firstIndex(of: photoData) {
+//                                                    selectedItems.remove(at: index)
+//                                                }
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .foregroundStyle(.white)
+                                            .padding(2)
+                                            .background(.red)
+                                            .clipShape(Circle())
+                                            .padding(.trailing, 3)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        ForEach(links.indices, id: \.self) { i in
+                            if links[i].isValidURL(), let url = URL(string: links[i]) {
+                                ZStack(alignment: .topTrailing) {
+                                    VStack {
+                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
+                                            image
+                                                .interpolation(.none)
+                                                .resizable()
+                                                .frame(width: 40, height: 40)
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                        
+                                        Text(url.host!)
+                                            .lineLimit(1)
+                                            .padding(.horizontal, 2)
+                                    }
+                                    .frame(width: 100, height: 100)
+                                    .background(Color.accentColor.opacity(0.4))
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                                    
+                                    Button {
+                                        links.remove(at: i)
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .foregroundStyle(.white)
+                                            .padding(2)
+                                            .background(.red)
+                                            .clipShape(Circle())
+                                            .padding(.trailing, 3)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal)
             }
             .navigationTitle("ElonMigo")
             .navigationBarTitleDisplayMode(.inline)
@@ -450,6 +566,7 @@ struct ContentView: View {
                         Section {
                             ForEach(links.indices, id: \.self) { index in
                                 TextField("Enter URL #\(index + 1)", text: $links[index])
+                                    .autocorrectionDisabled()
                                     .swipeActions(edge: .trailing) {
                                         Button(role: .destructive) {
                                             links.remove(at: index)
@@ -561,7 +678,7 @@ struct ContentView: View {
                             Button("Clear All") {
                                 showingClearHistoryActionSheet = true
                             }
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                             .actionSheet(isPresented: $showingClearHistoryActionSheet) {
                                 ActionSheet(
                                     title: Text("Are you sure you want to clear history?"),
@@ -593,48 +710,112 @@ struct ContentView: View {
             .sheet(isPresented: $showingSettingsSheet) {
                 NavigationStack {
                     Form {
-                        Section {
-                            SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
-                                .focused($focus, equals: .api)
-                                .onChange(of: userPreferences.selectedOption) { newValue in
-                                    print("Selected option changed to: \(newValue)")
-                                }
-                        } header: {
-                            Text("API Key")
-                        } footer: {
-                            Text("Grab one for free from [makersuite.google.com](https://makersuite.google.com/app/apikey)\n**Reminder: Never share API keys.**")
+                        Section("AI Model") {
+                            Toggle(isOn: .constant(true)) {
+                                Label("Use Gemini", systemImage: "cpu")
+                            }
                         }
                         
                         Section {
-                            Picker("Preferred Model", selection: $userPreferences.selectedOption) {
-                                ForEach(options, id: \.self) { option in
-                                    HStack {
-                                        if option == "Gemini 1.5 Flash" {
-                                            Label(" \(option)", systemImage: "bolt.fill")
+                            NavigationLink {
+                                Form {
+                                    Section {
+                                        SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
+                                            .focused($focus, equals: .api)
+                                            .onChange(of: userPreferences.selectedOption) {
+                                                print("Selected option changed to: \(userPreferences.selectedOption)")
+                                            }
+                                    } header: {
+                                        Text("API Key")
+                                    } footer: {
+                                        Text("Get a free API key from [makersuite.google.com](https://makersuite.google.com/app/apikey).\n**Reminder: Never share API keys.**")
+                                    }
+                                    
+                                    Section {
+                                        Picker("Preferred Model", selection: $userPreferences.selectedOption) {
+                                            ForEach(options, id: \.self) { option in
+                                                HStack {
+                                                    if option == "gemini-1.5-pro-latest" {
+                                                        Label(" Gemini 1.5 Pro", systemImage: "bolt.fill")
+                                                    } else {
+                                                        Label(" Gemini 1.5 Flash", systemImage: "brain.head.profile")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } header: {
+                                        Text("Choose Model")
+                                    } footer: {
+                                        if userPreferences.selectedOption == "gemini-1.5-flash" {
+                                            Text("Prioritize **faster response** over accuracy.")
                                         } else {
-                                            Label(" \(option)", systemImage: "brain.head.profile")
+                                            Text("Prioritize **accuracy** over speed.")
+                                        }
+                                    }
+                                    .onChange(of: userPreferences.selectedOption) {
+                                        // Perform any additional actions when the selected option changes.
+                                        // This block can be used to trigger side effects of changing the option.
+                                        // If no additional action is needed, this `.onChange` modifier can be removed.
+                                    }
+                                    
+                                    Section("Privacy") {
+                                        Toggle("Save Quiz Results", isOn: .constant(true))
+                                        Toggle("Improve Gemini for Everyone", isOn: .constant(true))
+                                    }
+                                }
+                                .navigationTitle("Gemini")
+                            } label: {
+                                Text("Gemini")
+                            }
+                            
+                            NavigationLink {
+                                Form {
+                                    Section {
+                                        SecureField("Top Secret OpenAI API Key", text: $userPreferences.chatGPTAPIKey)
+                                            .focused($focus, equals: .api)
+                                            .onChange(of: userPreferences.selectedOption) {
+                                                print("Selected option changed to: \(userPreferences.selectedOption)")
+                                            }
+                                    } header: {
+                                        Text("API Key")
+                                    } footer: {
+                                        Text("Get an API key from [platform.openai.com](https://platform.openai.com/playground).\n**Reminder: Never share API keys.**")
+                                    }
+                                    
+                                    Section {
+                                        Picker("Preferred Model", selection: $userPreferences.selectedOption) {
+                                            ForEach(gptOptions, id: \.self) { option in
+                                                HStack {
+                                                    if option == "gpt-3.5-turbo" {
+                                                        Label(" GPT 3.5 Turbo", systemImage: "bolt.fill")
+                                                    } else if option == "gpt-4-turbo" {
+                                                        Label(" GPT 4 Turbo", systemImage: "brain.head.profile")
+                                                    } else {
+                                                        Label(" GPT 4o", systemImage: "brain.head.profile")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } header: {
+                                        Text("Choose Model")
+                                    } footer: {
+                                        if userPreferences.selectedOption == "gpt-3.5-turbo" {
+                                            Text("Prioritize **speed** over accuracy. (in: $0.5, out: $1.5)")
+                                        } else if userPreferences.selectedOption == "gpt-4-turbo" {
+                                            Text("Prioritize **speed** over accuracy. (in: $10, out: $30)")
+                                        } else {
+                                            Text("Prioritize **accuracy** over speed. (in: $5, out: $15)")
                                         }
                                     }
                                 }
+                                .navigationTitle("ChatGPT")
+                            } label: {
+                                Text("ChatGPT")
                             }
                         } header: {
-                            Text("Choose Model")
+                            Text("AI Model Configurations")
                         } footer: {
-                            if userPreferences.selectedOption == "Gemini 1.5 Flash" {
-                                Text("You will receive a **faster response** but not necessarily a smarter, more accurate quiz.")
-                            } else {
-                                Text("You will receive a **smarter response** but not necessarily in a short amount of time.")
-                            }
-                        }
-                        .onChange(of: userPreferences.selectedOption) { newValue in
-                            // Perform any additional actions when the selected option changes.
-                            // This block can be used to trigger side effects of changing the option.
-                            // If no additional action is needed, this `.onChange` modifier can be removed.
-                        }
-                        
-                        Section("Privacy") {
-                            Toggle("Save Quiz Results", isOn: .constant(true))
-                            Toggle("Improve Gemini for Everyone", isOn: .constant(true))
+                            Text("Add your API keys and configure how you want the AI to respond.")
                         }
                     }
                     .navigationTitle("Settings")
@@ -651,9 +832,9 @@ struct ContentView: View {
             }
             
         }
-        
         //        }
     }
+    
     private var theme: Splash.Theme {
         // NOTE: We are ignoring the Splash theme font
         switch self.colorScheme {
@@ -663,6 +844,7 @@ struct ContentView: View {
             return .sunset(withFont: .init(size: 16))
         }
     }
+    
     func loadQuiz(from url: URL) async {
         do {
             print(url)
@@ -798,26 +980,10 @@ struct QuizResultsView: View {
 }
 
 #Preview {
+    @Previewable @StateObject var quizStorage = QuizStorage()
+    
     Group {
-        @StateObject var quizStorage = QuizStorage()
-        
         ContentView()
             .environmentObject(quizStorage)
-    }
-}
-extension CGSize {
-    func fits(largestDimension length: CGFloat) -> Bool {
-        return width <= length && height <= length
-    }
-    
-    func aspectFit(largestDimension length: CGFloat) -> CGSize {
-        let aspectRatio = width / height
-        if width > height {
-            let width = min(self.width, length)
-            return CGSize(width: width, height: round(width / aspectRatio))
-        } else {
-            let height = min(self.height, length)
-            return CGSize(width: round(height * aspectRatio), height: height)
-        }
     }
 }

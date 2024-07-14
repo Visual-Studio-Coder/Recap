@@ -40,7 +40,7 @@ struct ElonMigoApp: App {
                             
                             Spacer()
                             
-                            Image(uiImage: #imageLiteral(resourceName: "AppIcon"))
+                            Image(uiImage: Bundle.main.icon ?? UIImage())
                                 .resizable()
                                 .frame(width: 150, height: 150)
                                 .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))

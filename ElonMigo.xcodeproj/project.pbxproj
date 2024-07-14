@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -56,6 +56,25 @@
 		8B9675322C02420D005950FB /* ElonMigo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElonMigo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BF970012C02BC5900B78999 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8B56BC5F2C4481DA0050EE2F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Bundle+icon.swift",
+				CGSize.swift,
+				"CodeSyntaxHighlighter+splash.swift",
+				"String+isValidURL.swift",
+				"UTType+elonmigoExportType.swift",
+				"View+splashView.swift",
+			);
+			target = 8B9675312C02420D005950FB /* ElonMigo */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8B56BC5C2C4481CC0050EE2F /* Extensions */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8B56BC5F2C4481DA0050EE2F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Extensions; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8B96752F2C02420D005950FB /* Frameworks */ = {
@@ -116,6 +135,7 @@
 		787010162C0254AE004CDA60 /* ElonMigo */ = {
 			isa = PBXGroup;
 			children = (
+				8B56BC5C2C4481CC0050EE2F /* Extensions */,
 				78222B712C40AFE200097269 /* Syntax Highlighting */,
 				7870100B2C0254AE004CDA60 /* Data */,
 				7870100D2C0254AE004CDA60 /* Preview Content */,
@@ -381,12 +401,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 425;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ElonMigo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -397,7 +418,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.6.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.click.ElonMigo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaronhma.ElonMigo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -417,12 +438,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 425;
 				DEVELOPMENT_ASSET_PATHS = "\"ElonMigo/Preview Content\"";
-				DEVELOPMENT_TEAM = SU5789R8HD;
+				DEVELOPMENT_TEAM = L3P446LNNP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ElonMigo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ElonMigo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -433,7 +455,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.6.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.click.ElonMigo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaronhma.ElonMigo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
