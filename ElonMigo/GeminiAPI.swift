@@ -98,7 +98,7 @@ class GeminiAPI: ObservableObject {
                 do {
                     var validJsonReceived = false
                     if let imagesData = selectedPhotosData {
-                        let response = try await chat.sendMessageStream(
+                        let response = chat.sendMessageStream(
                             "Notes:", userInput,
                             imagesData.compactMap { data in
                                 UIImage(data: data)

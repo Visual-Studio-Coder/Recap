@@ -71,10 +71,10 @@ struct QuestionView: View {
                         if hasAnswered ?? false {
                             if option.correct == true {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
+                                    .foregroundStyle(.green)
                             } else if option.correct == false {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.red)
+                                    .foregroundStyle(.red)
                             }
                         }
                     }
@@ -110,8 +110,8 @@ struct QuestionView: View {
                     Text("Submit")
                         .bold()
                         .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
+                        .background(Color.accentColor)
+                        .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
                 .padding()
@@ -616,7 +616,9 @@ struct QuizView: View {
                 .padding(.horizontal)
             }
             .transition(.slide)
-            .onChange(of: correctAnswers) { _ in render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
+            .onChange(of: correctAnswers) {
+                render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count))
+            }
             .onAppear { render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
             //}
         }

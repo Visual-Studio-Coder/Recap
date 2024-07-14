@@ -1,4 +1,5 @@
 import Foundation
+
 struct UserAnswer: Identifiable, Codable {
     let id = UUID()
     let question: Question
@@ -6,6 +7,7 @@ struct UserAnswer: Identifiable, Codable {
     let isCorrect: Bool
     let correctAnswer: String?
 }
+
 struct GradingResult: Codable {
     var expectedAnswer: String
     var isCorrect: Bool
