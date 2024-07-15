@@ -13,7 +13,7 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.click.Recap.elonmigo</string>
+				<string>com.click.Recap.recap</string>
 			</array>
 		</dict>
 	</array>
@@ -24,7 +24,7 @@
 			<string>com.click.Recap</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>elonmigo</string>
+				<string>recap</string>
 			</array>
 		</dict>
 	</array>
@@ -44,12 +44,12 @@
 				<string>Recap.png</string>
 			</array>
 			<key>UTTypeIdentifier</key>
-			<string>com.click.Recap.elonmigo</string>
+			<string>com.click.Recap.recap</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>elonmigo</string>
+					<string>recap</string>
 				</array>
 			</dict>
 		</dict>

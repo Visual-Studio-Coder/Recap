@@ -65,7 +65,7 @@
 				CGSize.swift,
 				"CodeSyntaxHighlighter+splash.swift",
 				"String+isValidURL.swift",
-				"UTType+elonmigoExportType.swift",
+				"UTType+recapExportType.swift",
 				"View+splashView.swift",
 			);
 			target = 8B9675312C02420D005950FB /* Recap */;

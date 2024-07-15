@@ -18,7 +18,14 @@ struct ShareResults: View {
                     .fill(.white)
                     .frame(width: 200 * 1.618, height: 200)
                 RoundedRectangle(cornerRadius: 30)
-                    .fill(LinearGradient(colors: [.brown.opacity(0.2), .brown.opacity(0.3), .brown.opacity(0.4), .brown.opacity(0.5), .brown.opacity(0.6), .brown.opacity(0.7), .brown.opacity(0.8), .brown.opacity(0.9), .brown.opacity(1), .brown], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .brown.opacity(0.2), .brown.opacity(0.3), .brown.opacity(0.4),
+                                .brown.opacity(0.5), .brown.opacity(0.6), .brown.opacity(0.7),
+                                .brown.opacity(0.8), .brown.opacity(0.9), .brown.opacity(1), .brown,
+                            ], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
                     .frame(width: 200 * 1.618, height: 200)
                     .overlay {
                         HStack {
@@ -70,11 +77,11 @@ struct ShareResults: View {
                         .foregroundStyle(.white)
                         .padding()
                     }
-                    //.padding()
-                    
+                //.padding()
+
             }
             .padding([.leading, .trailing, .top])
-            
+
             Label {
                 Text("Download Recap Today!")
                     .font(.caption)
@@ -82,6 +89,7 @@ struct ShareResults: View {
                     .foregroundStyle(.secondary)
             } icon: {
                 Image(uiImage: #imageLiteral(resourceName: "RecapTransparent"))
+
                     .resizable()
                     .frame(width: 20, height: 20)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
@@ -89,8 +97,14 @@ struct ShareResults: View {
             .padding([.leading, .trailing, .bottom], 4)
 
         }
-        .background(LinearGradient(colors: [.blue.opacity(0.2), .blue.opacity(0.3), .blue.opacity(0.4), .blue.opacity(0.5), .blue.opacity(0.6), .blue.opacity(0.7), .blue.opacity(0.8), .blue.opacity(0.9), .blue.opacity(1), .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-        
+        .background(
+            LinearGradient(
+                colors: [
+                    .blue.opacity(0.2), .blue.opacity(0.3), .blue.opacity(0.4), .blue.opacity(0.5),
+                    .blue.opacity(0.6), .blue.opacity(0.7), .blue.opacity(0.8), .blue.opacity(0.9),
+                    .blue.opacity(1), .blue,
+                ], startPoint: .topLeading, endPoint: .bottomTrailing))
+
     }
 }
 

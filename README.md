@@ -2,8 +2,6 @@
 
 
 
-[View our DevPost submission ↗](https://devpost.com/software/elonmigo)
-
 
 
 ## What does it do?
@@ -26,7 +24,7 @@
 ## Disclaimers
 - In no way are we associated with Elon Musk or KhanMigo
 - When inputting your personal API key, be aware of the fact that on a free account, your prompts are linked to your identity and are used to train their models.
-- While we, Recap, do not collect any data from our users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on. 
+- While we, Recap, do not collect any data from our users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on.
 
 ---
 
