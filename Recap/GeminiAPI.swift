@@ -25,10 +25,6 @@ class GeminiAPI: ObservableObject {
     
     private func initializeModel() {
         let config = GenerationConfig(
-            temperature: 1,
-            topP: 0.95,
-            topK: 64,
-            maxOutputTokens: 128000,
             responseMIMEType: "application/json"
 //            responseSchema:
 //                ///Users/vaibhavsatishkumar/Downloads/Recap/Recap/GeminiAPI.swift:33:29 Cannot convert value of type 'String' to expected argument type 'Schema?'
@@ -72,7 +68,7 @@ class GeminiAPI: ObservableObject {
                 SafetySetting(harmCategory: .dangerousContent, threshold: .blockNone),
             ],
             systemInstruction:
-                "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true, but if all answers are true and you decide to use \"all of the above\", PLEASE MAKE THE OTHER ANSWERS FALSE. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes. Use GitHub Flavored Markdown whenever possible in the questions and answers, but replace all occurences of ``` with <`>"
+                "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true, but if all answers are true and you decide to use \"all of the above\", PLEASE MAKE THE OTHER ANSWERS FALSE. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes. Use GitHub Flavored Markdown (no HTML markdown is supported) whenever possible in the questions and answers, but replace all occurences of ``` with <`>"
         )
         
         if let model = self.model {
