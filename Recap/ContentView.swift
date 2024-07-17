@@ -438,13 +438,13 @@ struct ContentView: View {
                                             selectedPhotosData.remove(at: index)
                                         }
                                         
-//                                                if let index = selectedItems.flatMap({
-//                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
-//                                                        data
-//                                                    }
-//                                                }).firstIndex(of: photoData) {
-//                                                    selectedItems.remove(at: index)
-//                                                }
+                                        //                                                if let index = selectedItems.flatMap({
+                                        //                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
+                                        //                                                        data
+                                        //                                                    }
+                                        //                                                }).firstIndex(of: photoData) {
+                                        //                                                    selectedItems.remove(at: index)
+                                        //                                                }
                                     } label: {
                                         Image(systemName: "xmark")
                                             .foregroundStyle(.white)
@@ -581,18 +581,43 @@ struct ContentView: View {
                             .onDelete(perform: { offsets in
                                 links.remove(atOffsets: offsets)
                             })
+                        } header: {
+                            if links.count >= 1 {
+                                Text("Add up to 5 URLs")
+                            }
                         }
                         
                         Section {
-                            Button {
-                                links.append("")
+                            // Button {
+                            //     links.append("")
+                            // } label: {
+                            //     Label("Add New Link", systemImage: "plus")
+                            // }
+                            // .disabled(links.count == 5)
+                            Menu {
+                                //use clipboard
+                                Button {
+                                    if let clipboard = UIPasteboard.general.string {
+                                        links.append(clipboard)
+                                    }
+                                } label: {
+                                    Label("Paste from Clipboard", systemImage: "doc.on.clipboard")
+                                }
+                                .disabled(links.count == 5)
+
                             } label: {
                                 Label("Add New Link", systemImage: "plus")
+                                    .foregroundStyle((links.count == 5) ? .secondary : .primary)
+                            } primaryAction: {
+                                links.append("")
                             }
-                            .disabled(links.count == 5)
+                                .disabled(links.count == 5)
+
+                        } footer: {
+                            Markdown("Tip: Long press on the `Add New Link` button in order to paste a URL.")
                         }
                     }
-                    .navigationTitle("Web Search")
+                    .navigationTitle("Scan URLs")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .topBarLeading) {
@@ -714,6 +739,41 @@ struct ContentView: View {
                             Toggle(isOn: .constant(true)) {
                                 Label("Use Gemini", systemImage: "cpu")
                             }
+                        }
+                        
+                        Section("App Details") {
+                            DisclosureGroup {
+                                Markdown("""
+                                # Privacy Policy
+                                
+                                ## User Data
+                                We do not collect any data from our users. All quizzes are saved locally on your device, and we do not access or store:
+                                - Images
+                                - URLs
+                                - Notes you add to your quizzes
+                                
+                                Additionally, we do not collect any analytics. Please continue reading to understand the terms and conditions Google's Gemini and OpenAI's ChatGPT impose on your data.
+                                
+                                ## Third-Party Services
+                                We integrate with Google's Gemini and OpenAI's ChatGPT to provide multi-modal models for quiz generation. When you use these services, we provide them with the following user information:
+                                - Images
+                                - URLs
+                                - Text-based notes (anything you input to make a quiz)
+                                
+                                This information is necessary for the models to generate quizzes. However, please be aware that:
+                                - You should not enter any sensitive information into these models, as we cannot guarantee that OpenAI or ChatGPT will collect and keep this data for training models.
+                                - If you are using the free API key from Google, they may train models on your prompts and you may be susceptible to rate limits.
+                                - If you are using ChatGPT's API key, their privacy policy claims that your requests will not be logged, but you should still exercise caution.
+                                
+                                Please review the terms of service and privacy policies for these third-party services:
+                                - Google Gemini: [ai.google.dev/gemini-api/terms](https://ai.google.dev/gemini-api/terms)
+                                - OpenAI's ChatGPT: [openai.com/policies/privacy-policy/](https://openai.com/policies/privacy-policy/)
+                                """)
+                                
+                            } label: {
+                                Label("Privacy Policy", systemImage: "hand.raised.circle.fill")
+                            }
+                            
                         }
                         
                         Section {
