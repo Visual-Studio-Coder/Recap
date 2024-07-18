@@ -26,6 +26,7 @@
 		789C8EFD2C409803005C7FC3 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 789C8EFC2C409803005C7FC3 /* Splash */; };
 		789C8EFF2C409803005C7FC3 /* SplashMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 789C8EFE2C409803005C7FC3 /* SplashMarkdown */; };
 		78BEC66F2C3F42590083DF9C /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 78BEC66E2C3F42590083DF9C /* MarkdownUI */; };
+		78D4B7BE2C4881FD00411F8A /* YoutubeTranscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D4B7BD2C4881FD00411F8A /* YoutubeTranscript.swift */; };
 		8B25C4DC2C02654D00EC5F54 /* QuizProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */; };
 		8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E12C02739F00EC5F54 /* AppSettings.swift */; };
 		8B25C4E42C02962800EC5F54 /* Motivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E32C02962800EC5F54 /* Motivation.swift */; };
@@ -50,6 +51,7 @@
 		787010142C0254AE004CDA60 /* GeminiAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeminiAPI.swift; sourceTree = "<group>"; };
 		787010152C0254AE004CDA60 /* Sample-JSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
 		787010352C0630C4004CDA60 /* ShareResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareResults.swift; sourceTree = "<group>"; };
+		78D4B7BD2C4881FD00411F8A /* YoutubeTranscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeTranscript.swift; sourceTree = "<group>"; };
 		8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizProgressBar.swift; sourceTree = "<group>"; };
 		8B25C4E12C02739F00EC5F54 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8B25C4E32C02962800EC5F54 /* Motivation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motivation.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				787010102C0254AE004CDA60 /* Views */,
 				787010112C0254AE004CDA60 /* Assets.xcassets */,
 				787010122C0254AE004CDA60 /* ContentView.swift */,
+				78D4B7BD2C4881FD00411F8A /* YoutubeTranscript.swift */,
 				8B25C4E12C02739F00EC5F54 /* AppSettings.swift */,
 				787010132C0254AE004CDA60 /* RecapApp.swift */,
 				787010142C0254AE004CDA60 /* GeminiAPI.swift */,
@@ -260,6 +263,7 @@
 				787010202C0254AE004CDA60 /* ContentView.swift in Sources */,
 				787010222C0254AE004CDA60 /* GeminiAPI.swift in Sources */,
 				787010362C0630C4004CDA60 /* ShareResults.swift in Sources */,
+				78D4B7BE2C4881FD00411F8A /* YoutubeTranscript.swift in Sources */,
 				8BF970022C02BC5900B78999 /* SplashView.swift in Sources */,
 				8B25C4E42C02962800EC5F54 /* Motivation.swift in Sources */,
 				78222B702C40AFD700097269 /* TextOutputFormat.swift in Sources */,

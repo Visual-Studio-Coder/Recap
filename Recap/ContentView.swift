@@ -242,58 +242,77 @@ struct ContentView: View {
                         .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
                         .padding(.horizontal)
                     Button {
-                        gemeniGeneratingQuiz = true
-                        print(userPreferences.apiKey)
-                        print(userPreferences.geminiModel)
-                        
-                        // Create a DispatchGroup to handle multiple asynchronous tasks
-                        let group = DispatchGroup()
-                        
-                        var websiteContent = ""
-                        
-                        // Use a regular Swift for loop to iterate over the links array
-                        for link in links {
-                            if let url = URL(string: link) {
-                                group.enter()
-                                
-                                DispatchQueue.global().async {
-                                    do {
-                                        let contents = try String(contentsOf: url)
-                                        let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
-                                        let plainString = atr.string
-                                        websiteContent += plainString
-                                    } catch {
-                                        // contents could not be loaded
-                                    }
-                                    group.leave()
-                                }
+    gemeniGeneratingQuiz = true
+    print(userPreferences.apiKey)
+    print(userPreferences.geminiModel)
+    
+    // Create a DispatchGroup to handle multiple asynchronous tasks
+    let group = DispatchGroup()
+    
+    var websiteContent = ""
+    
+    // Use a regular Swift for loop to iterate over the links array
+    for link in links {
+        if let url = URL(string: link) {
+            group.enter()
+            
+            DispatchQueue.global().async {
+                if url.host?.contains("youtube") == true || url.host?.contains("youtu.be") == true {
+                    // Handle YouTube links
+                    let videoId = extractYouTubeVideoID(from: url)
+                    if let videoId = videoId {
+                        Task {
+                            do {
+                                let transcript = try await YouTubeTranscript.fetchTranscript(for: videoId)
+                                websiteContent += transcript
+                            } catch {
+                                print("Failed to fetch YouTube transcript for video ID \(videoId): \(error)")
                             }
+                            group.leave()
                         }
-                        
-                        group.notify(queue: .main) {
-                            if apiKey != "" {
-                                let message = userInput + "Attached Website Content:" + websiteContent
-                                geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
-                                    //print(response)
-                                    let (quiz, error) = decodeJSON(from: response)
-                                    if let quiz = quiz {
-                                        DispatchQueue.main.async {
-                                            self.quiz = quiz
-                                            self.showQuiz = true
-                                        }
-                                    } else {
-                                        print("Failed to decode json: \(error ?? "Unknown error")")
-                                        self.showingGeminiFailAlert = true
-                                        gemeniGeneratingQuiz = false
-                                    }
-                                    
-                                }
-                            } else {
-                                self.showingGeminiAPIAlert = true
-                                gemeniGeneratingQuiz = false
-                            }
-                        }
-                    } label: {
+                    } else {
+                        group.leave()
+                    }
+                } else {
+                    // Handle regular web links
+                    do {
+                        let contents = try String(contentsOf: url)
+                        let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+                        let plainString = atr.string
+                        websiteContent += plainString
+                    } catch {
+                        print("Failed to load contents of URL \(url): \(error)")
+                    }
+                    group.leave()
+                }
+            }
+        }
+    }
+    
+    group.notify(queue: .main) {
+        if apiKey != "" {
+            let message = userInput + "Attached Website Content:" + websiteContent
+            geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
+                //print(response)
+                let (quiz, error) = decodeJSON(from: response)
+                if let quiz = quiz {
+                    DispatchQueue.main.async {
+                        self.quiz = quiz
+                        self.showQuiz = true
+                    }
+                } else {
+                    print("Failed to decode json: \(error ?? "Unknown error")")
+                    self.showingGeminiFailAlert = true
+                    gemeniGeneratingQuiz = false
+                }
+                
+            }
+        } else {
+            self.showingGeminiAPIAlert = true
+            gemeniGeneratingQuiz = false
+        }
+    }
+} label: {
                         if gemeniGeneratingQuiz {
                             ProgressView()
                             //.foregroundStyle(.white)
@@ -936,6 +955,18 @@ struct ContentView: View {
             print("Failed to load quiz: \(error.localizedDescription)")
         }
     }
+    // Helper function to extract YouTube video ID from URL
+func extractYouTubeVideoID(from url: URL) -> String? {
+    if let host = url.host, host.contains("youtube.com") {
+        return URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name == "v" })?
+            .value
+    } else if let host = url.host, host.contains("youtu.be") {
+        return url.lastPathComponent
+    }
+    return nil
+}
 }
 
 struct QuizResultsView: View {
