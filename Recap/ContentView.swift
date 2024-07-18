@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 import MarkdownUI
 import Splash
+import LinkPresentation
 
 @MainActor
 class UserPreferences: ObservableObject {
@@ -242,77 +243,77 @@ struct ContentView: View {
                         .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
                         .padding(.horizontal)
                     Button {
-    gemeniGeneratingQuiz = true
-    print(userPreferences.apiKey)
-    print(userPreferences.geminiModel)
-    
-    // Create a DispatchGroup to handle multiple asynchronous tasks
-    let group = DispatchGroup()
-    
-    var websiteContent = ""
-    
-    // Use a regular Swift for loop to iterate over the links array
-    for link in links {
-        if let url = URL(string: link) {
-            group.enter()
-            
-            DispatchQueue.global().async {
-                if url.host?.contains("youtube") == true || url.host?.contains("youtu.be") == true {
-                    // Handle YouTube links
-                    let videoId = extractYouTubeVideoID(from: url)
-                    if let videoId = videoId {
-                        Task {
-                            do {
-                                let transcript = try await YouTubeTranscript.fetchTranscript(for: videoId)
-                                websiteContent += transcript
-                            } catch {
-                                print("Failed to fetch YouTube transcript for video ID \(videoId): \(error)")
+                        gemeniGeneratingQuiz = true
+                        print(userPreferences.apiKey)
+                        print(userPreferences.geminiModel)
+                        
+                        // Create a DispatchGroup to handle multiple asynchronous tasks
+                        let group = DispatchGroup()
+                        
+                        var websiteContent = ""
+                        
+                        // Use a regular Swift for loop to iterate over the links array
+                        for link in links {
+                            if let url = URL(string: link) {
+                                group.enter()
+                                
+                                DispatchQueue.global().async {
+                                    if url.host?.contains("youtube") == true || url.host?.contains("youtu.be") == true {
+                                        // Handle YouTube links
+                                        let videoId = extractYouTubeVideoID(from: url)
+                                        if let videoId = videoId {
+                                            Task {
+                                                do {
+                                                    let transcript = try await YouTubeTranscript.fetchTranscript(for: videoId)
+                                                    websiteContent += transcript
+                                                } catch {
+                                                    print("Failed to fetch YouTube transcript for video ID \(videoId): \(error)")
+                                                }
+                                                group.leave()
+                                            }
+                                        } else {
+                                            group.leave()
+                                        }
+                                    } else {
+                                        // Handle regular web links
+                                        do {
+                                            let contents = try String(contentsOf: url)
+                                            let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+                                            let plainString = atr.string
+                                            websiteContent += plainString
+                                        } catch {
+                                            print("Failed to load contents of URL \(url): \(error)")
+                                        }
+                                        group.leave()
+                                    }
+                                }
                             }
-                            group.leave()
                         }
-                    } else {
-                        group.leave()
-                    }
-                } else {
-                    // Handle regular web links
-                    do {
-                        let contents = try String(contentsOf: url)
-                        let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
-                        let plainString = atr.string
-                        websiteContent += plainString
-                    } catch {
-                        print("Failed to load contents of URL \(url): \(error)")
-                    }
-                    group.leave()
-                }
-            }
-        }
-    }
-    
-    group.notify(queue: .main) {
-        if apiKey != "" {
-            let message = userInput + "Attached Website Content:" + websiteContent
-            geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
-                //print(response)
-                let (quiz, error) = decodeJSON(from: response)
-                if let quiz = quiz {
-                    DispatchQueue.main.async {
-                        self.quiz = quiz
-                        self.showQuiz = true
-                    }
-                } else {
-                    print("Failed to decode json: \(error ?? "Unknown error")")
-                    self.showingGeminiFailAlert = true
-                    gemeniGeneratingQuiz = false
-                }
-                
-            }
-        } else {
-            self.showingGeminiAPIAlert = true
-            gemeniGeneratingQuiz = false
-        }
-    }
-} label: {
+                        
+                        group.notify(queue: .main) {
+                            if apiKey != "" {
+                                let message = userInput + "Attached Website Content:" + websiteContent
+                                geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
+                                    //print(response)
+                                    let (quiz, error) = decodeJSON(from: response)
+                                    if let quiz = quiz {
+                                        DispatchQueue.main.async {
+                                            self.quiz = quiz
+                                            self.showQuiz = true
+                                        }
+                                    } else {
+                                        print("Failed to decode json: \(error ?? "Unknown error")")
+                                        self.showingGeminiFailAlert = true
+                                        gemeniGeneratingQuiz = false
+                                    }
+                                    
+                                }
+                            } else {
+                                self.showingGeminiAPIAlert = true
+                                gemeniGeneratingQuiz = false
+                            }
+                        }
+                    } label: {
                         if gemeniGeneratingQuiz {
                             ProgressView()
                             //.foregroundStyle(.white)
@@ -435,12 +436,17 @@ struct ContentView: View {
                                     userInput = ""
                                 } label: {
                                     Image(systemName: "xmark")
+                                        .font(.system(size: 13, weight: .bold)) // Make the X mark bold
                                         .foregroundStyle(.white)
                                         .padding(2)
-                                        .background(.red)
+                                        .background(Color.gray)
                                         .clipShape(Circle())
-                                        .padding(.trailing, 3)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                        )
                                 }
+                                .padding(3)
                             }
                         }
                         
@@ -466,12 +472,17 @@ struct ContentView: View {
                                         //                                                }
                                     } label: {
                                         Image(systemName: "xmark")
+                                            .font(.system(size: 13, weight: .bold)) // Make the X mark bold
                                             .foregroundStyle(.white)
                                             .padding(2)
-                                            .background(.red)
+                                            .background(Color.gray)
                                             .clipShape(Circle())
-                                            .padding(.trailing, 3)
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                            )
                                     }
+                                    .padding(3)
                                 }
                             }
                         }
@@ -480,20 +491,23 @@ struct ContentView: View {
                             if links[i].isValidURL(), let url = URL(string: links[i]) {
                                 ZStack(alignment: .topTrailing) {
                                     VStack {
-                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
-                                            image
-                                                .interpolation(.none)
-                                                .resizable()
-                                                .frame(width: 40, height: 40)
-                                        } placeholder: {
-                                            ProgressView()
-                                        }
+                                        //                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
+                                        //                                            image
+                                        //                                                .interpolation(.none)
+                                        //                                                .resizable()
+                                        //                                                .frame(width: 40, height: 40)
+                                        //                                        } placeholder: {
+                                        //                                            ProgressView()
+                                        //                                        }
+                                        LinkPreview(url: url)
                                         
-                                        Text(url.host!)
-                                            .lineLimit(1)
-                                            .padding(.horizontal, 2)
+                                        
+                                        
+                                        //                                        Text(url.host!)
+                                        //                                            .lineLimit(1)
+                                        //                                            .padding(.horizontal, 2)
                                     }
-                                    .frame(width: 100, height: 100)
+                                    // .frame(width: 100, height: 100)
                                     .background(Color.accentColor.opacity(0.4))
                                     .clipShape(RoundedRectangle(cornerRadius: 16))
                                     
@@ -501,12 +515,18 @@ struct ContentView: View {
                                         links.remove(at: i)
                                     } label: {
                                         Image(systemName: "xmark")
+                                            .font(.system(size: 13, weight: .bold)) // Make the X mark bold
                                             .foregroundStyle(.white)
                                             .padding(2)
-                                            .background(.red)
+                                            .background(Color.gray)
                                             .clipShape(Circle())
-                                            .padding(.trailing, 3)
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                            )
+                                            
                                     }
+                                    .padding(3)
                                 }
                             }
                         }
@@ -623,15 +643,15 @@ struct ContentView: View {
                                     Label("Paste from Clipboard", systemImage: "doc.on.clipboard")
                                 }
                                 .disabled(links.count == 5)
-
+                                
                             } label: {
                                 Label("Add New Link", systemImage: "plus")
                                     .foregroundStyle((links.count == 5) ? .secondary : .primary)
                             } primaryAction: {
                                 links.append("")
                             }
-                                .disabled(links.count == 5)
-
+                            .disabled(links.count == 5)
+                            
                         } footer: {
                             Markdown("Tip: Long press on the `Add New Link` button in order to paste a URL.")
                         }
@@ -956,17 +976,41 @@ struct ContentView: View {
         }
     }
     // Helper function to extract YouTube video ID from URL
-func extractYouTubeVideoID(from url: URL) -> String? {
-    if let host = url.host, host.contains("youtube.com") {
-        return URLComponents(url: url, resolvingAgainstBaseURL: false)?
-            .queryItems?
-            .first(where: { $0.name == "v" })?
-            .value
-    } else if let host = url.host, host.contains("youtu.be") {
-        return url.lastPathComponent
+    func extractYouTubeVideoID(from url: URL) -> String? {
+        if let host = url.host, host.contains("youtube.com") {
+            return URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?
+                .first(where: { $0.name == "v" })?
+                .value
+        } else if let host = url.host, host.contains("youtu.be") {
+            return url.lastPathComponent
+        }
+        return nil
     }
-    return nil
 }
+
+
+struct LinkPreview: UIViewRepresentable {
+    let url: URL
+    
+    func makeUIView(context: Context) -> LPLinkView {
+        let linkView = LPLinkView(url: url)
+        let provider = LPMetadataProvider()
+        
+        provider.startFetchingMetadata(for: url) { metadata, error in
+            if let metadata = metadata {
+                DispatchQueue.main.async {
+                    linkView.metadata = metadata
+                }
+            }
+        }
+        
+        return linkView
+    }
+    
+    func updateUIView(_ uiView: LPLinkView, context: Context) {
+        // No update needed
+    }
 }
 
 struct QuizResultsView: View {
