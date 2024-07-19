@@ -734,6 +734,7 @@ struct ContentView: View {
                                         VStack(alignment: .leading) {
                                             Text(quizStorage.history[i].quiz_title)
                                                 .bold()
+                                                .multilineTextAlignment(.leading)
                                             
                                             Text("\(quizStorage.history[i].questions.count) Questions")
                                                 .foregroundStyle(.secondary)
@@ -762,7 +763,7 @@ struct ContentView: View {
                                             showingAllQuizzes = false
                                         }
                                     }
-                            ToolbarItem(placement: .destructiveAction) {
+                            ToolbarItem(placement: .topBarLeading) {
                                 Button("Clear All") {
                                     showingClearHistoryActionSheet = true
                                 }
