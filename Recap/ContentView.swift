@@ -317,7 +317,6 @@ struct ContentView: View {
                             
                             ForEach(links.indices, id: \.self) { i in
                                 if links[i].isValidURL(), let url = URL(string: links[i]) {
-                                    Spacer()
                                     ZStack(alignment: .topTrailing) {
                                         VStack {
                                             //                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
@@ -329,7 +328,7 @@ struct ContentView: View {
                                             //                                            ProgressView()
                                             //                                        }
                                             LinkPreview(url: url)
-                                                //.frame(maxWidth: 100, maxHeight: 100)
+                                                .frame(maxHeight: 100)
                                                 
                                             
                                             
@@ -362,6 +361,7 @@ struct ContentView: View {
                                     }
                                 }
                             }
+                            Spacer()
                         }
                     }
                     .mask {
