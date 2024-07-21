@@ -10,6 +10,8 @@ import PhotosUI
 import MarkdownUI
 import Splash
 import LinkPresentation
+import Shimmer
+import PDFKit
 
 @MainActor
 class UserPreferences: ObservableObject {
@@ -98,6 +100,8 @@ struct ContentView: View {
     @State private var showingQuizResults = false
     @State private var showingClearHistoryActionSheet = false
     @State private var showingAllQuizzes = false
+    @State private var attachmentsIsExpanded = true
+    @State private var errorText = ""
     
     @State private var userInput = ""
     //@AppStorage("numberOfQuestions") private var numberOfQuestions = 5
@@ -233,144 +237,187 @@ struct ContentView: View {
                 //                    }
                 //                    .scrollDismissesKeyboard(.interactively)
                 //                }
-                ScrollView {
-                    Spacer()
+                GeometryReader { geometry in
+                    ScrollView {
+                        
+                        VStack {
+                            Spacer() // Pushes content down
+                            
+                            // Recap AI text with rainbow "AI"
+                            Text("Recap AI")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .shimmering(
+                                    active: gemeniGeneratingQuiz
+                                    //                                    gradient: Gradient(colors: [.clear, .orange, .white, .green, .clear]),
+                                    //                                    bandSize: 0.5,
+                                    //                                    mode: .overlay()
+                                )
+                            
+                            // Smaller text below
+                            Text(gemeniGeneratingQuiz ? "Generating quiz..." : "Input attachments to generate a quiz")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .shimmering(
+                                    active: gemeniGeneratingQuiz
+                                    //                                    gradient: Gradient(colors: [.clear, .orange, .white, .green, .clear]),
+                                    //                                    bandSize: 0.5,
+                                    //                                    mode: .overlay()
+                                )
+                            
+                            Spacer() // Pushes content up
+                        }
+                        
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                    }
+                    .scrollDismissesKeyboard(.interactively)
                 }
-                .scrollDismissesKeyboard(.interactively)
                 VStack(alignment: .leading) {
                     Spacer()
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            if !userInput.isEmpty {
-                                ZStack(alignment: .topTrailing) {
-                                    VStack {
-                                        Image(systemName: "text.quote")
-                                            .interpolation(.none)
-                                            .resizable()
-                                            .frame(width: 40, height: 40)
-                                            .padding([.top, .bottom], 5)
-                                        
-                                        Text(userInput)
-                                            .lineLimit(1)
-                                            .padding(.horizontal, 2)
-                                    }
-                                    .frame(width: 100, height: 100)
-                                    .background(Color.accentColor.opacity(0.4))
-                                    .cornerRadius(16)
-                                    //.clipShape(RoundedRectangle(cornerRadius: 16))
-                                    
-                                    Button {
-                                        userInput = ""
-                                    } label: {
-                                        Image(systemName: "xmark")
-                                            .font(.system(size: 13, weight: .bold)) // Make the X mark bold
-                                            .foregroundStyle(.white)
-                                            .padding(2)
-                                            .background(Color.gray)
-                                            .clipShape(Circle())
-                                            .overlay(
-                                                Circle()
-                                                    .stroke(Color.white, lineWidth: 2) // Add a white outline
-                                            )
-                                    }
-                                    .padding(3)
-                                }
-                            }
-                            
-                            ForEach(selectedPhotosData, id: \.self) { photoData in
-                                if let image = UIImage(data: photoData) {
-                                    ZStack(alignment: .topTrailing) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .frame(width: 100, height: 100)
-                                            .cornerRadius(16.0)
-                                        
-                                        Button {
-                                            if let index = selectedPhotosData.firstIndex(of: photoData) {
-                                                selectedPhotosData.remove(at: index)
-                                            }
-                                            
-                                            //                                                if let index = selectedItems.flatMap({
-                                            //                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
-                                            //                                                        data
-                                            //                                                    }
-                                            //                                                }).firstIndex(of: photoData) {
-                                            //                                                    selectedItems.remove(at: index)
-                                            //                                                }
-                                        } label: {
-                                            Image(systemName: "xmark")
-                                                .font(.system(size: 13, weight: .bold)) // Make the X mark bold
-                                                .foregroundStyle(.white)
-                                                .padding(2)
-                                                .background(Color.gray)
-                                                .clipShape(Circle())
-                                                .overlay(
-                                                    Circle()
-                                                        .stroke(Color.white, lineWidth: 2) // Add a white outline
-                                                )
-                                        }
-                                        .padding(3)
-                                    }
-                                }
-                            }
-                            
-                            ForEach(links.indices, id: \.self) { i in
-                                if links[i].isValidURL(), let url = URL(string: links[i]) {
-                                    ZStack(alignment: .topTrailing) {
-                                        VStack {
-                                            //                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
-                                            //                                            image
-                                            //                                                .interpolation(.none)
-                                            //                                                .resizable()
-                                            //                                                .frame(width: 40, height: 40)
-                                            //                                        } placeholder: {
-                                            //                                            ProgressView()
-                                            //                                        }
-                                            LinkPreview(url: url)
-                                                .frame(maxHeight: 100)
+                    if !selectedItems.isEmpty || !userInput.isEmpty || !links.isEmpty {
+                        DisclosureGroup("Attachments (\((userInput.isEmpty ? 0 : 1) + selectedItems.count + links.count))", isExpanded: $attachmentsIsExpanded) {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack {
+                                    if !userInput.isEmpty {
+                                        ZStack(alignment: .topTrailing) {
+                                            VStack {
+                                                Image(systemName: "text.quote")
+                                                    .interpolation(.none)
+                                                    .resizable()
+                                                    .frame(width: 40, height: 40)
+                                                    .padding([.top, .bottom], 5)
                                                 
+                                                Text(userInput)
+                                                    .lineLimit(1)
+                                                    .padding(.horizontal, 2)
+                                            }
+                                            .frame(width: 100, height: 100)
+                                            .background(Color.accentColor.opacity(0.4))
+                                            .cornerRadius(16)
+                                            //.clipShape(RoundedRectangle(cornerRadius: 16))
                                             
-                                            
-                                            
-                                            //                                        Text(url.host!)
-                                            //                                            .lineLimit(1)
-                                            //                                            .padding(.horizontal, 2)
+                                            Button {
+                                                userInput = ""
+                                            } label: {
+                                                Image(systemName: "xmark")
+                                                    .font(.system(size: 13, weight: .bold)) // Make the X mark bold
+                                                    .foregroundStyle(.white)
+                                                    .padding(2)
+                                                    .background(Color.gray)
+                                                    .clipShape(Circle())
+                                                    .overlay(
+                                                        Circle()
+                                                            .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                                    )
+                                            }
+                                            .padding(3)
                                         }
-                                        // .frame(width: 100, height: 100)
-                                        .background(Color.accentColor.opacity(0.4))
-                                        .cornerRadius(16)
-                                        //.clipShape(RoundedRectangle(cornerRadius: 16))
-                                        
-                                        Button {
-                                            links.remove(at: i)
-                                        } label: {
-                                            Image(systemName: "xmark")
-                                                .font(.system(size: 13, weight: .bold)) // Make the X mark bold
-                                                .foregroundStyle(.white)
-                                                .padding(2)
-                                                .background(Color.gray)
-                                                .clipShape(Circle())
-                                                .overlay(
-                                                    Circle()
-                                                        .stroke(Color.white, lineWidth: 2) // Add a white outline
-                                                )
-                                            
-                                        }
-                                        .padding(3)
                                     }
+                                    
+                                    ForEach(selectedPhotosData, id: \.self) { photoData in
+                                        if let image = UIImage(data: photoData) {
+                                            ZStack(alignment: .topTrailing) {
+                                                Image(uiImage: image)
+                                                    .resizable()
+                                                    .frame(width: 100, height: 100)
+                                                    .cornerRadius(16.0)
+                                                
+                                                Button {
+                                                    
+                                                    if let index = selectedPhotosData.firstIndex(of: photoData) {
+                                                        withAnimation {
+                                                            selectedPhotosData.remove(at: index)
+                                                            selectedItems.remove(at: index)
+                                                        }
+                                                    }
+                                                    
+                                                    //                                                if let index = selectedItems.flatMap({
+                                                    //                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
+                                                    //                                                        data
+                                                    //                                                    }
+                                                    //                                                }).firstIndex(of: photoData) {
+                                                    //                                                    selectedItems.remove(at: index)
+                                                    //                                                }
+                                                } label: {
+                                                    Image(systemName: "xmark")
+                                                        .font(.system(size: 13, weight: .bold)) // Make the X mark bold
+                                                        .foregroundStyle(.white)
+                                                        .padding(2)
+                                                        .background(Color.gray)
+                                                        .clipShape(Circle())
+                                                        .overlay(
+                                                            Circle()
+                                                                .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                                        )
+                                                }
+                                                .padding(3)
+                                            }
+                                        }
+                                    }
+                                    
+                                    ForEach(links.indices, id: \.self) { i in
+                                        if links[i].isValidURL(), let url = URL(string: links[i]) {
+                                            ZStack(alignment: .topTrailing) {
+                                                VStack {
+                                                    //                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
+                                                    //                                            image
+                                                    //                                                .interpolation(.none)
+                                                    //                                                .resizable()
+                                                    //                                                .frame(width: 40, height: 40)
+                                                    //                                        } placeholder: {
+                                                    //                                            ProgressView()
+                                                    //                                        }
+                                                    LinkPreview(url: url)
+                                                        .frame(maxHeight: 100)
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    //                                        Text(url.host!)
+                                                    //                                            .lineLimit(1)
+                                                    //                                            .padding(.horizontal, 2)
+                                                }
+                                                // .frame(width: 100, height: 100)
+                                                .background(Color.accentColor.opacity(0.4))
+                                                .cornerRadius(16)
+                                                //.clipShape(RoundedRectangle(cornerRadius: 16))
+                                                
+                                                Button {
+                                                    links.remove(at: i)
+                                                } label: {
+                                                    Image(systemName: "xmark")
+                                                        .font(.system(size: 13, weight: .bold)) // Make the X mark bold
+                                                        .foregroundStyle(.white)
+                                                        .padding(2)
+                                                        .background(Color.gray)
+                                                        .clipShape(Circle())
+                                                        .overlay(
+                                                            Circle()
+                                                                .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                                        )
+                                                    
+                                                }
+                                                .padding(3)
+                                            }
+                                        }
+                                    }
+                                    Spacer()
                                 }
                             }
-                            Spacer()
+                            .mask {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color.white) // or any other background color
+                            }
+                            //.padding(.horizontal)
                         }
+                        .padding(.horizontal)
                     }
-                    .mask {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.white) // or any other background color
-                    }
-                    .padding(.horizontal)
+                    
+                    
                     
                     HStack {
+                        
                         TextField("What would you like to quiz yourself on?", text: $userInput, axis: .vertical)
                             .autocorrectionDisabled()
                             .focused($focus, equals: .quizPrompt)
@@ -410,6 +457,21 @@ struct ContentView: View {
                                             } else {
                                                 group.leave()
                                             }
+                                        } else if url.pathExtension == "pdf" {
+                                            // Handle PDF files
+                                            if let pdfDocument = PDFDocument(url: url) {
+                                                let pageCount = pdfDocument.pageCount
+                                                var pdfText = ""
+                                                for pageIndex in 0..<pageCount {
+                                                    if let page = pdfDocument.page(at: pageIndex) {
+                                                        pdfText += page.string ?? ""
+                                                    }
+                                                }
+                                                websiteContent += pdfText
+                                            } else {
+                                                print("Failed to load PDF document from URL \(url)")
+                                            }
+                                            group.leave()
                                         } else {
                                             // Handle regular web links
                                             do {
@@ -439,6 +501,11 @@ struct ContentView: View {
                                             }
                                         } else {
                                             print("Failed to decode json: \(error ?? "Unknown error")")
+                                            if response.contains("429") {
+                                                errorText = "Rate limit exceeded. Please try again later."
+                                            } else {
+                                                //errorText = "Failed to generate quiz. Please try again later."
+                                            }
                                             self.showingGeminiFailAlert = true
                                             gemeniGeneratingQuiz = false
                                         }
@@ -551,8 +618,8 @@ struct ContentView: View {
                     
                     
                 }
-                .navigationTitle("Recap")
-                .navigationBarTitleDisplayMode(.inline)
+                //.navigationTitle("Recap")
+                //.navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
@@ -576,7 +643,7 @@ struct ContentView: View {
                     }
                 }
                 
-                .alert("An unknown error occured while generating the quiz!", isPresented: $showingGeminiFailAlert) {}
+                .alert(errorText, isPresented: $showingGeminiFailAlert) {}
                 .sheet(isPresented: $showingQuizResults) {
                     if quiz != nil {
                         if quiz!.userAnswers != nil {
@@ -864,6 +931,13 @@ struct ContentView: View {
                                                         } else {
                                                             Label(" Gemini 1.5 Flash", systemImage: "brain.head.profile")
                                                         }
+                                                    }
+                                                }
+                                            }
+                                            DisclosureGroup("Model Details") {
+                                                List {
+                                                    HStack {
+                                                        Label("Tokens Per Minute", systemImage: "dollarsign.circle")
                                                     }
                                                 }
                                             }
