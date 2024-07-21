@@ -27,6 +27,7 @@
 		789C8EFD2C409803005C7FC3 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 789C8EFC2C409803005C7FC3 /* Splash */; };
 		789C8EFF2C409803005C7FC3 /* SplashMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 789C8EFE2C409803005C7FC3 /* SplashMarkdown */; };
 		78BEC66F2C3F42590083DF9C /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 78BEC66E2C3F42590083DF9C /* MarkdownUI */; };
+		78C9B7D22C4C229D00A80927 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 78C9B7D12C4C229D00A80927 /* Shimmer */; };
 		78D4B7BE2C4881FD00411F8A /* YoutubeTranscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D4B7BD2C4881FD00411F8A /* YoutubeTranscript.swift */; };
 		8B25C4DC2C02654D00EC5F54 /* QuizProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */; };
 		8B25C4E22C02739F00EC5F54 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B25C4E12C02739F00EC5F54 /* AppSettings.swift */; };
@@ -85,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78C9B7D22C4C229D00A80927 /* Shimmer in Frameworks */,
 				789C8EFF2C409803005C7FC3 /* SplashMarkdown in Frameworks */,
 				78BEC66F2C3F42590083DF9C /* MarkdownUI in Frameworks */,
 				789C8EFD2C409803005C7FC3 /* Splash in Frameworks */,
@@ -196,6 +198,7 @@
 				78BEC66E2C3F42590083DF9C /* MarkdownUI */,
 				789C8EFC2C409803005C7FC3 /* Splash */,
 				789C8EFE2C409803005C7FC3 /* SplashMarkdown */,
+				78C9B7D12C4C229D00A80927 /* Shimmer */,
 			);
 			productName = Recap;
 			productReference = 8B9675322C02420D005950FB /* Recap.app */;
@@ -230,6 +233,7 @@
 				787010322C0389BF004CDA60 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 				78BEC66D2C3F42590083DF9C /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				789C8EFB2C409803005C7FC3 /* XCRemoteSwiftPackageReference "Splash" */,
+				78C9B7D02C4C229D00A80927 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			productRefGroup = 8B9675332C02420D005950FB /* Products */;
 			projectDirPath = "";
@@ -523,6 +527,14 @@
 				version = 2.3.1;
 			};
 		};
+		78C9B7D02C4C229D00A80927 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = exactVersion;
+				version = 1.5.0;
+			};
+		};
 		8B9675432C02429E005950FB /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/generative-ai-swift";
@@ -553,6 +565,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 78BEC66D2C3F42590083DF9C /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
+		};
+		78C9B7D12C4C229D00A80927 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 78C9B7D02C4C229D00A80927 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 		8B9675442C02429E005950FB /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
