@@ -101,7 +101,7 @@ struct ContentView: View {
     @State private var showingClearHistoryActionSheet = false
     @State private var showingAllQuizzes = false
     @State private var attachmentsIsExpanded = true
-    @State private var errorText = ""
+    @State private var errorText = "Unknown error has occured! Please try a different prompt."
     
     @State private var userInput = ""
     //@AppStorage("numberOfQuestions") private var numberOfQuestions = 5
@@ -257,7 +257,7 @@ struct ContentView: View {
                             // Smaller text below
                             Text(gemeniGeneratingQuiz ? "Generating quiz..." : "Input attachments to generate a quiz")
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                //.foregroundColor(.secondary)
                                 .shimmering(
                                     active: gemeniGeneratingQuiz
                                     //                                    gradient: Gradient(colors: [.clear, .orange, .white, .green, .clear]),
@@ -502,9 +502,11 @@ struct ContentView: View {
                                         } else {
                                             print("Failed to decode json: \(error ?? "Unknown error")")
                                             if response.contains("429") {
-                                                errorText = "Rate limit exceeded. Please try again later."
+                                                errorText = "Rate limit exceeded. Please try again later or shorten the prompt.\n\n(If you're using a free API key, Google unfortunately imposes heavy rate limits)."
+                                            } else if response.contains("not available in your country") {
+                                                errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
                                             } else {
-                                                //errorText = "Failed to generate quiz. Please try again later."
+                                                errorText = "Unknown error has occured! Please try a different prompt."
                                             }
                                             self.showingGeminiFailAlert = true
                                             gemeniGeneratingQuiz = false
