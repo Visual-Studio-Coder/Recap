@@ -26,35 +26,6 @@ class GeminiAPI: ObservableObject {
     private func initializeModel() {
         let config = GenerationConfig(
             responseMIMEType: "application/json"
-//            responseSchema:
-//                ///Users/vaibhavsatishkumar/Downloads/Recap/Recap/GeminiAPI.swift:33:29 Cannot convert value of type 'String' to expected argument type 'Schema?'
-//                Schema(
-//                    type: .object,
-//                    properties: [
-//                        "quiz_title": Schema(type: .string),
-//                        "questions": Schema(
-//                            type: .array,
-//                            items: Schema(
-//                                type: .object,
-//                                properties: [
-//                                    "type": Schema(type: .string),
-//                                    "question": Schema(type: .string),
-//                                    "options": Schema(
-//                                        type: .array,
-//                                        items: Schema(
-//                                            type: .object,
-//                                            properties: [
-//                                                "text": Schema(type: .string),
-//                                                "correct": Schema(type: .boolean)
-//                                            ]
-//                                        )
-//                                    ),
-//                                    "answer": Schema(type: .string)
-//                                ]
-//                            )
-//                        )
-//                    ]
-//                )
         )
         
         self.model = GenerativeModel(

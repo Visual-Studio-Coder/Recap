@@ -506,6 +506,8 @@ struct ContentView: View {
                                                 errorText = "Rate limit exceeded. Please try again later or shorten the prompt.\n\n(If you're using a free API key, Google unfortunately imposes heavy rate limits)."
                                             } else if response.contains("not available in your country") {
                                                 errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
+                                            } else if response.contains("valid API key") {
+                                                errorText = "API key not valid. Please pass a valid API key."
                                             } else {
                                                 errorText = "Unknown error has occured! Please try a different prompt."
                                             }
@@ -929,6 +931,9 @@ struct ContentView: View {
                                         Section {
                                             SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
                                                 .focused($focus, equals: .api)
+                                                .onChange(of: userPreferences.apiKey) {
+                                                    GeminiAPI.initialize(with: userPreferences.apiKey)
+                                                }
                                                 .onChange(of: userPreferences.selectedOption) {
                                                     print("Selected option changed to: \(userPreferences.selectedOption)")
                                                 }
