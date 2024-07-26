@@ -24,6 +24,8 @@
 		787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 787010152C0254AE004CDA60 /* Sample-JSON.json */; };
 		787010342C0389BF004CDA60 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 787010332C0389BF004CDA60 /* ConfettiSwiftUI */; };
 		787010362C0630C4004CDA60 /* ShareResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010352C0630C4004CDA60 /* ShareResults.swift */; };
+		7870F53D2C54059B00C6656F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7870F53C2C54059B00C6656F /* OnboardingView.swift */; };
+		7870F5402C54062400C6656F /* UIOnboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 7870F53F2C54062400C6656F /* UIOnboarding */; };
 		789C8EFD2C409803005C7FC3 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 789C8EFC2C409803005C7FC3 /* Splash */; };
 		789C8EFF2C409803005C7FC3 /* SplashMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 789C8EFE2C409803005C7FC3 /* SplashMarkdown */; };
 		78BEC66F2C3F42590083DF9C /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 78BEC66E2C3F42590083DF9C /* MarkdownUI */; };
@@ -54,6 +56,7 @@
 		787010142C0254AE004CDA60 /* GeminiAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeminiAPI.swift; sourceTree = "<group>"; };
 		787010152C0254AE004CDA60 /* Sample-JSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
 		787010352C0630C4004CDA60 /* ShareResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareResults.swift; sourceTree = "<group>"; };
+		7870F53C2C54059B00C6656F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		78D4B7BD2C4881FD00411F8A /* YoutubeTranscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeTranscript.swift; sourceTree = "<group>"; };
 		8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizProgressBar.swift; sourceTree = "<group>"; };
 		8B25C4E12C02739F00EC5F54 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
@@ -90,6 +93,7 @@
 				789C8EFF2C409803005C7FC3 /* SplashMarkdown in Frameworks */,
 				78BEC66F2C3F42590083DF9C /* MarkdownUI in Frameworks */,
 				789C8EFD2C409803005C7FC3 /* Splash in Frameworks */,
+				7870F5402C54062400C6656F /* UIOnboarding in Frameworks */,
 				787010342C0389BF004CDA60 /* ConfettiSwiftUI in Frameworks */,
 				8B9675452C02429E005950FB /* GoogleGenerativeAI in Frameworks */,
 			);
@@ -134,6 +138,7 @@
 				8B25C4DB2C02654D00EC5F54 /* QuizProgressBar.swift */,
 				8BF970012C02BC5900B78999 /* SplashView.swift */,
 				787010352C0630C4004CDA60 /* ShareResults.swift */,
+				7870F53C2C54059B00C6656F /* OnboardingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 				789C8EFC2C409803005C7FC3 /* Splash */,
 				789C8EFE2C409803005C7FC3 /* SplashMarkdown */,
 				78C9B7D12C4C229D00A80927 /* Shimmer */,
+				7870F53F2C54062400C6656F /* UIOnboarding */,
 			);
 			productName = Recap;
 			productReference = 8B9675322C02420D005950FB /* Recap.app */;
@@ -234,6 +240,7 @@
 				78BEC66D2C3F42590083DF9C /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				789C8EFB2C409803005C7FC3 /* XCRemoteSwiftPackageReference "Splash" */,
 				78C9B7D02C4C229D00A80927 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
+				7870F53E2C54062400C6656F /* XCRemoteSwiftPackageReference "UIOnboarding" */,
 			);
 			productRefGroup = 8B9675332C02420D005950FB /* Products */;
 			projectDirPath = "";
@@ -278,6 +285,7 @@
 				787010182C0254AE004CDA60 /* Question.swift in Sources */,
 				787010212C0254AE004CDA60 /* RecapApp.swift in Sources */,
 				7870101A2C0254AE004CDA60 /* Quiz.swift in Sources */,
+				7870F53D2C54059B00C6656F /* OnboardingView.swift in Sources */,
 				7870101E2C0254AE004CDA60 /* QuizView.swift in Sources */,
 				8B25C4DC2C02654D00EC5F54 /* QuizProgressBar.swift in Sources */,
 			);
@@ -511,6 +519,14 @@
 				version = 1.1.0;
 			};
 		};
+		7870F53E2C54062400C6656F /* XCRemoteSwiftPackageReference "UIOnboarding" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lascic/UIOnboarding.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.3;
+			};
+		};
 		789C8EFB2C409803005C7FC3 /* XCRemoteSwiftPackageReference "Splash" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JohnSundell/Splash";
@@ -550,6 +566,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 787010322C0389BF004CDA60 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
 			productName = ConfettiSwiftUI;
+		};
+		7870F53F2C54062400C6656F /* UIOnboarding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7870F53E2C54062400C6656F /* XCRemoteSwiftPackageReference "UIOnboarding" */;
+			productName = UIOnboarding;
 		};
 		789C8EFC2C409803005C7FC3 /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;
