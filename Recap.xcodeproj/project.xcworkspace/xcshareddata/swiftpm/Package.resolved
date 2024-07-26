@@ -1,5 +1,5 @@
 {
-  "originHash" : "c4bed7f75fbc9708391a8a61e8bcf4dae00610ff62ca289559b9f1cb6ab81944",
+  "originHash" : "e97719fc249b0c202b01f0f1c4fed8eb3e93829a520a1bcd3efd5657c2741aa9",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -53,6 +53,15 @@
       "state" : {
         "revision" : "e3aa4226b0fafe345ca1c920f516b6a2f3e0aacc",
         "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "uionboarding",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lascic/UIOnboarding.git",
+      "state" : {
+        "revision" : "efd1e944c399de24c10d9f4947301e1c105dbb9b",
+        "version" : "2.0.3"
       }
     }
   ],

@@ -81,6 +81,7 @@ struct ContentView: View {
     }
     
     @AppStorage("apiKey") private var apiKey = ""
+    @AppStorage("showOnboarding") private var showOnboarding = true
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
@@ -620,6 +621,7 @@ struct ContentView: View {
                     
                     
                 }
+                
                 //.navigationTitle("Recap")
                 //.navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -865,6 +867,12 @@ struct ContentView: View {
                             }
                     }
                 })
+                .fullScreenCover(isPresented: $showOnboarding, onDismiss: {
+                    showOnboarding = false
+                }, content: {
+                    OnboardingView.init()
+                        .ignoresSafeArea(.all)
+                })
                 .sheet(isPresented: $showingSettingsSheet) {
                     NavigationStack {
                         Form {
@@ -875,6 +883,12 @@ struct ContentView: View {
                             }
                             
                             Section("App Details") {
+                                Button {
+                                    showOnboarding = true
+                                } label: {
+                                    Label("Show Onboarding", systemImage: "hand.wave.fill")
+                                }
+
                                 DisclosureGroup {
                                     Markdown("""
                                 # Privacy Policy
