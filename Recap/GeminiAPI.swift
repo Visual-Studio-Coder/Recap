@@ -8,28 +8,33 @@ class GeminiAPI: ObservableObject {
     private var model: GenerativeModel?
     private var chat: Chat?
     @Published var computerResponse = ""
-    private var key: String
     
-    private init(key: String) {
+    private var key: String
+    private var modelName: String
+    private var numberOfQuestions: Int
+    
+    private init(key: String, modelName: String, numberOfQuestions: Int) {
         self.key = key
-        initializeModel()
+        self.modelName = modelName
+        self.numberOfQuestions = numberOfQuestions
+        initializeModel(modelName: modelName)
     }
     
-    static func initialize(with key: String) {
-        self.shared = GeminiAPI(key: key)
+    static func initialize(with key: String, modelName: String, numberOfQuestions: Int) {
+        self.shared = GeminiAPI(key: key, modelName: modelName, numberOfQuestions: numberOfQuestions)
     }
     
     func clearChat() {
         chat?.history.removeAll()
     }
     
-    private func initializeModel() {
+    private func initializeModel(modelName: String) {
         let config = GenerationConfig(
             responseMIMEType: "application/json"
         )
         
         self.model = GenerativeModel(
-            name: "gemini-1.5-pro",
+            name: modelName,
             apiKey: key,
             generationConfig: config,
             safetySettings: [
@@ -55,7 +60,7 @@ class GeminiAPI: ObservableObject {
         
         let quizPrompt: String = {
             if generateQuiz {
-                return String("\n\nUse this JSON schema to generate the questions, and make sure to randomize the order of the options such that the correct answer is not always in the same place:\n\n{\n  \"quiz_title\": \"Sample Quiz\",\n  \"questions\": [\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"What is the capital of France?\",\n      \"options\": [\n        {\"text\": \"Paris\", \"correct\": true},\n        {\"text\": \"London\",  \"correct\": false},\n        {\"text\": \"Berlin\", \"correct\": false},\n        {\"text\": \"Rome\", \"correct\": false}\n      ]\n    },\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"What is the largest planet in our solar system?\",\n      \"options\": [\n        {\"text\": \"Earth\", \"correct\": false},\n        {\"text\": \"Saturn\", \"correct\": false},\n        {\"text\": \"Jupiter\", \"correct\": true},\n        {\"text\": \"Uranus\", \"correct\": false}\n      ]\n    },\n    {\n      \"type\": \"free_answer\",\n      \"question\": \"What is the meaning of life?\",\n      \"answer\": \"\" // user input will be stored here\n    },\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"Which of the following is not a primary color?\",\n      \"options\": [\n        {\"text\": \"Red\", \"correct\": false},\n        {\"text\": \"Blue\", \"correct\": false},\n        {\"text\": \"Yellow\", \"correct\": false},\n        {\"text\": \"Green\", \"correct\": true}\n      ]\n    },\n    {\n      \"type\": \"free_answer\",\n      \"question\": \"Describe the concept of artificial intelligence.\",\n      \"answer\": \"Enter the answer here\" \n    }\n  ]\n}\n")
+                return String("\n\nUse this JSON schema to generate \(numberOfQuestions) questions, and make sure to randomize the order of the options such that the correct answer is not always in the same place:\n\n{\n  \"quiz_title\": \"Sample Quiz\",\n  \"questions\": [\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"What is the capital of France?\",\n      \"options\": [\n        {\"text\": \"Paris\", \"correct\": true},\n        {\"text\": \"London\",  \"correct\": false},\n        {\"text\": \"Berlin\", \"correct\": false},\n        {\"text\": \"Rome\", \"correct\": false}\n      ]\n    },\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"What is the largest planet in our solar system?\",\n      \"options\": [\n        {\"text\": \"Earth\", \"correct\": false},\n        {\"text\": \"Saturn\", \"correct\": false},\n        {\"text\": \"Jupiter\", \"correct\": true},\n        {\"text\": \"Uranus\", \"correct\": false}\n      ]\n    },\n    {\n      \"type\": \"free_answer\",\n      \"question\": \"What is the meaning of life?\",\n      \"answer\": \"\" // user input will be stored here\n    },\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"Which of the following is not a primary color?\",\n      \"options\": [\n        {\"text\": \"Red\", \"correct\": false},\n        {\"text\": \"Blue\", \"correct\": false},\n        {\"text\": \"Yellow\", \"correct\": false},\n        {\"text\": \"Green\", \"correct\": true}\n      ]\n    },\n    {\n      \"type\": \"free_answer\",\n      \"question\": \"Describe the concept of artificial intelligence.\",\n      \"answer\": \"Enter the answer here\" \n    }\n  ]\n}\n")
             }
             return "Please follow the example JSON EXACTLY"
         }()

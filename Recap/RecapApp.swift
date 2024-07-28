@@ -13,9 +13,6 @@ struct RecapApp: App {
     
     @AppStorage("apiKey") var key: String = ""
     
-    init() {
-        GeminiAPI.initialize(with: key)
-    }
     
     @StateObject private var quizStorage = QuizStorage()
     @StateObject private var userPreferences = UserPreferences()
@@ -29,6 +26,9 @@ struct RecapApp: App {
                     Task {
                         await quizStorage.load()
                     }
+                }
+                .onAppear {
+                    GeminiAPI.initialize(with: key, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
                 }
                 .splashView {
                     ZStack {
