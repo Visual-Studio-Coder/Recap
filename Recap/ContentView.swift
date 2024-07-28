@@ -428,6 +428,7 @@ struct ContentView: View {
                             .padding(.horizontal)
                         Button {
                             gemeniGeneratingQuiz = true
+                            GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.geminiModel, numberOfQuestions: userPreferences.numberOfQuestions)
                             print(userPreferences.apiKey)
                             print(userPreferences.geminiModel)
                             
@@ -932,7 +933,7 @@ struct ContentView: View {
                                             SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
                                                 .focused($focus, equals: .api)
                                                 .onChange(of: userPreferences.apiKey) {
-                                                    GeminiAPI.initialize(with: userPreferences.apiKey)
+                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
                                                 }
                                                 .onChange(of: userPreferences.selectedOption) {
                                                     print("Selected option changed to: \(userPreferences.selectedOption)")
@@ -1242,14 +1243,5 @@ struct QuizResultsView: View {
         default:
             return .sunset(withFont: .init(size: 16))
         }
-    }
-}
-
-#Preview {
-    @Previewable @StateObject var quizStorage = QuizStorage()
-    
-    Group {
-        ContentView()
-            .environmentObject(quizStorage)
     }
 }
