@@ -781,6 +781,7 @@ struct ContentView: View {
                                     ShareLink(item: ExportableQuiz(quiz: quizStorage.history[i]), preview: SharePreview(quizStorage.history[i].quiz_title, icon: "square.and.arrow.up"))
                                     Button(action: {
                                         //remove current quiz:
+                                        showingAllQuizzes = false
                                         quiz = quizStorage.history[i]
                                         withAnimation {
                                             showQuiz.toggle()

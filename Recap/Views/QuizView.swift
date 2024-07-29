@@ -258,9 +258,10 @@ struct QuizView: View {
                         .transition(.slide)
                     } else {
                         HStack {
-                            Text(quiz.questions[selectedTab].question)
+                            Markdown(quiz.questions[selectedTab].question)
+                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                 .bold()
-                                .font(.title)
+//                                .font(.title)
                                 .padding()
                             Spacer()
                         }
