@@ -673,7 +673,12 @@ struct ContentView: View {
                     NavigationStack {
                         Form {
                             Section {
-                                Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions, onEditingChanged: GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions))
+                                Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions, in: 1...15, onEditingChanged: { editing in
+                                    if !editing {
+                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
+                                    }
+                                })
+                                
                                 
                             } header: {
                                 Text("Customize Question Count")
