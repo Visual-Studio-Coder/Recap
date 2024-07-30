@@ -258,7 +258,7 @@ struct ContentView: View {
                             // Smaller text below
                             Text(gemeniGeneratingQuiz ? "Generating quiz..." : "Input attachments to generate a quiz")
                                 .font(.subheadline)
-                                //.foregroundColor(.secondary)
+                            //.foregroundColor(.secondary)
                                 .shimmering(
                                     active: gemeniGeneratingQuiz
                                     //                                    gradient: Gradient(colors: [.clear, .orange, .white, .green, .clear]),
@@ -273,119 +273,34 @@ struct ContentView: View {
                     }
                     .scrollDismissesKeyboard(.interactively)
                 }
-                VStack(alignment: .leading) {
+                VStack {
                     Spacer()
                     
-                    if !selectedItems.isEmpty || !userInput.isEmpty || !links.isEmpty {
-                        DisclosureGroup("Attachments (\((userInput.isEmpty ? 0 : 1) + selectedItems.count + links.count))", isExpanded: $attachmentsIsExpanded) {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack {
-                                    if !userInput.isEmpty {
-                                        ZStack(alignment: .topTrailing) {
-                                            VStack {
-                                                Image(systemName: "text.quote")
-                                                    .interpolation(.none)
-                                                    .resizable()
-                                                    .frame(width: 40, height: 40)
-                                                    .padding([.top, .bottom], 5)
-                                                
-                                                Text(userInput)
-                                                    .lineLimit(1)
-                                                    .padding(.horizontal, 2)
-                                            }
-                                            .frame(width: 100, height: 100)
-                                            .background(Color.accentColor.opacity(0.4))
-                                            .cornerRadius(16)
-                                            //.clipShape(RoundedRectangle(cornerRadius: 16))
-                                            
-                                            Button {
-                                                userInput = ""
-                                            } label: {
-                                                Image(systemName: "xmark")
-                                                    .font(.system(size: 13, weight: .bold)) // Make the X mark bold
-                                                    .foregroundStyle(.white)
-                                                    .padding(2)
-                                                    .background(Color.gray)
-                                                    .clipShape(Circle())
-                                                    .overlay(
-                                                        Circle()
-                                                            .stroke(Color.white, lineWidth: 2) // Add a white outline
-                                                    )
-                                            }
-                                            .padding(3)
-                                        }
-                                    }
-                                    
-                                    ForEach(selectedPhotosData, id: \.self) { photoData in
-                                        if let image = UIImage(data: photoData) {
-                                            ZStack(alignment: .topTrailing) {
-                                                Image(uiImage: image)
-                                                    .resizable()
-                                                    .frame(width: 100, height: 100)
-                                                    .cornerRadius(16.0)
-                                                
-                                                Button {
-                                                    
-                                                    if let index = selectedPhotosData.firstIndex(of: photoData) {
-                                                        withAnimation {
-                                                            selectedPhotosData.remove(at: index)
-                                                            selectedItems.remove(at: index)
-                                                        }
-                                                    }
-                                                    
-                                                    //                                                if let index = selectedItems.flatMap({
-                                                    //                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
-                                                    //                                                        data
-                                                    //                                                    }
-                                                    //                                                }).firstIndex(of: photoData) {
-                                                    //                                                    selectedItems.remove(at: index)
-                                                    //                                                }
-                                                } label: {
-                                                    Image(systemName: "xmark")
-                                                        .font(.system(size: 13, weight: .bold)) // Make the X mark bold
-                                                        .foregroundStyle(.white)
-                                                        .padding(2)
-                                                        .background(Color.gray)
-                                                        .clipShape(Circle())
-                                                        .overlay(
-                                                            Circle()
-                                                                .stroke(Color.white, lineWidth: 2) // Add a white outline
-                                                        )
-                                                }
-                                                .padding(3)
-                                            }
-                                        }
-                                    }
-                                    
-                                    ForEach(links.indices, id: \.self) { i in
-                                        if links[i].isValidURL(), let url = URL(string: links[i]) {
+                    VStack(alignment: .leading) {
+                        if !selectedItems.isEmpty || !userInput.isEmpty || !links.isEmpty {
+                            DisclosureGroup("Attachments (\((userInput.isEmpty ? 0 : 1) + selectedItems.count + links.count))", isExpanded: $attachmentsIsExpanded) {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack {
+                                        if !userInput.isEmpty {
                                             ZStack(alignment: .topTrailing) {
                                                 VStack {
-                                                    //                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
-                                                    //                                            image
-                                                    //                                                .interpolation(.none)
-                                                    //                                                .resizable()
-                                                    //                                                .frame(width: 40, height: 40)
-                                                    //                                        } placeholder: {
-                                                    //                                            ProgressView()
-                                                    //                                        }
-                                                    LinkPreview(url: url)
-                                                        .frame(maxHeight: 100)
+                                                    Image(systemName: "text.quote")
+                                                        .interpolation(.none)
+                                                        .resizable()
+                                                        .frame(width: 40, height: 40)
+                                                        .padding([.top, .bottom], 5)
                                                     
-                                                    
-                                                    
-                                                    
-                                                    //                                        Text(url.host!)
-                                                    //                                            .lineLimit(1)
-                                                    //                                            .padding(.horizontal, 2)
+                                                    Text(userInput)
+                                                        .lineLimit(1)
+                                                        .padding(.horizontal, 2)
                                                 }
-                                                // .frame(width: 100, height: 100)
+                                                .frame(width: 100, height: 100)
                                                 .background(Color.accentColor.opacity(0.4))
                                                 .cornerRadius(16)
                                                 //.clipShape(RoundedRectangle(cornerRadius: 16))
                                                 
                                                 Button {
-                                                    links.remove(at: i)
+                                                    userInput = ""
                                                 } label: {
                                                     Image(systemName: "xmark")
                                                         .font(.system(size: 13, weight: .bold)) // Make the X mark bold
@@ -397,206 +312,293 @@ struct ContentView: View {
                                                             Circle()
                                                                 .stroke(Color.white, lineWidth: 2) // Add a white outline
                                                         )
-                                                    
                                                 }
                                                 .padding(3)
                                             }
                                         }
-                                    }
-                                    Spacer()
-                                }
-                            }
-                            .mask {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.white) // or any other background color
-                            }
-                            //.padding(.horizontal)
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    
-                    
-                    HStack {
-                        
-                        TextField("What would you like to quiz yourself on?", text: $userInput, axis: .vertical)
-                            .autocorrectionDisabled()
-                            .focused($focus, equals: .quizPrompt)
-                            .padding()
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                            .overlay(RoundedRectangle(cornerRadius: 15).stroke(.gray, lineWidth: 1))
-                            .padding(.horizontal)
-                        Button {
-                            gemeniGeneratingQuiz = true
-                            GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.geminiModel, numberOfQuestions: userPreferences.numberOfQuestions)
-                            print(userPreferences.apiKey)
-                            print(userPreferences.geminiModel)
-                            
-                            // Create a DispatchGroup to handle multiple asynchronous tasks
-                            let group = DispatchGroup()
-                            
-                            var websiteContent = ""
-                            
-                            // Use a regular Swift for loop to iterate over the links array
-                            for link in links {
-                                if let url = URL(string: link) {
-                                    group.enter()
-                                    
-                                    DispatchQueue.global().async {
-                                        if url.host?.contains("youtube") == true || url.host?.contains("youtu.be") == true {
-                                            // Handle YouTube links
-                                            let videoId = extractYouTubeVideoID(from: url)
-                                            if let videoId = videoId {
-                                                Task {
-                                                    do {
-                                                        let transcript = try await YouTubeTranscript.fetchTranscript(for: videoId)
-                                                        websiteContent += transcript
-                                                    } catch {
-                                                        print("Failed to fetch YouTube transcript for video ID \(videoId): \(error)")
+                                        
+                                        ForEach(selectedPhotosData, id: \.self) { photoData in
+                                            if let image = UIImage(data: photoData) {
+                                                ZStack(alignment: .topTrailing) {
+                                                    Image(uiImage: image)
+                                                        .resizable()
+                                                        .frame(width: 100, height: 100)
+                                                        .cornerRadius(16.0)
+                                                    
+                                                    Button {
+                                                        
+                                                        if let index = selectedPhotosData.firstIndex(of: photoData) {
+                                                            withAnimation {
+                                                                selectedPhotosData.remove(at: index)
+                                                                selectedItems.remove(at: index)
+                                                            }
+                                                        }
+                                                        
+                                                        //                                                if let index = selectedItems.flatMap({
+                                                        //                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
+                                                        //                                                        data
+                                                        //                                                    }
+                                                        //                                                }).firstIndex(of: photoData) {
+                                                        //                                                    selectedItems.remove(at: index)
+                                                        //                                                }
+                                                    } label: {
+                                                        Image(systemName: "xmark")
+                                                            .font(.system(size: 13, weight: .bold)) // Make the X mark bold
+                                                            .foregroundStyle(.white)
+                                                            .padding(2)
+                                                            .background(Color.gray)
+                                                            .clipShape(Circle())
+                                                            .overlay(
+                                                                Circle()
+                                                                    .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                                            )
                                                     }
-                                                    group.leave()
+                                                    .padding(3)
                                                 }
-                                            } else {
-                                                group.leave()
                                             }
-                                        } else if url.pathExtension == "pdf" {
-                                            // Handle PDF files
-                                            if let pdfDocument = PDFDocument(url: url) {
-                                                let pageCount = pdfDocument.pageCount
-                                                var pdfText = ""
-                                                for pageIndex in 0..<pageCount {
-                                                    if let page = pdfDocument.page(at: pageIndex) {
-                                                        pdfText += page.string ?? ""
-                                                    }
-                                                }
-                                                websiteContent += pdfText
-                                            } else {
-                                                print("Failed to load PDF document from URL \(url)")
-                                            }
-                                            group.leave()
-                                        } else {
-                                            // Handle regular web links
-                                            do {
-                                                let contents = try String(contentsOf: url)
-                                                let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
-                                                let plainString = atr.string
-                                                websiteContent += plainString
-                                            } catch {
-                                                print("Failed to load contents of URL \(url): \(error)")
-                                            }
-                                            group.leave()
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            group.notify(queue: .main) {
-                                if apiKey != "" {
-                                    let message = userInput + "Attached Website Content:" + websiteContent
-                                    geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
-                                        //print(response)
-                                        let (quiz, error) = decodeJSON(from: response)
-                                        if let quiz = quiz {
-                                            DispatchQueue.main.async {
-                                                self.quiz = quiz
-                                                self.showQuiz = true
-                                            }
-                                        } else {
-                                            print("Failed to decode json: \(error ?? "Unknown error")")
-                                            if response.contains("429") {
-                                                errorText = "Rate limit exceeded. Please try again later or shorten the prompt.\n\n(If you're using a free API key, Google unfortunately imposes heavy rate limits)."
-                                            } else if response.contains("not available in your country") {
-                                                errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
-                                            } else if response.contains("valid API key") {
-                                                errorText = "API key not valid. Please pass a valid API key."
-                                            } else {
-                                                errorText = "Unknown error has occured! Please try a different prompt."
-                                            }
-                                            self.showingGeminiFailAlert = true
-                                            gemeniGeneratingQuiz = false
                                         }
                                         
+                                        ForEach(links.indices, id: \.self) { i in
+                                            if links[i].isValidURL(), let url = URL(string: links[i]) {
+                                                ZStack(alignment: .topTrailing) {
+                                                    VStack {
+                                                        //                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
+                                                        //                                            image
+                                                        //                                                .interpolation(.none)
+                                                        //                                                .resizable()
+                                                        //                                                .frame(width: 40, height: 40)
+                                                        //                                        } placeholder: {
+                                                        //                                            ProgressView()
+                                                        //                                        }
+                                                        LinkPreview(url: url)
+                                                            .frame(maxHeight: 100)
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        //                                        Text(url.host!)
+                                                        //                                            .lineLimit(1)
+                                                        //                                            .padding(.horizontal, 2)
+                                                    }
+                                                    // .frame(width: 100, height: 100)
+                                                    .background(Color.accentColor.opacity(0.4))
+                                                    .cornerRadius(16)
+                                                    //.clipShape(RoundedRectangle(cornerRadius: 16))
+                                                    
+                                                    Button {
+                                                        links.remove(at: i)
+                                                    } label: {
+                                                        Image(systemName: "xmark")
+                                                            .font(.system(size: 13, weight: .bold)) // Make the X mark bold
+                                                            .foregroundStyle(.white)
+                                                            .padding(2)
+                                                            .background(Color.gray)
+                                                            .clipShape(Circle())
+                                                            .overlay(
+                                                                Circle()
+                                                                    .stroke(Color.white, lineWidth: 2) // Add a white outline
+                                                            )
+                                                        
+                                                    }
+                                                    .padding(3)
+                                                }
+                                            }
+                                        }
+                                        Spacer()
                                     }
-                                } else {
-                                    self.showingGeminiAPIAlert = true
-                                    gemeniGeneratingQuiz = false
                                 }
+                                .mask {
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(Color.white) // or any other background color
+                                }
+                                //.padding(.horizontal)
                             }
-                        } label: {
-                            if gemeniGeneratingQuiz {
-                                ProgressView()
-                                //.foregroundStyle(.white)
-                                    .frame(width: 30, height: 30)
-                                    .padding(.trailing)
-                                //.background(Color.accentColor)
-                                //.clipShape(RoundedRectangle(cornerRadius: 15))
-                            } else {
-                                Image(systemName: "paperplane")
-                                //.foregroundStyle(.white)
-                                    .frame(width: 30, height: 30)
-                                    .padding(.trailing)
-                                //.background(Color.accentColor)
-                                //.clipShape(RoundedRectangle(cornerRadius: 15))
-                            }
+                            .padding(.horizontal)
                         }
-                        .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
-                    }
-                    
-                    HStack {
-                        Button {
-                            showingQuizCustomizationSheet.toggle()
-                        } label: {
-                            Image(systemName: "slider.horizontal.3")
-                        }
-                        .buttonStyle(.bordered)
-                        .clipShape(RoundedRectangle(cornerRadius: 100))
-                        
-                        PhotosPicker(selection: $selectedItems, maxSelectionCount: 5, matching: .images) {
-                            if selectedItems.count == 1 {
-                                Label("\(selectedItems.count != 0 ? "\(selectedItems.count) Selected" : "")", systemImage: "photo")
-                            } else if selectedItems.count == 0 {
-                                Image(systemName: "photo")
-                            } else {
-                                Label("\(selectedItems.count != 0 ? "\(selectedItems.count) Selected" : "")", systemImage: "photo")
-                            }
-                        }
-                        .buttonStyle(.bordered)
-                        .clipShape(RoundedRectangle(cornerRadius: 100))
-                        .onChange(of: selectedItems) {
-                            selectedPhotosData = []
+
+                        HStack {
                             
-                            // Define the maximum allowed dimension for an image.
-                            let largestImageDimension: CGFloat = 768.0
-                            
-                            // Use a concurrent loop to process images in parallel.
-                            Task {
-                                await withTaskGroup(of: Data?.self) { group in
-                                    for item in selectedItems {
-                                        group.addTask {
-                                            return try? await item.loadTransferable(type: Data.self)
+                            TextField("What would you like a quiz on?", text: $userInput, axis: .vertical)
+                                .autocorrectionDisabled()
+                                .focused($focus, equals: .quizPrompt)
+                                .padding()
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                .overlay(RoundedRectangle(cornerRadius: 15).stroke(.accent, lineWidth: 1))
+                                .padding(.horizontal)
+                            Button {
+                                gemeniGeneratingQuiz = true
+                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.geminiModel, numberOfQuestions: userPreferences.numberOfQuestions)
+                                print(userPreferences.apiKey)
+                                print(userPreferences.geminiModel)
+                                
+                                // Create a DispatchGroup to handle multiple asynchronous tasks
+                                let group = DispatchGroup()
+                                
+                                var websiteContent = ""
+                                
+                                // Use a regular Swift for loop to iterate over the links array
+                                for link in links {
+                                    if let url = URL(string: link) {
+                                        group.enter()
+                                        
+                                        DispatchQueue.global().async {
+                                            if url.host?.contains("youtube") == true || url.host?.contains("youtu.be") == true {
+                                                // Handle YouTube links
+                                                let videoId = extractYouTubeVideoID(from: url)
+                                                if let videoId = videoId {
+                                                    Task {
+                                                        do {
+                                                            let transcript = try await YouTubeTranscript.fetchTranscript(for: videoId)
+                                                            websiteContent += transcript
+                                                        } catch {
+                                                            print("Failed to fetch YouTube transcript for video ID \(videoId): \(error)")
+                                                        }
+                                                        group.leave()
+                                                    }
+                                                } else {
+                                                    group.leave()
+                                                }
+                                            } else if url.pathExtension == "pdf" {
+                                                // Handle PDF files
+                                                if let pdfDocument = PDFDocument(url: url) {
+                                                    let pageCount = pdfDocument.pageCount
+                                                    var pdfText = ""
+                                                    for pageIndex in 0..<pageCount {
+                                                        if let page = pdfDocument.page(at: pageIndex) {
+                                                            pdfText += page.string ?? ""
+                                                        }
+                                                    }
+                                                    websiteContent += pdfText
+                                                } else {
+                                                    print("Failed to load PDF document from URL \(url)")
+                                                }
+                                                group.leave()
+                                            } else {
+                                                // Handle regular web links
+                                                do {
+                                                    let contents = try String(contentsOf: url)
+                                                    let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+                                                    let plainString = atr.string
+                                                    websiteContent += plainString
+                                                } catch {
+                                                    print("Failed to load contents of URL \(url): \(error)")
+                                                }
+                                                group.leave()
+                                            }
                                         }
                                     }
-                                    
-                                    // Process each image as it finishes loading.
-                                    for await result in group {
-                                        if let data = result, let image = UIImage(data: data) {
-                                            // Check if the image fits within the largest allowed dimension.
-                                            if image.size.fits(largestDimension: largestImageDimension) {
-                                                // If it fits, use the original image data.
-                                                await MainActor.run {
-                                                    selectedPhotosData.append(data)
+                                }
+                                
+                                group.notify(queue: .main) {
+                                    if apiKey != "" {
+                                        let message = userInput + "Attached Website Content:" + websiteContent
+                                        geminiAPI!.sendMessage(userInput: message, selectedPhotosData: selectedPhotosData, streamContent: false, generateQuiz: true) { response in
+                                            //print(response)
+                                            let (quiz, error) = decodeJSON(from: response)
+                                            if let quiz = quiz {
+                                                DispatchQueue.main.async {
+                                                    self.quiz = quiz
+                                                    self.showQuiz = true
                                                 }
                                             } else {
-                                                // If it doesn't fit, resize the image.
-                                                guard let resizedImage = image.preparingThumbnail(of: CGSize(width: largestImageDimension, height: largestImageDimension).aspectFit(largestDimension: largestImageDimension)) else {
-                                                    continue
+                                                print("Failed to decode json: \(error ?? "Unknown error")")
+                                                if response.contains("429") {
+                                                    errorText = "Rate limit exceeded. Please try again later or shorten the prompt.\n\n(If you're using a free API key, Google unfortunately imposes heavy rate limits)."
+                                                } else if response.contains("not available in your country") {
+                                                    errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
+                                                } else if response.contains("valid API key") {
+                                                    errorText = "API key not valid. Please pass a valid API key."
+                                                } else {
+                                                    errorText = "Unknown error has occured! Please try a different prompt."
                                                 }
-                                                
-                                                // Convert the resized image back to Data, if possible.
-                                                if let resizedImageData = resizedImage.jpegData(compressionQuality: 1.0) {
-                                                    // Append the resized image data to the selectedPhotosData array.
+                                                self.showingGeminiFailAlert = true
+                                                gemeniGeneratingQuiz = false
+                                            }
+                                            
+                                        }
+                                    } else {
+                                        self.showingGeminiAPIAlert = true
+                                        gemeniGeneratingQuiz = false
+                                    }
+                                }
+                            } label: {
+                                if gemeniGeneratingQuiz {
+                                    ProgressView()
+                                    //.foregroundStyle(.white)
+                                        .frame(width: 30, height: 30)
+                                    //                                    .padding(.trailing)
+                                    //.background(Color.accentColor)
+                                    //.clipShape(RoundedRectangle(cornerRadius: 15))
+                                } else {
+                                    Image(systemName: "paperplane")
+                                    //.foregroundStyle(.white)
+                                        .frame(width: 30, height: 30)
+                                    //                                    .padding(.trailing)
+                                    //.background(Color.accentColor)
+                                    //.clipShape(RoundedRectangle(cornerRadius: 15))
+                                }
+                            }
+                            .padding(.trailing)
+                            .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Button {
+                                showingQuizCustomizationSheet.toggle()
+                            } label: {
+                                Image(systemName: "slider.horizontal.3")
+                            }
+                            .buttonStyle(.bordered)
+                            .clipShape(RoundedRectangle(cornerRadius: 100))
+                            
+                            PhotosPicker(selection: $selectedItems, maxSelectionCount: 5, matching: .images) {
+                                if selectedItems.count == 1 {
+                                    Label("\(selectedItems.count != 0 ? "\(selectedItems.count) Selected" : "")", systemImage: "photo")
+                                } else if selectedItems.count == 0 {
+                                    Image(systemName: "photo")
+                                } else {
+                                    Label("\(selectedItems.count != 0 ? "\(selectedItems.count) Selected" : "")", systemImage: "photo")
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .clipShape(RoundedRectangle(cornerRadius: 100))
+                            .onChange(of: selectedItems) {
+                                selectedPhotosData = []
+                                
+                                // Define the maximum allowed dimension for an image.
+                                let largestImageDimension: CGFloat = 768.0
+                                
+                                // Use a concurrent loop to process images in parallel.
+                                Task {
+                                    await withTaskGroup(of: Data?.self) { group in
+                                        for item in selectedItems {
+                                            group.addTask {
+                                                return try? await item.loadTransferable(type: Data.self)
+                                            }
+                                        }
+                                        
+                                        // Process each image as it finishes loading.
+                                        for await result in group {
+                                            if let data = result, let image = UIImage(data: data) {
+                                                // Check if the image fits within the largest allowed dimension.
+                                                if image.size.fits(largestDimension: largestImageDimension) {
+                                                    // If it fits, use the original image data.
                                                     await MainActor.run {
-                                                        selectedPhotosData.append(resizedImageData)
+                                                        selectedPhotosData.append(data)
+                                                    }
+                                                } else {
+                                                    // If it doesn't fit, resize the image.
+                                                    guard let resizedImage = image.preparingThumbnail(of: CGSize(width: largestImageDimension, height: largestImageDimension).aspectFit(largestDimension: largestImageDimension)) else {
+                                                        continue
+                                                    }
+                                                    
+                                                    // Convert the resized image back to Data, if possible.
+                                                    if let resizedImageData = resizedImage.jpegData(compressionQuality: 1.0) {
+                                                        // Append the resized image data to the selectedPhotosData array.
+                                                        await MainActor.run {
+                                                            selectedPhotosData.append(resizedImageData)
+                                                        }
                                                     }
                                                 }
                                             }
@@ -604,23 +606,26 @@ struct ContentView: View {
                                     }
                                 }
                             }
-                        }
-                        
-                        Button {
-                            showingURLSheet = true
-                        } label: {
-                            if links.count == 1 {
-                                Label("\(links.count != 0 ? "\(links.count) Link" : "")", systemImage: "link.badge.plus")
-                            } else if links.count == 0 {
-                                Image(systemName: "link.badge.plus")
-                            } else {
-                                Label("\(links.count != 0 ? "\(links.count) Links" : "")", systemImage: "link.badge.plus")
+                            
+                            Button {
+                                showingURLSheet = true
+                            } label: {
+                                if links.count == 1 {
+                                    Label("\(links.count != 0 ? "\(links.count) Link" : "")", systemImage: "link.badge.plus")
+                                } else if links.count == 0 {
+                                    Image(systemName: "link.badge.plus")
+                                } else {
+                                    Label("\(links.count != 0 ? "\(links.count) Links" : "")", systemImage: "link.badge.plus")
+                                }
                             }
+                            .buttonStyle(.bordered)
+                            .clipShape(RoundedRectangle(cornerRadius: 100.00))
+                            
                         }
-                        .buttonStyle(.bordered)
-                        .clipShape(RoundedRectangle(cornerRadius: 100.00))
+                        .padding([.bottom, .leading, .trailing])
                     }
-                    .padding([.bottom, .leading, .trailing])
+                    .padding(.vertical)
+                    .background(.ultraThinMaterial)
                     
                     
                 }
@@ -668,7 +673,8 @@ struct ContentView: View {
                     NavigationStack {
                         Form {
                             Section {
-                                Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions)
+                                Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions, onEditingChanged: GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions))
+                                
                             } header: {
                                 Text("Customize Question Count")
                             } footer: {
@@ -892,7 +898,7 @@ struct ContentView: View {
                                 } label: {
                                     Label("Show Onboarding", systemImage: "hand.wave.fill")
                                 }
-
+                                
                                 DisclosureGroup {
                                     Markdown("""
                                 # Privacy Policy
@@ -950,9 +956,9 @@ struct ContentView: View {
                                                 ForEach(options, id: \.self) { option in
                                                     HStack {
                                                         if option == "gemini-1.5-pro-latest" {
-                                                            Label(" Gemini 1.5 Pro", systemImage: "bolt.fill")
+                                                            Label(" Gemini 1.5 Pro", systemImage: "brain.head.profile")
                                                         } else {
-                                                            Label(" Gemini 1.5 Flash", systemImage: "brain.head.profile")
+                                                            Label(" Gemini 1.5 Flash", systemImage: "bolt.fill")
                                                         }
                                                     }
                                                 }
