@@ -377,7 +377,9 @@ struct QuizView: View {
                 VStack {
                     Button {
                         withAnimation {
-                            if quiz.questions[selectedTab].type == "free_answer" && !gradingCompleted {
+                            if quiz.questions.count-1 < selectedTab {
+                                
+                            } else if quiz.questions[selectedTab].type == "free_answer" && !gradingCompleted {
                                 // If it's a free response question and grading hasn't been completed, start grading
                                 gradeFreeResponse()
                             } else {
@@ -543,7 +545,7 @@ struct QuizView: View {
                                 "feedback": "Your feedback here in a consice bulleted list",
                                 "difficultyScore": (something between 1 and 5)
                             }
-                            """, selectedPhotosData: nil, streamContent: false, generateQuiz: false, completion: { response in
+                            """, selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
                                 chatService.computerResponse = ""
                                 let data = Data(response.utf8)
                                 let decoder = JSONDecoder()
