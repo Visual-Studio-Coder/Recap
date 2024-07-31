@@ -71,10 +71,10 @@ struct ShareResults: View {
                         .padding()
                     }
                 //.padding()
-
+                
             }
             .padding([.leading, .trailing, .top])
-
+            
             Label {
                 Text("Download Recap Today!")
                     .font(.caption)
@@ -82,13 +82,13 @@ struct ShareResults: View {
                     .foregroundStyle(.secondary)
             } icon: {
                 Image(uiImage: #imageLiteral(resourceName: "RecapTransparent"))
-
+                
                     .resizable()
                     .frame(width: 20, height: 20)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
             }
             .padding([.leading, .trailing, .bottom], 4)
-
+            
         }
         .background(
             LinearGradient(
@@ -97,7 +97,7 @@ struct ShareResults: View {
                     .blue.opacity(0.6), .blue.opacity(0.7), .blue.opacity(0.8), .blue.opacity(0.9),
                     .blue.opacity(1), .blue,
                 ], startPoint: .topLeading, endPoint: .bottomTrailing))
-
+        
     }
 }
 

@@ -19,7 +19,7 @@ struct ExportableQuiz: Codable, Transferable {
 @MainActor
 class QuizStorage: ObservableObject {
     @Published var history: [Quiz] = []
-
+    
     private static func fileURL() throws -> URL {
         try FileManager.default.url(
             for: .documentDirectory,
@@ -29,7 +29,7 @@ class QuizStorage: ObservableObject {
         )
         .appendingPathComponent("quiz.data")
     }
-
+    
     func load() async {
         do {
             let fileURL = try Self.fileURL()
@@ -42,7 +42,7 @@ class QuizStorage: ObservableObject {
             print("Failed to load quizzes: \(error)")
         }
     }
-
+    
     func save(history: [Quiz]) async {
         do {
             let data = try JSONEncoder().encode(history)
@@ -52,7 +52,7 @@ class QuizStorage: ObservableObject {
             print("Failed to save quizzes: \(error)")
         }
     }
-
+    
     func addQuiz(_ quiz: Quiz, userAnswers: [UserAnswer]) async {
         var newQuiz = quiz
         newQuiz.userAnswers = userAnswers  // Assign user answers to the quiz

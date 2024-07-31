@@ -140,7 +140,7 @@ class GeminiAPI: ObservableObject {
                     }
                 }
             }
-        
+            
         } else {
             
             Task {
