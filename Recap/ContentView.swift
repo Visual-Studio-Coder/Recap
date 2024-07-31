@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Recap
-//
-//  Created by Aaron Ma on 5/25/24.
-//
-
 import SwiftUI
 import PhotosUI
 import MarkdownUI
@@ -131,142 +124,29 @@ struct ContentView: View {
     
     
     var body: some View {
-        //        if showQuiz, let quiz = quiz {
-        //            QuizView(quiz: quiz, showQuiz: $showQuiz)
-        //                .environmentObject(quizStorage)
-        //                .onAppear {
-        //                    gemeniGeneratingQuiz = false
-        //                }
-        //        } else {
         NavigationStack {
             ZStack {
-                //                if !quizStorage.history.isEmpty {
-                //                    ScrollView {
-                //                        VStack {
-                //
-                //                            Text("Recent Quizzes")
-                //                                .font(.title)
-                //                                .bold()
-                //                            Button(action: {
-                //                                // Show action sheet to confirm clearing history
-                //                                showingClearHistoryActionSheet = true
-                //                            }) {
-                //                                Label("Clear History", systemImage: "trash")
-                //                            }
-                //                            .actionSheet(isPresented: $showingClearHistoryActionSheet) {
-                //                                ActionSheet(
-                //                                    title: Text("Are you sure you want to clear history?"),
-                //                                    buttons: [
-                //                                        .destructive(Text("Clear"), action: {
-                //                                            quizStorage.history.removeAll()
-                //                                            Task {
-                //                                                await quizStorage.save(history: [])
-                //                                            }
-                //                                        }),
-                //                                        .cancel()
-                //                                    ]
-                //                                )
-                //                            }
-                //                            .foregroundStyle(.red)
-                //
-                //                        }
-                //                        .padding(.leading)
-                //
-                //                        //List {
-                //                        ForEach(quizStorage.history.indices.reversed().prefix(3), id: \.self) { i in
-                //                            Menu {
-                //                                //share quiz
-                //                                ShareLink(item: ExportableQuiz(quiz: quizStorage.history[i]), preview: SharePreview(quizStorage.history[i].quiz_title, icon: "square.and.arrow.up"))
-                //                                Button(action: {
-                //                                    //remove current quiz:
-                //                                    quiz = quizStorage.history[i]
-                //                                    withAnimation {
-                //                                        showQuiz.toggle()
-                //                                    }
-                //                                    quizStorage.history.remove(at: i)
-                //                                }) {
-                //                                    Label("Take Quiz Again", systemImage: "arrow.clockwise")
-                //                                }
-                //                                Button(action: {
-                //                                    DispatchQueue.main.async {
-                //                                        quiz = quizStorage.history[i]
-                //                                    }
-                //                                    showingQuizResults.toggle()
-                //                                }) {
-                //                                    Label("View Past Results", systemImage: "text.book.closed")
-                //                                }
-                //
-                //                                Button(action: {
-                //                                    // Implement action to regenerate the quiz
-                //                                }) {
-                //                                    Label("Regenerate Quiz", systemImage: "gobackward")
-                //                                }
-                //                            } label: {
-                //                                HStack {
-                //                                    VStack(alignment: .leading) {
-                //                                        Text(quizStorage.history[i].quiz_title)
-                //                                            .bold()
-                //
-                //                                        Text("\(quizStorage.history[i].questions.count) Questions")
-                //                                            .foregroundStyle(.secondary)
-                //                                    }
-                //                                    Spacer()
-                //                                    //                                        if quizStorage.history[i].userAnswers != nil {
-                //                                    //                                            Text("\(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count)/\(quizStorage.history[i].questions.count) (\(Int((Double(quizStorage.history[i].userAnswers!.filter { $0.isCorrect == true }.count) / Double(quizStorage.history[i].questions.count)) * 100))%)")
-                //                                    //                                                .foregroundStyle(.secondary)
-                //                                    //                                        }
-                //                                    if let userAnswers = quizStorage.history[i].userAnswers {
-                //                                        Text("\((userAnswers.filter { $0.isCorrect }.count))/\(quizStorage.history[i].questions.count) (\(String(format: "%.0f", (Double(userAnswers.filter { $0.isCorrect }.count) / Double(quizStorage.history[i].questions.count) * 100)))%)")
-                //                                            .foregroundStyle(.secondary)
-                //                                    }
-                //                                }
-                //                                .padding()
-                //                            }
-                //                        }
-                //                        //}
-                //
-                //                        if quizStorage.history.count > 3 {
-                //                            Button(action: {
-                //                                // Show all quizzes
-                //                                showingAllQuizzes.toggle()
-                //                            }) {
-                //                                Text("Show All Quizzes")
-                //                                    .font(.headline)
-                //                                    .foregroundStyle(.blue)
-                //                            }
-                //                        }
-                //                    }
-                //                    .scrollDismissesKeyboard(.interactively)
-                //                }
                 GeometryReader { geometry in
                     ScrollView {
                         
                         VStack {
                             Spacer() // Pushes content down
                             
-                            // Recap AI text with rainbow "AI"
                             Text("Recap AI")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .shimmering(
                                     active: gemeniGeneratingQuiz
-                                    //                                    gradient: Gradient(colors: [.clear, .orange, .white, .green, .clear]),
-                                    //                                    bandSize: 0.5,
-                                    //                                    mode: .overlay()
                                 )
                             
                             // Smaller text below
                             Text(gemeniGeneratingQuiz ? "Generating quiz..." : "Input attachments to generate a quiz")
                                 .font(.subheadline)
-                            //.foregroundColor(.secondary)
                                 .shimmering(
                                     active: gemeniGeneratingQuiz
-                                    //                                    gradient: Gradient(colors: [.clear, .orange, .white, .green, .clear]),
-                                    //                                    bandSize: 0.5,
-                                    //                                    mode: .overlay()
                                 )
                             
-                            Spacer() // Pushes content up
+                            Spacer()
                         }
                         
                         .frame(width: geometry.size.width, height: geometry.size.height)
@@ -297,7 +177,6 @@ struct ContentView: View {
                                                 .frame(width: 100, height: 100)
                                                 .background(Color.accentColor.opacity(0.4))
                                                 .cornerRadius(16)
-                                                //.clipShape(RoundedRectangle(cornerRadius: 16))
                                                 
                                                 Button {
                                                     userInput = ""
@@ -326,21 +205,12 @@ struct ContentView: View {
                                                         .cornerRadius(16.0)
                                                     
                                                     Button {
-                                                        
                                                         if let index = selectedPhotosData.firstIndex(of: photoData) {
                                                             withAnimation {
                                                                 selectedPhotosData.remove(at: index)
                                                                 selectedItems.remove(at: index)
                                                             }
                                                         }
-                                                        
-                                                        //                                                if let index = selectedItems.flatMap({
-                                                        //                                                    if let data = try? await $0.loadTransferable(type: Data.self) {
-                                                        //                                                        data
-                                                        //                                                    }
-                                                        //                                                }).firstIndex(of: photoData) {
-                                                        //                                                    selectedItems.remove(at: index)
-                                                        //                                                }
                                                     } label: {
                                                         Image(systemName: "xmark")
                                                             .font(.system(size: 13, weight: .bold)) // Make the X mark bold
@@ -362,28 +232,11 @@ struct ContentView: View {
                                             if links[i].isValidURL(), let url = URL(string: links[i]) {
                                                 ZStack(alignment: .topTrailing) {
                                                     VStack {
-                                                        //                                        AsyncImage(url: URL(string: "https://icons.duckduckgo.com/ip3/\(url.host!).ico")) { image in
-                                                        //                                            image
-                                                        //                                                .interpolation(.none)
-                                                        //                                                .resizable()
-                                                        //                                                .frame(width: 40, height: 40)
-                                                        //                                        } placeholder: {
-                                                        //                                            ProgressView()
-                                                        //                                        }
                                                         LinkPreview(url: url)
                                                             .frame(maxHeight: 100)
-                                                        
-                                                        
-                                                        
-                                                        
-                                                        //                                        Text(url.host!)
-                                                        //                                            .lineLimit(1)
-                                                        //                                            .padding(.horizontal, 2)
                                                     }
-                                                    // .frame(width: 100, height: 100)
                                                     .background(Color.accentColor.opacity(0.4))
                                                     .cornerRadius(16)
-                                                    //.clipShape(RoundedRectangle(cornerRadius: 16))
                                                     
                                                     Button {
                                                         links.remove(at: i)
@@ -411,7 +264,6 @@ struct ContentView: View {
                                     RoundedRectangle(cornerRadius: 16)
                                         .fill(Color.white) // or any other background color
                                 }
-                                //.padding(.horizontal)
                             }
                             .padding(.horizontal)
                         }

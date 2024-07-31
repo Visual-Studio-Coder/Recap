@@ -1,10 +1,3 @@
-//
-//  Bundle+icon.swift
-//  Recap
-//
-//  Created by Aaron Ma on 7/14/24.
-//
-
 import UIKit
 
 extension Bundle {

@@ -1,10 +1,3 @@
-//
-//  QuizProgressBar.swift
-//  Recap
-//
-//  Created by Aaron Ma on 5/25/24.
-//
-
 import SwiftUI
 
 struct QuizProgressBar: View {

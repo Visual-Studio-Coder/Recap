@@ -1,7 +1,3 @@
-//
-//  QuizView.swift
-//  Recap
-//
 import SwiftUI
 import ConfettiSwiftUI
 import MarkdownUI

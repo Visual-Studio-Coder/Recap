@@ -1,10 +1,3 @@
-//
-//  String+isValidURL.swift
-//  Recap
-//
-//  Created by Aaron Ma on 7/14/24.
-//
-
 import Foundation
 
 extension String {
