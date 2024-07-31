@@ -6,6 +6,7 @@ import SwiftUI
 import ConfettiSwiftUI
 import MarkdownUI
 import Splash
+import Shimmer
 
 struct QuestionView: View {
     @Environment(\.colorScheme) private var colorScheme
@@ -143,7 +144,10 @@ struct QuizView: View {
     @State private var userAnswers = [UserAnswer]()
     @State private var showExplanation = false
     @State private var explanation: Explanation?
+    @State private var feedback: Feedback?
+    @State private var difficultyScore = 1
     @State private var gradingResult: GradingResult?
+    @State private var generatingFeedback = false
     @State private var userInput = ""
     @State private var isGradingInProgress = false
     @State private var computerResponse = ""
@@ -156,6 +160,8 @@ struct QuizView: View {
     @State private var showFullExpectedAnswer = false
     @State private var gradingCompleted: Bool = false // Add this state variable
     @State private var showingGeminiQuotaLimit = false
+    @State private var isShowingResults = false
+    
     @Environment(\.displayScale) var displayScale
     @Environment(\.colorScheme) private var colorScheme
     
@@ -233,6 +239,7 @@ struct QuizView: View {
                     } label: {
                         Label("Explain", systemImage: "sparkle")
                     }
+                    .disabled(quiz.questions[selectedTab].type == "free_answer")
                     .symbolEffect(.bounce, value: showExplanation)
                     .buttonBorderShape(.capsule)
                     .buttonStyle(.bordered)
@@ -261,7 +268,7 @@ struct QuizView: View {
                             Markdown(quiz.questions[selectedTab].question)
                                 .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                                 .bold()
-//                                .font(.title)
+                            //                                .font(.title)
                                 .padding()
                             Spacer()
                         }
@@ -428,10 +435,10 @@ struct QuizView: View {
                 NavigationStack {
                     VStack {
                         if let explanationUnwrapped = explanation, !explanationUnwrapped.question.isEmpty {
-                            Markdown(explanationUnwrapped.question.replacingOccurrences(of: "<`>", with: "```"))
-                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                .font(.headline)
-                                .padding()
+                            // Markdown(explanationUnwrapped.question.replacingOccurrences(of: "<`>", with: "```"))
+                            //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                            //     .font(.headline)
+                            //     .padding()
                             Form {
                                 ForEach(explanationUnwrapped.choices, id: \.answer_option) { choice in
                                     Section {
@@ -454,13 +461,17 @@ struct QuizView: View {
                                 }
                             }
                         } else if !chatService.computerResponse.isEmpty {
-                            Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
-                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                .font(.headline)
-                                .padding()
+                            // Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
+                            //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                            //     .font(.headline)
+                            //     .padding()
                             Form {
                                 Text("**Receiving Response from Gemini...**")
                                 Markdown(chatService.computerResponse.replacingOccurrences(of: "<`>", with: "```"))
+                                    .foregroundStyle(.brown)
+                                    .redacted(reason: .placeholder)
+                                //rainbow gradient
+                                    .shimmering()
                                     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                             }
                             .onChange(of: chatService.computerResponse, { oldValue, newValue in
@@ -469,10 +480,10 @@ struct QuizView: View {
                             })
                         } else {
                             VStack {
-                                Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
-                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                //.font(.headline)
-                                    .padding()
+                                // Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
+                                //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                // //.font(.headline)
+                                //     .padding()
                                 ProgressView()
                                     .controlSize(.extraLarge)
                                     .padding(.top, 25)
@@ -484,116 +495,186 @@ struct QuizView: View {
                             }
                         }
                     }
+                    .navigationTitle(quiz.questions[selectedTab].question)
+                    .navigationBarTitleDisplayMode(.inline)
                 }
                 .presentationDetents([.medium, .large])
             }
         } else {
-            //ScrollView {
-            VStack {
-                Text("🎉")
-                    .font(.system(size: 60))
-                    .confettiCannon(counter: $confettiCounter)
-                
-                Text("\(100 * correctAnswers / answeredQuestions)%")
-                    .font(.system(size: 100))
-                    .bold()
-                
-                Text("\(correctAnswers) out of \(answeredQuestions) correct")
-                //button to share results:
-                //ShareLink(item: <#T##URL#>, subject: <#T##Text?#>, message: <#T##Text?#>, label: <#T##() -> View#>)
-                ShareLink("Share Results", item: renderedImage, preview: SharePreview(Text("I got a \(correctAnswers) out of \(quiz.questions.count) on Recap!"), image: renderedImage))
-                
-                    .onAppear {
-                        confettiCounter += 1
-                    }
-                Form {
-                    ForEach(userAnswers, id: \.question.question) { userAnswer in
-                        Section {
-                            VStack {
-                                HStack {
-                                    //did they get it correct or incorrect
-                                    if userAnswer.isCorrect {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundStyle(.green)
-                                        Text("You got this question correct!")
-                                            .bold()
-                                            .foregroundStyle(.secondary)
-                                            .font(.footnote)
-                                            .multilineTextAlignment(.leading)
-                                    } else {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundStyle(.red)
-                                        Text("You got this question incorrect.")
-                                            .bold()
-                                            .foregroundStyle(.secondary)
-                                            .font(.footnote)
-                                            .multilineTextAlignment(.leading)
-                                    }
-                                    Spacer()
-                                    Text("Question \(userAnswers.firstIndex(where: { $0.question.question == userAnswer.question.question })! + 1)")
-                                        .bold()
-                                        .foregroundStyle(.secondary)
-                                        .font(.footnote)
-                                        .multilineTextAlignment(.leading)
-                                }
-                                HStack {
-                                    Markdown(userAnswer.question.question.replacingOccurrences(of: "<`>", with: "```"))
-                                        .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                    //.bold()
-                                        .multilineTextAlignment(.leading)
-                                    //                                    if userAnswer.question.type == "multiple_choice" {
-                                    //                                        Spacer()
-                                    //                                    }
-                                    Spacer()
-                                }
-                                //                                .padding(.vertical)
+            ScrollView {
+                VStack {
+                    Spacer()
+                    Text("🎉")
+                        .font(.system(size: 60))
+                        .confettiCannon(counter: $confettiCounter)
+                    
+                    Text("\(100 * correctAnswers / answeredQuestions)%")
+                        .font(.system(size: 100))
+                        .bold()
+                    
+                    Text("\(correctAnswers) out of \(answeredQuestions) correct")
+                    //button to share results:
+                    //ShareLink(item: <#T##URL#>, subject: <#T##Text?#>, message: <#T##Text?#>, label: <#T##() -> View#>)
+                    ShareLink("Share Results", item: renderedImage, preview: SharePreview(Text("I got a \(correctAnswers) out of \(quiz.questions.count) on Recap!"), image: renderedImage))
+                    
+                        .onAppear {
+                            confettiCounter += 1
+                        }
+                    
+                    GroupBox(label: Label("Performance Feedback", systemImage: "bubble.left.and.text.bubble.right")
+                    ) {
+                        Divider()
+                        if let feedback = feedback {
+                            Markdown(feedback.feedback)
+                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                        } else {
+                            if chatService.computerResponse.isEmpty {
+                                ProgressView()
+                                    .controlSize(.large)
+                            } else {
+                                Text(chatService.computerResponse)
+                                    .redacted(reason: .placeholder)
+                                    .shimmering()
                             }
-                            if userAnswer.question.type == "multiple_choice" {
-                                ForEach(userAnswer.question.options ?? [], id: \.text) { option in
-                                    HStack {
-                                        Markdown(option.text.replacingOccurrences(of: "<`>", with: "```"))
-                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                        Spacer()
-                                        if userAnswer.userAnswer.contains(option.text) {
-                                            if option.correct {
-                                                Image(systemName: "checkmark.circle.fill")
-                                                    .foregroundStyle(.green)
-                                            } else {
-                                                Image(systemName: "xmark.circle.fill")
-                                                    .foregroundStyle(.red)
-                                            }
-                                        } else if option.correct {
-                                            Image(systemName: "checkmark.circle")
-                                                .foregroundStyle(.green)
-                                        } else {
-                                            Image(systemName: "circle")
-                                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .onAppear {
+                        func sendFeedbackRequest() {
+                            chatService.sendMessage(userInput: """
+                            Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only one JSON of this format:
+                            
+                            {
+                                "feedback": "Your feedback here in a consice bulleted list",
+                                "difficultyScore": (something between 1 and 5)
+                            }
+                            """, selectedPhotosData: nil, streamContent: false, generateQuiz: false, completion: { response in
+                                chatService.computerResponse = ""
+                                let data = Data(response.utf8)
+                                let decoder = JSONDecoder()
+                                
+                                DispatchQueue.main.async {
+                                    do {
+                                        let result = try decoder.decode(Feedback.self, from: data)
+                                        
+                                        self.feedback = result
+                                        print("Decoded feedback result: \(result)")
+                                    } catch {
+                                        print("Failed to decode feedback result: \(error)")
+                                        print("Raw response: \(response)")
+                                        
+                                        if response.contains("Resource has been exhausted") || response.contains("internal error has occurred") {
+                                            sendFeedbackRequest()
                                         }
                                     }
                                 }
-                            } else {
-                                VStack(alignment: .leading) {
-                                    Text("Your Answer:")
-                                        .bold()
-                                        .foregroundStyle(.secondary)
-                                    Text(userAnswer.userAnswer.joined(separator: ","))
-                                }
-                                VStack(alignment: .leading) {
-                                    Text("Expected Answer:")
-                                        .bold()
-                                        .foregroundStyle(.secondary)
-                                    if let correctAnswer = userAnswer.correctAnswer {
-                                        Markdown(correctAnswer.replacingOccurrences(of: "<`>", with: "```"))
-                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                            })
+                        }
+                        
+                        sendFeedbackRequest()
+                    }
+                    .padding()
+                    .sheet(isPresented: $isShowingResults, content: {
+                        Form {
+                            ForEach(userAnswers, id: \.question.question) { userAnswer in
+                                Section {
+                                    VStack {
+                                        HStack {
+                                            //did they get it correct or incorrect
+                                            if userAnswer.isCorrect {
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .foregroundStyle(.green)
+                                                Text("You got this question correct!")
+                                                    .bold()
+                                                    .foregroundStyle(.secondary)
+                                                    .font(.footnote)
+                                                    .multilineTextAlignment(.leading)
+                                            } else {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundStyle(.red)
+                                                Text("You got this question incorrect.")
+                                                    .bold()
+                                                    .foregroundStyle(.secondary)
+                                                    .font(.footnote)
+                                                    .multilineTextAlignment(.leading)
+                                            }
+                                            Spacer()
+                                            Text("Question \(userAnswers.firstIndex(where: { $0.question.question == userAnswer.question.question })! + 1)")
+                                                .bold()
+                                                .foregroundStyle(.secondary)
+                                                .font(.footnote)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                        HStack {
+                                            Markdown(userAnswer.question.question.replacingOccurrences(of: "<`>", with: "```"))
+                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                            //.bold()
+                                                .multilineTextAlignment(.leading)
+                                            //                                    if userAnswer.question.type == "multiple_choice" {
+                                            //                                        Spacer()
+                                            //                                    }
+                                            Spacer()
+                                        }
+                                        //                                .padding(.vertical)
+                                    }
+                                    if userAnswer.question.type == "multiple_choice" {
+                                        ForEach(userAnswer.question.options ?? [], id: \.text) { option in
+                                            HStack {
+                                                Markdown(option.text.replacingOccurrences(of: "<`>", with: "```"))
+                                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                                Spacer()
+                                                if userAnswer.userAnswer.contains(option.text) {
+                                                    if option.correct {
+                                                        Image(systemName: "checkmark.circle.fill")
+                                                            .foregroundStyle(.green)
+                                                    } else {
+                                                        Image(systemName: "xmark.circle.fill")
+                                                            .foregroundStyle(.red)
+                                                    }
+                                                } else if option.correct {
+                                                    Image(systemName: "checkmark.circle")
+                                                        .foregroundStyle(.green)
+                                                } else {
+                                                    Image(systemName: "circle")
+                                                        .foregroundStyle(.secondary)
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        VStack(alignment: .leading) {
+                                            Text("Your Answer:")
+                                                .bold()
+                                                .foregroundStyle(.secondary)
+                                            Text(userAnswer.userAnswer.joined(separator: ","))
+                                        }
+                                        VStack(alignment: .leading) {
+                                            Text("Expected Answer:")
+                                                .bold()
+                                                .foregroundStyle(.secondary)
+                                            if let correctAnswer = userAnswer.correctAnswer {
+                                                Markdown(correctAnswer.replacingOccurrences(of: "<`>", with: "```"))
+                                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
+                    })
+                    
+                    Spacer()
                 }
-                
-                Spacer()
-                
+                .transition(.slide)
+                .onChange(of: correctAnswers) {
+                    render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count))
+                }
+                .onAppear { render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
+            }
+            //toggle show results
+            VStack {
+                Button("Show My Responses", action: {
+                    isShowingResults.toggle()
+                })
+                .padding()
                 Button {
                     withAnimation {
                         chatService.clearChat()
@@ -616,12 +697,6 @@ struct QuizView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
             }
-            .transition(.slide)
-            .onChange(of: correctAnswers) {
-                render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count))
-            }
-            .onAppear { render(quizTitle: quiz.quiz_title, correctCount: Double(correctAnswers), wrongCount: Double(quiz.questions.count)) }
-            //}
         }
     }
     // Assuming gradingResult, correctAnswers, answeredQuestions, and userAnswers are @State properties or are properly managed to reflect UI updates.

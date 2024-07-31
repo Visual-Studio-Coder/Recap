@@ -13,3 +13,8 @@ struct GradingResult: Codable {
     var isCorrect: Bool
     var feedback: String
 }
+
+struct Feedback: Codable {
+    let feedback: String
+    let difficultyScore: Int
+}
