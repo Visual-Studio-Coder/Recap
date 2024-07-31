@@ -219,7 +219,7 @@ struct QuizView: View {
                         let choices = options.map { (option: Option) in
                             Explanation.Choice(
                                 answer_option: option.text, // Assuming 'text' is the property containing the string value
-                                correct: option.text == currentQuestion.answer, // Assuming 'answer' is a string
+                                correct: option.correct, // Assuming 'answer' is a string
                                 explanation: "Insert the explanation here for why this is the correct or wrong answer."
                             )
                         }

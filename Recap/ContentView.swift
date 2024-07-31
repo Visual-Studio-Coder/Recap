@@ -94,6 +94,7 @@ struct ContentView: View {
     @State private var showingQuizResults = false
     @State private var showingClearHistoryActionSheet = false
     @State private var showingAllQuizzes = false
+    @State private var showingExploreTab = false
     @State private var attachmentsIsExpanded = true
     @State private var errorText = "Unknown error has occured! Please try a different prompt."
     
@@ -111,6 +112,28 @@ struct ContentView: View {
     // Photos Picker
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
+    
+    let predefinedQuizzes = [
+        PredefinedQuiz(title: "The Importance of Recycling", description: "Learn about the importance of recycling and how it helps reduce waste and conserve natural resources.", prompt: "Quiz me on the importance of recycling.", links: [], category: "Environment"),
+        PredefinedQuiz(title: "Understanding Climate Change", description: "Understand the impact of climate change and what actions we can take to mitigate its effects.", prompt: "Quiz me on understanding climate change.", links: ["https://climate.nasa.gov/"], category: "Environment"),
+        PredefinedQuiz(title: "Benefits of Renewable Energy", description: "Explore the benefits of renewable energy sources like solar and wind power.", prompt: "Quiz me on the benefits of renewable energy.", links: ["https://www.energy.gov/science-innovation/clean-energy"], category: "Environment"),
+        PredefinedQuiz(title: "Protecting Biodiversity", description: "Discover the importance of biodiversity and how protecting ecosystems supports life on Earth.", prompt: "Quiz me on protecting biodiversity.", links: ["https://www.worldwildlife.org/initiatives/wildlife-conservation"], category: "Environment"),
+        PredefinedQuiz(title: "Sustainable Agriculture Practices", description: "Learn about sustainable agriculture practices that help preserve soil health and reduce environmental impact.", prompt: "Quiz me on sustainable agriculture practices.", links: ["https://www.fao.org/sustainable-agriculture/en/"], category: "Environment"),
+        PredefinedQuiz(title: "Water Conservation", description: "Understand the significance of water conservation and how we can reduce water waste in our daily lives.", prompt: "Quiz me on water conservation.", links: ["https://www.epa.gov/watersense"], category: "Environment"),
+        PredefinedQuiz(title: "Plastic Pollution and Marine Life", description: "Explore the effects of plastic pollution on marine life and what we can do to reduce plastic waste.", prompt: "Quiz me on plastic pollution and marine life.", links: ["https://oceanservice.noaa.gov/hazards/marinedebris/plastics-in-the-ocean.html"], category: "Environment"),
+        PredefinedQuiz(title: "The Role of Trees in Combating Climate Change", description: "Learn about the role of trees in combating climate change and the importance of reforestation.", prompt: "Quiz me on the role of trees in combating climate change.", links: ["https://www.arborday.org/trees/climatechange/"], category: "Environment"),
+        
+        PredefinedQuiz(title: "Unit Circle Quiz", description: "Test your knowledge of the unit circle and trigonometric functions with this quiz. See how fast you can do it", prompt: "Quiz me on the unit circle.", links: [], category: "Mathematics"),
+
+        PredefinedQuiz(title: "The times tables", description: "Test your knowledge of the times tables with this quiz. See how fast you can do it", prompt: "Quiz me on the N x N times tables.", links: [], category: "Mathematics"),
+
+        PredefinedQuiz(title: "Daily News", description: "You think you know the news? Test your knowledge of the daily news with this quiz. See how fast you can do it", prompt: "Quiz me on the daily news.", links: ["https://www.npr.org/sections/news/"], category: "Current Events"),
+
+    ]
+    
+    var categories: [String] {
+        Set(predefinedQuizzes.map { $0.category }).sorted()
+    }
     
     func decodeJSON(from jsonString: String) -> (quiz: Quiz?, error: String?) {
         let jsonData = jsonString.data(using: .utf8)!
@@ -492,6 +515,15 @@ struct ContentView: View {
                             Label("Settings", systemImage: "gearshape")
                         }
                     }
+                    
+                    ToolbarItem(placement: .automatic) {
+                        Button {
+                            showingExploreTab = true
+                        } label: {
+                            Label("Explore", systemImage: "safari")
+                        }
+                    }
+                    
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             showingAllQuizzes = true
@@ -520,6 +552,38 @@ struct ContentView: View {
                         }
                     }
                     
+                }
+                .sheet(isPresented: $showingExploreTab) {
+                    NavigationStack {
+                        List {
+                            ForEach(categories, id: \.self) { category in
+                                Section(header: Text(category)) {
+                                    ForEach(predefinedQuizzes.filter { $0.category == category }) { quiz in
+                                        Button(action: {
+                                            userInput = quiz.prompt
+                                            links = quiz.links
+                                            showingExploreTab = false
+                                        }) {
+                                            VStack(alignment: .leading) {
+                                                Text(quiz.title)
+                                                    .font(.headline)
+                                                Text(quiz.description)
+                                                    .font(.subheadline)
+                                                ForEach(quiz.links, id: \.self) { link in
+                                                    Link(link, destination: URL(string: link)!)
+                                                }
+                                            }
+                                            .padding()
+                                            .contentShape(Rectangle()) // Make the entire area tappable
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                    }
+                                }
+                            }
+                        }
+                        .navigationTitle("Explore Prompts")
+                        .navigationBarTitleDisplayMode(.inline)
+                    }
                 }
                 .sheet(isPresented: $showingQuizCustomizationSheet) {
                     NavigationStack {
