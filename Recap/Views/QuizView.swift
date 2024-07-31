@@ -206,7 +206,25 @@ struct QuizView: View {
                         showExplanation.toggle()
                         chatService.computerResponse = ""
                         self.explanation = Explanation(question: "", choices: [])
-                        let explanationPrompt = Explanation(question: "\(quiz.questions[selectedTab].question)", choices: [Explanation.Choice(answer_option: selectedOptions[selectedTab] ?? "", correct: selectedOptions[selectedTab] == quiz.questions[selectedTab].answer, explanation: "Insert the explanation here for why this is the correct or wrong answer.")])
+                        
+                        // Collect all options for the current question
+                        let currentQuestion = quiz.questions[selectedTab]
+                        
+                        // Safely unwrap options
+                        guard let options = currentQuestion.options else {
+                            print("Options are nil")
+                            return
+                        }
+                        
+                        let choices = options.map { (option: Option) in
+                            Explanation.Choice(
+                                answer_option: option.text, // Assuming 'text' is the property containing the string value
+                                correct: option.text == currentQuestion.answer, // Assuming 'answer' is a string
+                                explanation: "Insert the explanation here for why this is the correct or wrong answer."
+                            )
+                        }
+                        
+                        let explanationPrompt = Explanation(question: currentQuestion.question, choices: choices)
                         
                         let encoder = JSONEncoder()
                         encoder.outputFormatting = .prettyPrinted
@@ -215,22 +233,25 @@ struct QuizView: View {
                             let data = try encoder.encode(explanationPrompt)
                             let jsonString = String(data: data, encoding: .utf8)!
                             
-                            chatService.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return the JSON back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title",selectedPhotosData: nil, streamContent: true, generateQuiz: false) { response in
+                            // Debug print to verify JSON string
+                            print("JSON String being sent: \(jsonString)")
+                            
+                            chatService.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return this exact JSON (with the same properties and ordering) back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title", selectedPhotosData: nil, streamContent: true, generateQuiz: false) { response in
                                 DispatchQueue.main.async {
                                     let data = Data(chatService.computerResponse.utf8)
                                     let decoder = JSONDecoder()
                                     
                                     if let partialExplanation = try? decoder.decode(Explanation.self, from: data) {
-                                        // If the response can be decoded into an Explanation, update explanation and break the loop
+                                        // If the response can be decoded into an Explanation, update explanation
                                         self.explanation = partialExplanation
                                     } else {
                                         // If the response can't be decoded into an Explanation, show the raw JSON
-                                        print(String(chatService.computerResponse))
+                                        print("Raw JSON response: \(String(chatService.computerResponse))")
                                     }
                                 }
                             }
                         } catch {
-                            print(error)
+                            print("Error encoding JSON: \(error)")
                         }
                     } label: {
                         Label("Explain", systemImage: "sparkle")
