@@ -1,10 +1,3 @@
-//
-//  CGSize.swift
-//  Recap
-//
-
-//
-
 import Foundation
 
 extension CGSize {

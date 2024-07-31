@@ -1,10 +1,3 @@
-//
-//  UTType+recapExportType.swift
-//  Recap
-//
-
-//
-
 import UniformTypeIdentifiers
 
 extension UTType {

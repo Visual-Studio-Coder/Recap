@@ -1,10 +1,3 @@
-//
-//  Motivation.swift
-//  Recap
-//
-
-//
-
 import Foundation
 
 struct Motivation {

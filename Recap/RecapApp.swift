@@ -1,10 +1,3 @@
-//
-//  RecapApp.swift
-//  Recap
-//
-
-//
-
 import SwiftUI
 
 @main

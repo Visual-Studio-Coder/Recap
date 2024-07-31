@@ -1,10 +1,3 @@
-//
-//  View+splashView.swift
-//  Recap
-//
-
-//
-
 import SwiftUI
 
 extension View {

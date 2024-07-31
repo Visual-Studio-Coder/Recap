@@ -1,10 +1,3 @@
-//
-//  AppSettings.swift
-//  Recap
-//
-
-//
-
 import Foundation
 
 enum AppSettings {

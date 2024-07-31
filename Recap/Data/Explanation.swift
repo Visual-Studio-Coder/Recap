@@ -1,10 +1,3 @@
-//
-//  Explanation.swift
-//  Recap
-//
-
-//
-
 import Foundation
 
 struct Explanation: Codable {

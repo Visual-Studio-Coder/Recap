@@ -1,10 +1,3 @@
-//
-//  CodeSyntaxHighlighter+splash.swift
-//  Recap
-//
-
-//
-
 import Splash
 import MarkdownUI
 

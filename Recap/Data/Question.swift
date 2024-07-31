@@ -1,10 +1,3 @@
-//
-//  Question.swift
-//  Recap
-//
-
-//
-
 import Foundation
 
 struct Option: Codable {

@@ -1,10 +1,3 @@
-//
-//  ShareResults.swift
-//  Recap
-//
-//  Created by Vaibhav Satishkumar on 5/28/24.
-//
-
 import SwiftUI
 
 struct ShareResults: View {

@@ -1,10 +1,3 @@
-//
-//  QuizProgressBar.swift
-//  Recap
-//
-
-//
-
 import SwiftUI
 
 struct QuizProgressBar: View {

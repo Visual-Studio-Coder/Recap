@@ -1,10 +1,3 @@
-//
-//  String+isValidURL.swift
-//  Recap
-//
-
-//
-
 import Foundation
 
 extension String {

@@ -1,10 +1,3 @@
-//
-//  SplashView.swift
-//  Recap
-//
-
-//
-
 import SwiftUI
 
 struct SplashView<SplashContent: View>: ViewModifier {
