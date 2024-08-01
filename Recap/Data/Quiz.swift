@@ -6,6 +6,9 @@ struct Quiz: Codable {
     let quiz_title: String
     let questions: [Question]
     var userAnswers: [UserAnswer]?  // Optional to handle quizzes without answers
+    var userPrompt: String?
+    var userLinks: [String]?
+    var userPhotos: [Data]?
 }
 
 struct ExportableQuiz: Codable, Transferable {
@@ -53,9 +56,12 @@ class QuizStorage: ObservableObject {
         }
     }
     
-    func addQuiz(_ quiz: Quiz, userAnswers: [UserAnswer]) async {
+    func addQuiz(_ quiz: Quiz, userAnswers: [UserAnswer], userPrompt: String, userLinks: [String], userPhotos: [Data]) async {
         var newQuiz = quiz
         newQuiz.userAnswers = userAnswers  // Assign user answers to the quiz
+        newQuiz.userLinks = userLinks
+        newQuiz.userPrompt = userPrompt
+        newQuiz.userPhotos = userPhotos
         history.append(newQuiz)
         await save(history: history)
     }
