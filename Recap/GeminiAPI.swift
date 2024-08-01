@@ -5,7 +5,7 @@ class GeminiAPI: ObservableObject {
     
     static var shared: GeminiAPI? = nil
     
-    private var model: GenerativeModel?
+    public var model: GenerativeModel?
     private var chat: Chat?
     @Published var computerResponse = ""
     

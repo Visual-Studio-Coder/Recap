@@ -16,12 +16,6 @@ class UserPreferences: ObservableObject {
         }
     }
     
-    @Published var chatGPTAPIKey: String {
-        didSet {
-            UserDefaults.standard.set(chatGPTAPIKey, forKey: "chatGPTAPIKey")
-        }
-    }
-    
     @Published var apiKey: String {
         didSet {
             UserDefaults.standard.set(apiKey, forKey: "apiKey")
@@ -54,7 +48,6 @@ class UserPreferences: ObservableObject {
     
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
-        self.chatGPTAPIKey = UserDefaults.standard.string(forKey: "chatGPTAPIKey") ?? ""
         self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
         self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-1.5-pro-latest"
         self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
@@ -163,7 +156,7 @@ struct ContentView: View {
                                 )
                             
                             // Smaller text below
-                            Text(gemeniGeneratingQuiz ? "Generating quiz..." : "Input attachments to generate a quiz")
+                            Text(gemeniGeneratingQuiz ? "Generating quiz..." : "Input attachments to generate a quiz\n")
                                 .font(.subheadline)
                                 .shimmering(
                                     active: gemeniGeneratingQuiz
@@ -413,6 +406,7 @@ struct ContentView: View {
                                     //.clipShape(RoundedRectangle(cornerRadius: 15))
                                 }
                             }
+                            .accessibilityLabel("Generate Quiz")
                             .padding(.trailing)
                             .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
                             Spacer()
@@ -545,7 +539,7 @@ struct ContentView: View {
                         if quiz!.userAnswers != nil {
                             NavigationStack {
                                 QuizResultsView(userAnswers: quiz!.userAnswers!)
-                                    .navigationTitle(Text("\(quiz!.quiz_title) Results"))
+                                    .navigationTitle(Text("\(quiz!.quiz_title)"))
                                     .navigationBarTitleDisplayMode(.inline)
                             }
                             .presentationDetents([.large, .medium])
@@ -914,51 +908,6 @@ struct ContentView: View {
                                     .navigationTitle("Gemini")
                                 } label: {
                                     Text("Gemini")
-                                }
-                                
-                                NavigationLink {
-                                    Form {
-                                        Section {
-                                            SecureField("Top Secret OpenAI API Key", text: $userPreferences.chatGPTAPIKey)
-                                                .focused($focus, equals: .api)
-                                                .onChange(of: userPreferences.selectedOption) {
-                                                    print("Selected option changed to: \(userPreferences.selectedOption)")
-                                                }
-                                        } header: {
-                                            Text("API Key")
-                                        } footer: {
-                                            Text("Get an API key from [platform.openai.com](https://platform.openai.com/playground).\n**Reminder: Never share API keys.**")
-                                        }
-                                        
-                                        Section {
-                                            Picker("Preferred Model", selection: $userPreferences.selectedOption) {
-                                                ForEach(gptOptions, id: \.self) { option in
-                                                    HStack {
-                                                        if option == "gpt-3.5-turbo" {
-                                                            Label(" GPT 3.5 Turbo", systemImage: "bolt.fill")
-                                                        } else if option == "gpt-4-turbo" {
-                                                            Label(" GPT 4 Turbo", systemImage: "brain.head.profile")
-                                                        } else {
-                                                            Label(" GPT 4o", systemImage: "brain.head.profile")
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } header: {
-                                            Text("Choose Model")
-                                        } footer: {
-                                            if userPreferences.selectedOption == "gpt-3.5-turbo" {
-                                                Text("Prioritize **speed** over accuracy. (in: $0.5, out: $1.5)")
-                                            } else if userPreferences.selectedOption == "gpt-4-turbo" {
-                                                Text("Prioritize **speed** over accuracy. (in: $10, out: $30)")
-                                            } else {
-                                                Text("Prioritize **accuracy** over speed. (in: $5, out: $15)")
-                                            }
-                                        }
-                                    }
-                                    .navigationTitle("ChatGPT")
-                                } label: {
-                                    Text("ChatGPT")
                                 }
                             } header: {
                                 Text("AI Model Configurations")
