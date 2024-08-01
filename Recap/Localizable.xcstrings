@@ -1,0 +1,339 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    " Gemini 1.5 Flash" : {
+      "shouldTranslate" : false
+    },
+    " Gemini 1.5 Pro" : {
+      "shouldTranslate" : false
+    },
+    "**Receiving Response from Gemini...**" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Recibiendo una respuesta de Gemini**"
+          }
+        }
+      }
+    },
+    "%@" : {
+      "shouldTranslate" : false
+    },
+    "%lld of %lld questions answered" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld questions answered"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %2$lld preguntas contestadas"
+          }
+        }
+      }
+    },
+    "%lld out of %lld correct" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld out of %2$lld correct"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %2$lld preguntas correctas"
+          }
+        }
+      }
+    },
+    "%lld Questions" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Preguntas"
+          }
+        }
+      }
+    },
+    "%lld/%lld (%@%%)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld (%3$@%%)"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "%lld%%" : {
+      "shouldTranslate" : false
+    },
+    "🎉" : {
+      "shouldTranslate" : false
+    },
+    "Add New Link" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir nuevo enlace"
+          }
+        }
+      }
+    },
+    "Add up to 5 URLs" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añada hasta 5 URL"
+          }
+        }
+      }
+    },
+    "Add your API keys and configure how you want the AI to respond." : {
+
+    },
+    "AI Model" : {
+
+    },
+    "AI Model Configurations" : {
+
+    },
+    "All Quizzes" : {
+
+    },
+    "API Key" : {
+
+    },
+    "App Details" : {
+
+    },
+    "Are you sure you want to clear history?" : {
+
+    },
+    "Attachments (%lld)" : {
+
+    },
+    "Choose Model" : {
+
+    },
+    "Clear" : {
+
+    },
+    "Clear All" : {
+
+    },
+    "Click here to answer..." : {
+
+    },
+    "Correct" : {
+
+    },
+    "Customize Question Count" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Done" : {
+
+    },
+    "Download Recap Today!" : {
+
+    },
+    "Enter a free response" : {
+
+    },
+    "Enter URL #%lld" : {
+
+    },
+    "Exit Quiz" : {
+
+    },
+    "Expected Answer:" : {
+
+    },
+    "Explain" : {
+
+    },
+    "Explore" : {
+
+    },
+    "Explore Prompts" : {
+
+    },
+    "Feedback:" : {
+
+    },
+    "Gemini" : {
+
+    },
+    "Generate Quiz" : {
+
+    },
+    "Generating explanation..." : {
+
+    },
+    "Generating quiz..." : {
+
+    },
+    "Get a free API key from [makersuite.google.com](https://makersuite.google.com/app/apikey).\n**Reminder: Never share API keys.**" : {
+
+    },
+    "History" : {
+
+    },
+    "I got a %lld out of %lld on Recap!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "I got a %1$lld out of %2$lld on Recap!"
+          }
+        }
+      }
+    },
+    "Improve Gemini for Everyone" : {
+
+    },
+    "Input attachments to generate a quiz\n" : {
+
+    },
+    "Model Details" : {
+
+    },
+    "Next" : {
+
+    },
+    "No guarantee, but we'll try to get Gemini to generate only ^[%lld question](inflect: true)." : {
+
+    },
+    "Number of Questions: %lld" : {
+
+    },
+    "Open Settings" : {
+
+    },
+    "Paste from Clipboard" : {
+
+    },
+    "Performance Feedback" : {
+
+    },
+    "Preferred Model" : {
+
+    },
+    "Prioritize **accuracy** over speed." : {
+
+    },
+    "Prioritize **faster response** over accuracy." : {
+
+    },
+    "Privacy" : {
+
+    },
+    "Privacy Policy" : {
+
+    },
+    "Question %lld" : {
+
+    },
+    "Quiz Settings" : {
+
+    },
+    "Recap" : {
+
+    },
+    "Recap AI" : {
+
+    },
+    "Regenerate Quiz" : {
+
+    },
+    "Save Quiz Results" : {
+
+    },
+    "Scan URLs" : {
+
+    },
+    "Select **multiple** answers" : {
+
+    },
+    "Select **one** answer" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Share Results" : {
+
+    },
+    "Show My Responses" : {
+
+    },
+    "Show Onboarding" : {
+
+    },
+    "Submit" : {
+
+    },
+    "Submit Answer" : {
+
+    },
+    "Take Quiz Again" : {
+
+    },
+    "To use Recap, enter your API key!" : {
+
+    },
+    "Tokens Per Minute" : {
+
+    },
+    "Top Secret Gemini API Key" : {
+
+    },
+    "Total Questions" : {
+
+    },
+    "Use Gemini" : {
+
+    },
+    "View Past Results" : {
+
+    },
+    "What would you like a quiz on?" : {
+
+    },
+    "Why did the AI quizzer app get top marks?\nBecause it aced all the byte-sized questions!" : {
+
+    },
+    "You got this question correct" : {
+
+    },
+    "You got this question correct!" : {
+
+    },
+    "You got this question incorrect" : {
+
+    },
+    "You got this question incorrect." : {
+
+    },
+    "Your Answer:" : {
+
+    }
+  },
+  "version" : "1.0"
+}

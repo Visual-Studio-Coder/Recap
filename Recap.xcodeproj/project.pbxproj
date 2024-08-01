@@ -10,6 +10,7 @@
 		7814B1652C335C7B005B9530 /* Recap.png in Resources */ = {isa = PBXBuildFile; fileRef = 7814B1642C335C7B005B9530 /* Recap.png */; };
 		78222B702C40AFD700097269 /* TextOutputFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78222B6F2C40AFD700097269 /* TextOutputFormat.swift */; };
 		78222B732C40AFFE00097269 /* SplashCodeSyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78222B722C40AFFE00097269 /* SplashCodeSyntaxHighlighter.swift */; };
+		78496A882C5B0DB6002071CD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 78496A872C5B0DB6002071CD /* Localizable.xcstrings */; };
 		787010172C0254AE004CDA60 /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010062C0254AE004CDA60 /* Explanation.swift */; };
 		787010182C0254AE004CDA60 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010072C0254AE004CDA60 /* Question.swift */; };
 		7870101A2C0254AE004CDA60 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787010092C0254AE004CDA60 /* Quiz.swift */; };
@@ -43,6 +44,7 @@
 		7814B1642C335C7B005B9530 /* Recap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Recap.png; sourceTree = "<group>"; };
 		78222B6F2C40AFD700097269 /* TextOutputFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOutputFormat.swift; sourceTree = "<group>"; };
 		78222B722C40AFFE00097269 /* SplashCodeSyntaxHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCodeSyntaxHighlighter.swift; sourceTree = "<group>"; };
+		78496A872C5B0DB6002071CD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		787010062C0254AE004CDA60 /* Explanation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
 		787010072C0254AE004CDA60 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		787010092C0254AE004CDA60 /* Quiz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				787010152C0254AE004CDA60 /* Sample-JSON.json */,
 				7814B1642C335C7B005B9530 /* Recap.png */,
 				7814B1622C335C08005B9530 /* Info.plist */,
+				78496A872C5B0DB6002071CD /* Localizable.xcstrings */,
 			);
 			path = Recap;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = 8B9675292C02420D005950FB;
 			packageReferences = (
@@ -257,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				787010232C0254AE004CDA60 /* Sample-JSON.json in Resources */,
+				78496A882C5B0DB6002071CD /* Localizable.xcstrings in Resources */,
 				7814B1652C335C7B005B9530 /* Recap.png in Resources */,
 				7870101F2C0254AE004CDA60 /* Assets.xcassets in Resources */,
 				7870101C2C0254AE004CDA60 /* Preview Assets.xcassets in Resources */,
@@ -353,6 +358,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -409,6 +415,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

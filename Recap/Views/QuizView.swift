@@ -12,6 +12,7 @@ struct QuestionView: View {
     
     @State private var selectedOptions: [String] = []
     @Binding var hasAnswered: Bool?
+    @Binding var userDidGetAnswerCorrect: Bool?
     
     var body: some View {
         VStack {
@@ -27,9 +28,21 @@ struct QuestionView: View {
             Divider()
                 .padding(.horizontal)
             HStack {
-                Text(question.type == "free_answer" ? "Enter a free response" : question.options?.filter({ $0.correct == true }).count ?? 0 > 1 ? "Select **multiple** answers" : "Select **one** answer")
-                    .font(.subheadline)
-                    .padding(.leading)
+                if hasAnswered ?? false {
+                    if userDidGetAnswerCorrect ?? false {
+                        Label("You got this question correct", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                            .padding(.horizontal)
+                    } else {
+                        Label("You got this question incorrect", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.red)
+                            .padding(.horizontal)
+                    }
+                } else {
+                    Text(question.type == "free_answer" ? "Enter a free response" : question.options?.filter({ $0.correct == true }).count ?? 0 > 1 ? "Select **multiple** answers" : "Select **one** answer")
+                        .font(.subheadline)
+                        .padding(.leading)
+                }
                 Spacer()
             }
             ForEach(question.options ?? [], id: \.text) { option in
@@ -137,6 +150,7 @@ struct QuizView: View {
     @State private var answeredQuestions = 0
     @State private var selectedOptions = [Int: String]()
     @State private var hasAnswered = [Int: Bool]()
+    @State private var userDidGetAnswerCorrect = [Int: Bool]()
     @State private var userAnswers = [UserAnswer]()
     @State private var showExplanation = false
     @State private var explanation: Explanation?
@@ -219,7 +233,7 @@ struct QuizView: View {
                         let choices = options.map { (option: Option) in
                             Explanation.Choice(
                                 answer_option: option.text, // Assuming 'text' is the property containing the string value
-                                correct: option.correct, // Assuming 'answer' is a string
+                                correct: option.text == currentQuestion.answer, // Assuming 'answer' is a string
                                 explanation: "Insert the explanation here for why this is the correct or wrong answer."
                             )
                         }
@@ -277,8 +291,9 @@ struct QuizView: View {
                             
                             userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
                             
+                            userDidGetAnswerCorrect[selectedTab] = isCorrect
                             hasAnswered[selectedTab] = true
-                        }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab])
+                        }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab], userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab])
                         .transition(.slide)
                     } else {
                         HStack {
@@ -559,34 +574,36 @@ struct QuizView: View {
                     }
                     .onAppear {
                         func sendFeedbackRequest() {
-                            chatService.sendMessage(userInput: """
-                            Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only one JSON of this format:
-                            
-                            {
-                                "feedback": "Your feedback here in a consice bulleted list",
-                                "difficultyScore": (something between 1 and 5)
-                            }
-                            """, selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
-                                chatService.computerResponse = ""
-                                let data = Data(response.utf8)
-                                let decoder = JSONDecoder()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                chatService.sendMessage(userInput: """
+                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only one JSON of this format:
                                 
-                                DispatchQueue.main.async {
-                                    do {
-                                        let result = try decoder.decode(Feedback.self, from: data)
-                                        
-                                        self.feedback = result
-                                        print("Decoded feedback result: \(result)")
-                                    } catch {
-                                        print("Failed to decode feedback result: \(error)")
-                                        print("Raw response: \(response)")
-                                        
-                                        if response.contains("Resource has been exhausted") || response.contains("internal error has occurred") {
-                                            sendFeedbackRequest()
+                                {
+                                    "feedback": "Your feedback here in a consice bulleted list",
+                                    "difficultyScore": (something between 1 and 5)
+                                }
+                                """, selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
+                                    chatService.computerResponse = ""
+                                    let data = Data(response.utf8)
+                                    let decoder = JSONDecoder()
+                                    
+                                    DispatchQueue.main.async {
+                                        do {
+                                            let result = try decoder.decode(Feedback.self, from: data)
+                                            
+                                            self.feedback = result
+                                            print("Decoded feedback result: \(result)")
+                                        } catch {
+                                            print("Failed to decode feedback result: \(error)")
+                                            print("Raw response: \(response)")
+                                            
+                                            if response.contains("Resource has been exhausted") || response.contains("internal error has occurred") {
+                                                sendFeedbackRequest()
+                                            }
                                         }
                                     }
-                                }
-                            })
+                                })
+                            }
                         }
                         
                         sendFeedbackRequest()
