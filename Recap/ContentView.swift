@@ -40,11 +40,7 @@ class UserPreferences: ObservableObject {
         }
     }
     
-    @Published var gptModel: String {
-        didSet {
-            UserDefaults.standard.set(gptModel, forKey: "gptModel")
-        }
-    }
+    
     
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
@@ -52,7 +48,6 @@ class UserPreferences: ObservableObject {
         self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-1.5-pro-latest"
         self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
         self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
-        self.gptModel = UserDefaults.standard.string(forKey: "gptModel") ?? AppSettings.gptModel
     }
 }
 struct ContentView: View {
@@ -73,7 +68,6 @@ struct ContentView: View {
     let geminiAPI = GeminiAPI.shared
     //@AppStorage("model") private var selectedOption = "gemini-1.5-pro-latest"
     let options = ["gemini-1.5-pro-latest", "gemini-1.5-flash"]
-    let gptOptions = ["gpt-3.5-turbo", "gpt-4-turbo", "gpt-4o"]
     
     @State private var quiz: Quiz?
     @State private var showingQuizSheet = false
@@ -117,11 +111,11 @@ struct ContentView: View {
         PredefinedQuiz(title: "The Role of Trees in Combating Climate Change", description: "Learn about the role of trees in combating climate change and the importance of reforestation.", prompt: "Quiz me on the role of trees in combating climate change.", links: ["https://www.arborday.org/trees/climatechange/"], category: "Environment"),
         
         PredefinedQuiz(title: "Unit Circle Quiz", description: "Test your knowledge of the unit circle and trigonometric functions with this quiz. See how fast you can do it", prompt: "Quiz me on the unit circle.", links: [], category: "Mathematics"),
-
+        
         PredefinedQuiz(title: "The times tables", description: "Test your knowledge of the times tables with this quiz. See how fast you can do it", prompt: "Quiz me on the N x N times tables.", links: [], category: "Mathematics"),
-
+        
         PredefinedQuiz(title: "Daily News", description: "You think you know the news? Test your knowledge of the daily news with this quiz. See how fast you can do it", prompt: "Quiz me on the daily news.", links: ["https://www.npr.org/sections/news/"], category: "Current Events"),
-
+        
     ]
     
     var categories: [String] {
@@ -721,7 +715,116 @@ struct ContentView: View {
                                     }
                                     
                                     Button(action: {
-                                        // Implement action to regenerate the quiz
+                                        showingAllQuizzes = false
+                                        gemeniGeneratingQuiz = true
+                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.geminiModel, numberOfQuestions: userPreferences.numberOfQuestions)
+                                        print(userPreferences.apiKey)
+                                        print(userPreferences.geminiModel)
+                                        
+                                        // Create a DispatchGroup to handle multiple asynchronous tasks
+                                        let group = DispatchGroup()
+                                        
+                                        var websiteContent = ""
+                                        
+                                        // Unwrap userLinks
+                                        if let userLinks = quizStorage.history[i].userLinks {
+                                            // Use a regular Swift for loop to iterate over the links array
+                                            for link in userLinks {
+                                                if let url = URL(string: link) {
+                                                    group.enter()
+                                                    
+                                                    DispatchQueue.global().async {
+                                                        if url.host?.contains("youtube") == true || url.host?.contains("youtu.be") == true {
+                                                            // Handle YouTube links
+                                                            let videoId = extractYouTubeVideoID(from: url)
+                                                            if let videoId = videoId {
+                                                                Task {
+                                                                    do {
+                                                                        let transcript = try await YouTubeTranscript.fetchTranscript(for: videoId)
+                                                                        websiteContent += transcript
+                                                                    } catch {
+                                                                        print("Failed to fetch YouTube transcript for video ID \(videoId): \(error)")
+                                                                    }
+                                                                    group.leave()
+                                                                }
+                                                            } else {
+                                                                group.leave()
+                                                            }
+                                                        } else if url.pathExtension == "pdf" {
+                                                            // Handle PDF files
+                                                            if let pdfDocument = PDFDocument(url: url) {
+                                                                let pageCount = pdfDocument.pageCount
+                                                                var pdfText = ""
+                                                                for pageIndex in 0..<pageCount {
+                                                                    if let page = pdfDocument.page(at: pageIndex) {
+                                                                        pdfText += page.string ?? ""
+                                                                    }
+                                                                }
+                                                                websiteContent += pdfText
+                                                            } else {
+                                                                print("Failed to load PDF document from URL \(url)")
+                                                            }
+                                                            group.leave()
+                                                        } else {
+                                                            // Handle regular web links
+                                                            do {
+                                                                let contents = try String(contentsOf: url)
+                                                                let atr = try! NSAttributedString(data: contents.data(using: .unicode)!, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+                                                                let plainString = atr.string
+                                                                websiteContent += plainString
+                                                            } catch {
+                                                                print("Failed to load contents of URL \(url): \(error)")
+                                                            }
+                                                            group.leave()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                        group.notify(queue: .main) {
+                                            if apiKey != "" {
+                                                // Unwrap userPrompt
+                                                if let userPrompt = quizStorage.history[i].userPrompt {
+                                                    let message = userPrompt + "Attached Website Content:" + websiteContent
+                                                    
+                                                    // Unwrap userPhotos
+                                                    if let userPhotos = quizStorage.history[i].userPhotos {
+                                                        geminiAPI!.sendMessage(userInput: message, selectedPhotosData: userPhotos, streamContent: false, generateQuiz: true) { response in
+                                                            //print(response)
+                                                            let (quiz, error) = decodeJSON(from: response)
+                                                            if let quiz = quiz {
+                                                                DispatchQueue.main.async {
+                                                                    self.quiz = quiz
+                                                                    self.showQuiz = true
+                                                                    quizStorage.history.remove(at: i)
+                                                                }
+                                                            } else {
+                                                                print("Failed to decode json: \(error ?? "Unknown error")")
+                                                                if response.contains("429") {
+                                                                    errorText = "Rate limit exceeded. Please try again later or shorten the prompt.\n\n(If you're using a free API key, Google unfortunately imposes heavy rate limits)."
+                                                                } else if response.contains("not available in your country") {
+                                                                    errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
+                                                                } else if response.contains("valid API key") {
+                                                                    errorText = "API key not valid. Please pass a valid API key."
+                                                                } else {
+                                                                    errorText = "Unknown error has occured! Please try a different prompt."
+                                                                }
+                                                                self.showingGeminiFailAlert = true
+                                                                gemeniGeneratingQuiz = false
+                                                            }
+                                                        }
+                                                    } else {
+                                                        print("No user photos available.")
+                                                    }
+                                                } else {
+                                                    print("No user prompt available.")
+                                                }
+                                            } else {
+                                                self.showingGeminiAPIAlert = true
+                                                gemeniGeneratingQuiz = false
+                                            }
+                                        }
                                     }) {
                                         Label("Regenerate Quiz", systemImage: "gobackward")
                                     }
@@ -785,7 +888,7 @@ struct ContentView: View {
                 }
                 .fullScreenCover(isPresented: $showQuiz, content: {
                     if let quiz = quiz {
-                        QuizView(quiz: quiz, showQuiz: $showQuiz)
+                        QuizView(quiz: quiz, showQuiz: $showQuiz, userPrompt: userInput, userLinks: links, userPhotos: selectedPhotosData)
                             .environmentObject(quizStorage)
                             .onAppear {
                                 gemeniGeneratingQuiz = false
@@ -824,22 +927,19 @@ struct ContentView: View {
                                 - URLs
                                 - Notes you add to your quizzes
                                 
-                                Additionally, we do not collect any analytics. Please continue reading to understand the terms and conditions Google's Gemini and OpenAI's ChatGPT impose on your data.
+                                Additionally, we do not collect any analytics. Please continue reading to understand the terms and conditions that Google's Gemini impose on your data.
                                 
                                 ## Third-Party Services
-                                We integrate with Google's Gemini and OpenAI's ChatGPT to provide multi-modal models for quiz generation. When you use these services, we provide them with the following user information:
+                                We integrate with Google's Gemini to provide multi-modal models for quiz generation. When you use these services, we provide them with the following user information:
                                 - Images
                                 - URLs
                                 - Text-based notes (anything you input to make a quiz)
                                 
                                 This information is necessary for the models to generate quizzes. However, please be aware that:
-                                - You should not enter any sensitive information into these models, as we cannot guarantee that OpenAI or ChatGPT will collect and keep this data for training models.
                                 - If you are using the free API key from Google, they may train models on your prompts and you may be susceptible to rate limits.
-                                - If you are using ChatGPT's API key, their privacy policy claims that your requests will not be logged, but you should still exercise caution.
                                 
-                                Please review the terms of service and privacy policies for these third-party services:
+                                Please review the terms of service and privacy policies for this third-party service:
                                 - Google Gemini: [ai.google.dev/gemini-api/terms](https://ai.google.dev/gemini-api/terms)
-                                - OpenAI's ChatGPT: [openai.com/policies/privacy-policy/](https://openai.com/policies/privacy-policy/)
                                 """)
                                     
                                 } label: {

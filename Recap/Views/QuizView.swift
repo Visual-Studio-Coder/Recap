@@ -179,6 +179,9 @@ struct QuizView: View {
     @ObservedObject var chatService = GeminiAPI.shared!
     
     @Binding var showQuiz: Bool
+    let userPrompt: String
+    let userLinks: [String]
+    let userPhotos: [Data]
     
     var body: some View {
         if selectedTab < quiz.questions.count {
@@ -195,7 +198,7 @@ struct QuizView: View {
                                 
                                 // Add the quiz to the history and save it asynchronously
                                 Task {
-                                    await quizStorage.addQuiz(quiz, userAnswers: userAnswers)
+                                    await quizStorage.addQuiz(quiz, userAnswers: userAnswers, userPrompt: userPrompt, userLinks: userLinks, userPhotos: userPhotos)
                                 }
                             } label: {
                                 Label("Exit Quiz", systemImage: "rectangle.portrait.and.arrow.forward")
@@ -721,7 +724,7 @@ struct QuizView: View {
                     
                     // Add the quiz to the history and save it asynchronously
                     Task {
-                        await quizStorage.addQuiz(quiz, userAnswers: userAnswers)
+                        await quizStorage.addQuiz(quiz, userAnswers: userAnswers, userPrompt: userPrompt, userLinks: userLinks, userPhotos: userPhotos)
                     }
                 } label: {
                     Spacer()
@@ -818,6 +821,6 @@ struct QuizView: View {
     }
 }
 
-#Preview {
-    QuizView(quiz: Quiz(quiz_title: "Long Quiz Title Long Quiz Title", questions: [Question(type: "free_answer", question: "Explain how Elon Musk bought X.", options: [], answer: ""), Question(type: "multiple_choice", question: "Select Elon Musk #1", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Jeff Bezos #2", options: [Option(text: "Elon Musk", correct: false), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: true), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Elon Musk #3", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk")]), showQuiz: .constant(true))
-}
+//#Preview {
+//    QuizView(quiz: Quiz(quiz_title: "Long Quiz Title Long Quiz Title", questions: [Question(type: "free_answer", question: "Explain how Elon Musk bought X.", options: [], answer: ""), Question(type: "multiple_choice", question: "Select Elon Musk #1", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Jeff Bezos #2", options: [Option(text: "Elon Musk", correct: false), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: true), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Elon Musk #3", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk")]), showQuiz: .constant(true))
+//}
