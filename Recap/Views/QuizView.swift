@@ -233,8 +233,8 @@ struct QuizView: View {
                         let choices = options.map { (option: Option) in
                             Explanation.Choice(
                                 answer_option: option.text, // Assuming 'text' is the property containing the string value
-                                correct: option.text == currentQuestion.answer, // Assuming 'answer' is a string
-                                explanation: "Insert the explanation here for why this is the correct or wrong answer."
+                                correct: option.correct, // Assuming 'answer' is a string
+                                explanation: "Insert the explanation here for why this is the \(option.correct ? "correct" : "wrong") answer."
                             )
                         }
                         
@@ -576,7 +576,7 @@ struct QuizView: View {
                         func sendFeedbackRequest() {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 chatService.sendMessage(userInput: """
-                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only one JSON of this format:
+                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only a SINGULAR JSON (that doesn't contain choices or explanation properties in the JSON) IN THIS EXACT FORMAT:
                                 
                                 {
                                     "feedback": "Your feedback here in a consice bulleted list",
@@ -590,6 +590,8 @@ struct QuizView: View {
                                     DispatchQueue.main.async {
                                         do {
                                             let result = try decoder.decode(Feedback.self, from: data)
+                                            
+                                            print(response)
                                             
                                             self.feedback = result
                                             print("Decoded feedback result: \(result)")
