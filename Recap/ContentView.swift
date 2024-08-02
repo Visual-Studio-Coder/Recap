@@ -668,7 +668,7 @@ struct ContentView: View {
                                 .disabled(links.count == 5)
                                 
                             } footer: {
-                                Markdown("Tip: Long press on the `Add New Link` button in order to paste a URL.")
+                                Markdown(NSLocalizedString("Tip: Long press on the `Add New Link` button in order to paste a URL.", comment: ""))
                             }
                         }
                         .navigationTitle("Scan URLs")
@@ -909,11 +909,11 @@ struct ContentView: View {
                 .sheet(isPresented: $showingSettingsSheet) {
                     NavigationStack {
                         Form {
-                            Section("AI Model") {
-                                Toggle(isOn: .constant(true)) {
-                                    Label("Use Gemini", systemImage: "cpu")
-                                }
-                            }
+//                            Section("AI Model") {
+//                                Toggle(isOn: .constant(true)) {
+//                                    Label("Use Gemini", systemImage: "cpu")
+//                                }
+//                            }
                             
                             Section("App Details") {
                                 Button {
