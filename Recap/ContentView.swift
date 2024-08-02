@@ -923,29 +923,34 @@ struct ContentView: View {
                                 }
                                 
                                 DisclosureGroup {
-                                    Markdown("""
-                                # Privacy Policy
+                                    Markdown(
+                                """
+                                # \(NSLocalizedString("Privacy Policy", comment: ""))
                                 
-                                ## User Data
-                                We do not collect any data from our users. All quizzes are saved locally on your device, and we do not access or store:
-                                - Images
-                                - URLs
-                                - Notes you add to your quizzes
+                                ## \(NSLocalizedString("User Data", comment: ""))
+                                \(NSLocalizedString("We do not collect any data from our users. All quizzes are saved locally on your device and we do not access or store:", comment: ""))
+                                - \(NSLocalizedString("Images", comment: ""))
+                                - \(NSLocalizedString("URLs", comment: ""))
+                                - \(NSLocalizedString("Notes you add to your quizzes", comment: ""))
                                 
-                                Additionally, we do not collect any analytics. Please continue reading to understand the terms and conditions that Google's Gemini impose on your data.
+                                \(NSLocalizedString("Furthermore, we do not collect any analytics. Read on to understand the terms and conditions imposed by Google's Gemini on your data.", comment: ""))
                                 
-                                ## Third-Party Services
-                                We integrate with Google's Gemini to provide multi-modal models for quiz generation. When you use these services, we provide them with the following user information:
-                                - Images
-                                - URLs
-                                - Text-based notes (anything you input to make a quiz)
+                                ## \(NSLocalizedString("Third-Party Services", comment: ""))
+                                \(NSLocalizedString("We integrate with Google's Gemini to provide multimodal models for quiz generation. When you use these services, we provide them with the following user information:", comment: ""))
+                                - \(NSLocalizedString("Images", comment: ""))
+                                - \(NSLocalizedString("URLs", comment: ""))
+                                - \(NSLocalizedString("Text-based notes (anything you input to create a quiz)", comment: ""))
                                 
-                                This information is necessary for the models to generate quizzes. However, please be aware that:
-                                - If you are using the free API key from Google, they may train models on your prompts and you may be susceptible to rate limits.
+                                \(NSLocalizedString("This information is necessary for the models to generate quizzes. However, please note that:", comment: ""))
+                                - \(NSLocalizedString("If you are using the free Google API key, they may train models with your inputs and you may be subject to rate limits.", comment: ""))
                                 
-                                Please review the terms of service and privacy policies for this third-party service:
-                                - Google Gemini: [ai.google.dev/gemini-api/terms](https://ai.google.dev/gemini-api/terms)
-                                """)
+                                \(NSLocalizedString("Please review the terms of service and privacy policies of this third-party service:", comment: ""))
+                                - \(NSLocalizedString("Google Gemini:", comment: "")) [ai.google.dev/gemini-api/terms](https://ai.google.dev/gemini-api/terms)
+                                """
+                                    )
+
+
+
                                     
                                 } label: {
                                     Label("Privacy Policy", systemImage: "hand.raised.circle.fill")
