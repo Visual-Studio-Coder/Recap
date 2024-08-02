@@ -579,7 +579,7 @@ struct QuizView: View {
                         func sendFeedbackRequest() {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 chatService.sendMessage(userInput: """
-                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only a SINGULAR JSON (that doesn't contain choices or explanation properties in the JSON) IN THIS EXACT FORMAT:
+                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only a SINGULAR JSON (that doesn't contain properties like expected_answer and stuff) IN THIS EXACT FORMAT:
                                 
                                 {
                                     "feedback": "Your feedback here in a consice bulleted list",

@@ -28,7 +28,7 @@ class UserPreferences: ObservableObject {
         }
     }
     
-    @Published var numberOfQuestions: Int {
+    @Published var numberOfQuestions: Int = 5 {
         didSet {
             UserDefaults.standard.set(numberOfQuestions, forKey: "numberOfQuestions")
         }
@@ -281,6 +281,7 @@ struct ContentView: View {
                         HStack {
                             
                             TextField("What would you like a quiz on?", text: $userInput, axis: .vertical)
+                                .disabled(gemeniGeneratingQuiz)
                                 .autocorrectionDisabled()
                                 .focused($focus, equals: .quizPrompt)
                                 .padding()
@@ -360,8 +361,9 @@ struct ContentView: View {
                                             if let quiz = quiz {
                                                 DispatchQueue.main.async {
                                                     self.quiz = quiz
-                                                    self.showQuiz = true
+                                                    
                                                 }
+                                                self.showQuiz = true
                                             } else {
                                                 print("Failed to decode json: \(error ?? "Unknown error")")
                                                 if response.contains("429") {
@@ -717,6 +719,9 @@ struct ContentView: View {
                                     Button(action: {
                                         showingAllQuizzes = false
                                         gemeniGeneratingQuiz = true
+                                        userInput = quizStorage.history[i].userPrompt ?? ""
+                                        selectedPhotosData = quizStorage.history[i].userPhotos ?? []
+                                        links = quizStorage.history[i].userLinks ?? []
                                         GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.geminiModel, numberOfQuestions: userPreferences.numberOfQuestions)
                                         print(userPreferences.apiKey)
                                         print(userPreferences.geminiModel)
@@ -796,9 +801,9 @@ struct ContentView: View {
                                                             if let quiz = quiz {
                                                                 DispatchQueue.main.async {
                                                                     self.quiz = quiz
-                                                                    self.showQuiz = true
-                                                                    quizStorage.history.remove(at: i)
                                                                 }
+                                                                self.showQuiz = true
+                                                                quizStorage.history.remove(at: i)
                                                             } else {
                                                                 print("Failed to decode json: \(error ?? "Unknown error")")
                                                                 if response.contains("429") {

@@ -23,10 +23,10 @@ struct UIOnboardingHelper {
                   description: "Generate a quiz based solely on your notes from class."),
             .init(icon: UIImage(systemName: "dollarsign.arrow.circlepath")!,
                   title: "Education Free of Charge",
-                  description: "Powered by Google Gemini, get access to free AI without any ads or tracking."),
+                  description: "Powered by Google Gemini, get access to free AI-powered quizzes without any ads."),
             .init(icon: UIImage(systemName: "doc")!,
                   title: "Attach Anything",
-                  description: "Add links to webpages, YouTube videos, images, and PDFs, and we'll feed it to the AI for you!")
+                  description: "Add images, links to webpages/articles/PDFs/YouTube videos, and text, and we'll feed it to the AI for you!")
         ])
     }
     
