@@ -113,6 +113,7 @@
       }
     },
     "AI Model" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -798,6 +799,16 @@
       },
       "shouldTranslate" : false
     },
+    "Tip: Long press on the `Add New Link` button in order to paste a URL." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consejo: Mantén presionado el botón Agregar Nuevo Enlace para pegar una URL."
+          }
+        }
+      }
+    },
     "To use Recap, enter your API key!" : {
       "localizations" : {
         "es" : {
@@ -842,6 +853,7 @@
       "shouldTranslate" : false
     },
     "Use Gemini" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
