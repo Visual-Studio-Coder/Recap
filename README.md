@@ -77,7 +77,7 @@ This project is licensed under the MIT License - see the [`LICENSE`](https://git
 - **Vaibhav Satishkumar** - [GitHub](https://github.com/Visual-Studio-Coder)
 
 ## Contact
-For any inquiries, please contact [your email](mailto:youremail@example.com).
+For any inquiries, please contact [vsdev@duck.com](mailto:vsdev@duck.com).
 
 ---
 
