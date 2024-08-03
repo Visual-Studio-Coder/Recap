@@ -282,22 +282,42 @@ struct QuizView: View {
                 
                 ScrollView {
                     if quiz.questions[selectedTab].type == "multiple_choice" {
-                        QuestionView(question: quiz.questions[selectedTab], answerCallback: { selectedOptions, isCorrect in
-                            answeredQuestions += 1
-                            
-                            if isCorrect {
-                                correctAnswers += 1
-                                showPassMotivation = true
+                        if let options = quiz.questions[selectedTab].options {
+                            if options.filter({$0.correct}).count > 1 {
+                                QuestionView(question: quiz.questions[selectedTab], answerCallback: { selectedOptions, isCorrect in
+                                    answeredQuestions += 1
+                                    
+                                    if isCorrect {
+                                        correctAnswers += 1
+                                        showPassMotivation = true
+                                    } else {
+                                        showFailMotivation = true
+                                    }
+                                    
+                                    userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
+                                    
+                                    userDidGetAnswerCorrect[selectedTab] = isCorrect
+                                    hasAnswered[selectedTab] = true
+                                }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab], userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab])
                             } else {
-                                showFailMotivation = true
+                                QuestionView(question: quiz.questions[selectedTab], answerCallback: { selectedOptions, isCorrect in
+                                    answeredQuestions += 1
+                                    
+                                    if isCorrect {
+                                        correctAnswers += 1
+                                        showPassMotivation = true
+                                    } else {
+                                        showFailMotivation = true
+                                    }
+                                    
+                                    userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
+                                    
+                                    userDidGetAnswerCorrect[selectedTab] = isCorrect
+                                    hasAnswered[selectedTab] = true
+                                }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab], userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab])
+                                .transition(.slide)
                             }
-                            
-                            userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
-                            
-                            userDidGetAnswerCorrect[selectedTab] = isCorrect
-                            hasAnswered[selectedTab] = true
-                        }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab], userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab])
-                        .transition(.slide)
+                        }
                     } else {
                         HStack {
                             Markdown(quiz.questions[selectedTab].question)
@@ -435,7 +455,7 @@ struct QuizView: View {
                             ProgressView() // Show progress view if grading is in progress
                         } else {
                             Spacer()
-                            Text(gradingCompleted ? "Next" : (quiz.questions[selectedTab].type == "free_answer" ? "Submit Answer" : "Next"))
+                            Text(gradingCompleted ? "Next" : (quiz.questions[selectedTab].type == "free_answer") ? "Submit Answer" : "Next")
                                 .bold()
                                 .padding(6)
                             Spacer()

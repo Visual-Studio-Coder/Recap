@@ -1004,16 +1004,6 @@ struct ContentView: View {
                                                 Text("Prioritize **accuracy** over speed.")
                                             }
                                         }
-                                        .onChange(of: userPreferences.selectedOption) {
-                                            // Perform any additional actions when the selected option changes.
-                                            // This block can be used to trigger side effects of changing the option.
-                                            // If no additional action is needed, this `.onChange` modifier can be removed.
-                                        }
-                                        
-                                        Section("Privacy") {
-                                            Toggle("Save Quiz Results", isOn: .constant(true))
-                                            Toggle("Improve Gemini for Everyone", isOn: .constant(true))
-                                        }
                                     }
                                     .navigationTitle("Gemini")
                                 } label: {

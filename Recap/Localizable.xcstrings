@@ -456,6 +456,7 @@
       }
     },
     "Improve Gemini for Everyone" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -596,6 +597,7 @@
       }
     },
     "Privacy" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -659,6 +661,7 @@
       }
     },
     "Save Quiz Results" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
