@@ -10,7 +10,7 @@ struct QuestionView: View {
     let question: Question
     let answerCallback: ([String], Bool) -> Void
     
-    @State private var selectedOptions: [String] = []
+    @Binding var selectedOptions: [String]
     @Binding var hasAnswered: Bool?
     @Binding var userDidGetAnswerCorrect: Bool?
     
@@ -99,7 +99,6 @@ struct QuestionView: View {
                 .disabled(hasAnswered ?? false)
                 .buttonStyle(.bordered)
                 .background(selectedOptions.contains(option.text) ? Color.blue.opacity(0.2) : Color.clear)
-                //                .clipShape(RoundedRectangle(cornerRadius: 10))
                 .cornerRadius(10)
                 .padding(.horizontal)
                 .padding(.vertical, 5)
@@ -148,7 +147,7 @@ struct QuizView: View {
     @State private var selectedTab = 0
     @State private var correctAnswers = 0
     @State private var answeredQuestions = 0
-    @State private var selectedOptions = [Int: String]()
+    @State private var selectedOptions: [Int: [String]] = [:]
     @State private var hasAnswered = [Int: Bool]()
     @State private var userDidGetAnswerCorrect = [Int: Bool]()
     @State private var userAnswers = [UserAnswer]()
@@ -284,38 +283,55 @@ struct QuizView: View {
                     if quiz.questions[selectedTab].type == "multiple_choice" {
                         if let options = quiz.questions[selectedTab].options {
                             if options.filter({$0.correct}).count > 1 {
-                                QuestionView(question: quiz.questions[selectedTab], answerCallback: { selectedOptions, isCorrect in
-                                    answeredQuestions += 1
-                                    
-                                    if isCorrect {
-                                        correctAnswers += 1
-                                        showPassMotivation = true
-                                    } else {
-                                        showFailMotivation = true
-                                    }
-                                    
-                                    userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
-                                    
-                                    userDidGetAnswerCorrect[selectedTab] = isCorrect
-                                    hasAnswered[selectedTab] = true
-                                }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab], userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab])
+                                QuestionView(
+                                    question: quiz.questions[selectedTab],
+                                    answerCallback: { selectedOptions, isCorrect in
+                                        answeredQuestions += 1
+                                        
+                                        if isCorrect {
+                                            correctAnswers += 1
+                                            showPassMotivation = true
+                                        } else {
+                                            showFailMotivation = true
+                                        }
+                                        
+                                        userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
+                                        
+                                        userDidGetAnswerCorrect[selectedTab] = isCorrect
+                                        hasAnswered[selectedTab] = true
+                                    },
+                                    selectedOptions: Binding(
+                                        get: { selectedOptions[selectedTab] ?? [] },
+                                        set: { selectedOptions[selectedTab] = $0 }
+                                    ),
+                                    hasAnswered: $hasAnswered[selectedTab],
+                                    userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab]
+                                )
                             } else {
-                                QuestionView(question: quiz.questions[selectedTab], answerCallback: { selectedOptions, isCorrect in
-                                    answeredQuestions += 1
-                                    
-                                    if isCorrect {
-                                        correctAnswers += 1
-                                        showPassMotivation = true
-                                    } else {
-                                        showFailMotivation = true
-                                    }
-                                    
-                                    userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
-                                    
-                                    userDidGetAnswerCorrect[selectedTab] = isCorrect
-                                    hasAnswered[selectedTab] = true
-                                }, /*selectedOptions: $selectedOptions[selectedTab],*/ hasAnswered: $hasAnswered[selectedTab], userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab])
-                                .transition(.slide)
+                                QuestionView(
+                                    question: quiz.questions[selectedTab],
+                                    answerCallback: { selectedOptions, isCorrect in
+                                        answeredQuestions += 1
+                                        
+                                        if isCorrect {
+                                            correctAnswers += 1
+                                            showPassMotivation = true
+                                        } else {
+                                            showFailMotivation = true
+                                        }
+                                        
+                                        userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
+                                        
+                                        userDidGetAnswerCorrect[selectedTab] = isCorrect
+                                        hasAnswered[selectedTab] = true
+                                    },
+                                    selectedOptions: Binding(
+                                        get: { selectedOptions[selectedTab] ?? [] },
+                                        set: { selectedOptions[selectedTab] = $0 }
+                                    ),
+                                    hasAnswered: $hasAnswered[selectedTab],
+                                    userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab]
+                                )
                             }
                         }
                     } else {
@@ -430,7 +446,6 @@ struct QuizView: View {
                             }
                         }
                     }
-                    
                 }
                 Spacer()
                 VStack {
@@ -620,22 +635,22 @@ struct QuizView: View {
                                             self.feedback = result
                                             print("Decoded feedback result: \(result)")
                                         } catch let DecodingError.dataCorrupted(context) {
-    print("Data corrupted: \(context.debugDescription)")
-    print("Coding Path: \(context.codingPath)")
-} catch let DecodingError.keyNotFound(key, context) {
-    print("Key '\(key)' not found: \(context.debugDescription)")
-    print("Coding Path: \(context.codingPath)")
-} catch let DecodingError.valueNotFound(value, context) {
-    print("Value '\(value)' not found: \(context.debugDescription)")
-    print("Coding Path: \(context.codingPath)")
-} catch let DecodingError.typeMismatch(type, context) {
-    print("Type '\(type)' mismatch: \(context.debugDescription)")
-    print("Coding Path: \(context.codingPath)")
-} catch {
-    print("Failed to decode feedback result: \(error.localizedDescription)")
-    print("Raw response: \(response)")
-}
-
+                                            print("Data corrupted: \(context.debugDescription)")
+                                            print("Coding Path: \(context.codingPath)")
+                                        } catch let DecodingError.keyNotFound(key, context) {
+                                            print("Key '\(key)' not found: \(context.debugDescription)")
+                                            print("Coding Path: \(context.codingPath)")
+                                        } catch let DecodingError.valueNotFound(value, context) {
+                                            print("Value '\(value)' not found: \(context.debugDescription)")
+                                            print("Coding Path: \(context.codingPath)")
+                                        } catch let DecodingError.typeMismatch(type, context) {
+                                            print("Type '\(type)' mismatch: \(context.debugDescription)")
+                                            print("Coding Path: \(context.codingPath)")
+                                        } catch {
+                                            print("Failed to decode feedback result: \(error.localizedDescription)")
+                                            print("Raw response: \(response)")
+                                        }
+                                        
                                     }
                                 })
                             }
