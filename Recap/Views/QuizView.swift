@@ -596,10 +596,11 @@ struct QuizView: View {
                         }
                     }
                     .onAppear {
+                        chatService.computerResponse = ""
                         func sendFeedbackRequest() {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 chatService.sendMessage(userInput: """
-                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only a SINGULAR JSON (that doesn't contain properties like expected_answer and stuff) IN THIS EXACT FORMAT:
+                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only a SINGULAR JSON, and make sure not to include multiple JSONS or add keys that don't exist like "expectedAnswer" "isCorrect" or "feedback":
                                 
                                 {
                                     "feedback": "Your feedback here in a consice bulleted list",
@@ -618,14 +619,23 @@ struct QuizView: View {
                                             
                                             self.feedback = result
                                             print("Decoded feedback result: \(result)")
-                                        } catch {
-                                            print("Failed to decode feedback result: \(error)")
-                                            print("Raw response: \(response)")
-                                            
-                                            if response.contains("Resource has been exhausted") || response.contains("internal error has occurred") {
-                                                sendFeedbackRequest()
-                                            }
-                                        }
+                                        } catch let DecodingError.dataCorrupted(context) {
+    print("Data corrupted: \(context.debugDescription)")
+    print("Coding Path: \(context.codingPath)")
+} catch let DecodingError.keyNotFound(key, context) {
+    print("Key '\(key)' not found: \(context.debugDescription)")
+    print("Coding Path: \(context.codingPath)")
+} catch let DecodingError.valueNotFound(value, context) {
+    print("Value '\(value)' not found: \(context.debugDescription)")
+    print("Coding Path: \(context.codingPath)")
+} catch let DecodingError.typeMismatch(type, context) {
+    print("Type '\(type)' mismatch: \(context.debugDescription)")
+    print("Coding Path: \(context.codingPath)")
+} catch {
+    print("Failed to decode feedback result: \(error.localizedDescription)")
+    print("Raw response: \(response)")
+}
+
                                     }
                                 })
                             }
@@ -788,7 +798,7 @@ struct QuizView: View {
                     let result = try decoder.decode(GradingResult.self, from: data)
                     // Directly update the @State property
                     self.gradingResult = result
-                    print("Decoded grading result: \(result)")
+                    print("Decoded grading result asdasdasd: \(result)")
                     
                     if result.isCorrect {
                         self.correctAnswers += 1
@@ -813,7 +823,7 @@ struct QuizView: View {
                     // If the response can't be decoded into a GradingResult, print the error and the raw response
                     showingGeminiQuotaLimit.toggle()
                     print("Failed to decode grading result: \(error)")
-                    print("Raw response: \(response)")
+                    print("Raw response 1234: \(response)")
                     self.isGradingInProgress = false
                 }
             }
