@@ -5,6 +5,7 @@ import Splash
 import LinkPresentation
 import Shimmer
 import PDFKit
+import OnboardingKit
 
 @MainActor
 class UserPreferences: ObservableObject {
@@ -63,6 +64,12 @@ struct ContentView: View {
     
     @AppStorage("apiKey") private var apiKey = ""
     @AppStorage("showOnboarding") private var showOnboarding = true
+    
+    let onboardingRows = [
+        OnboardingRow(image: Image(systemName: "brain.head.profile"), title: "Create Personalized Quizzes", description: "Generate a quiz based solely on your notes from class."),
+        OnboardingRow(image: Image(systemName: "dollarsign.arrow.circlepath"), title: "Education Free of Charge", description: "Powered by Google Gemini, get access to free AI-powered quizzes without any ads."),
+        OnboardingRow(image: Image(systemName: "doc"), title: "Attach Anything", description: "Add images, links to webpages/articles/PDFs/YouTube videos, and text, and we'll feed it to the AI for you!")
+    ]
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
@@ -900,20 +907,26 @@ struct ContentView: View {
                             }
                     }
                 })
-                .fullScreenCover(isPresented: $showOnboarding, onDismiss: {
+//                .fullScreenCover(isPresented: $showOnboarding, onDismiss: {
+//                    showOnboarding = false
+//                }, content: {
+//                    OnboardingView.init()
+//                        .ignoresSafeArea(.all)
+//                })
+                .welcomeSheet(isPresented: $showOnboarding, onDismiss: {
                     showOnboarding = false
-                }, content: {
-                    OnboardingView.init()
-                        .ignoresSafeArea(.all)
+                }, rows: onboardingRows, title: "Welcome to Recap", onConfirm: {
+                    showOnboarding = false
                 })
+                
                 .sheet(isPresented: $showingSettingsSheet) {
                     NavigationStack {
                         Form {
-//                            Section("AI Model") {
-//                                Toggle(isOn: .constant(true)) {
-//                                    Label("Use Gemini", systemImage: "cpu")
-//                                }
-//                            }
+                            //                            Section("AI Model") {
+                            //                                Toggle(isOn: .constant(true)) {
+                            //                                    Label("Use Gemini", systemImage: "cpu")
+                            //                                }
+                            //                            }
                             
                             Section("App Details") {
                                 Button {
@@ -921,7 +934,19 @@ struct ContentView: View {
                                 } label: {
                                     Label("Show Onboarding", systemImage: "hand.wave.fill")
                                 }
-                                
+                                Button {
+                                    if let url = URL(string: "https://github.com/TopGApps/Recap") {
+                                        UIApplication.shared.open(url)
+                                    }
+                                } label: {
+                                    HStack {
+                                        Label("Contribute", systemImage: "curlybraces")
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right")
+                                            .tint(.secondary)
+                                    }
+                                }
+                                .tint(.primary)
                                 DisclosureGroup {
                                     Markdown(
                                 """
@@ -948,9 +973,9 @@ struct ContentView: View {
                                 - \(NSLocalizedString("Google Gemini:", comment: "")) [ai.google.dev/gemini-api/terms](https://ai.google.dev/gemini-api/terms)
                                 """
                                     )
-
-
-
+                                    
+                                    
+                                    
                                     
                                 } label: {
                                     Label("Privacy Policy", systemImage: "hand.raised.circle.fill")
