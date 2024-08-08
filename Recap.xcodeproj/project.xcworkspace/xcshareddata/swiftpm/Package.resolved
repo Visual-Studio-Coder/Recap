@@ -1,5 +1,5 @@
 {
-  "originHash" : "e97719fc249b0c202b01f0f1c4fed8eb3e93829a520a1bcd3efd5657c2741aa9",
+  "originHash" : "6b9652c3dca419ae5a22d8ce40a2f96d83f8f29d37fa376c823aca12170e3fed",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -13,10 +13,10 @@
     {
       "identity" : "generative-ai-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/generative-ai-swift",
+      "location" : "https://github.com/google-gemini/generative-ai-swift/",
       "state" : {
-        "revision" : "54784005b57c2235a7669e0c12e8dafa68f0ca5f",
-        "version" : "0.5.4"
+        "revision" : "2b8f14cfd158982fe3b2c8a8582ac3af5743742f",
+        "version" : "0.5.5"
       }
     },
     {
@@ -29,9 +29,18 @@
       }
     },
     {
+      "identity" : "onboardingkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/BortoAle/OnboardingKit",
+      "state" : {
+        "revision" : "5c2f9508d9f0118572ac9783fd297c687c8f06e7",
+        "version" : "0.1.3"
+      }
+    },
+    {
       "identity" : "splash",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JohnSundell/Splash",
+      "location" : "https://github.com/johnsundell/splash.git",
       "state" : {
         "revision" : "7f4df436eb78fe64fe2c32c58006e9949fa28ad8",
         "version" : "0.16.0"
@@ -49,7 +58,7 @@
     {
       "identity" : "swiftui-shimmer",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/markiv/SwiftUI-Shimmer",
+      "location" : "https://github.com/markiv/SwiftUI-Shimmer.git",
       "state" : {
         "revision" : "e3aa4226b0fafe345ca1c920f516b6a2f3e0aacc",
         "version" : "1.5.0"

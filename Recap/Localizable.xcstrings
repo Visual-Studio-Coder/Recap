@@ -82,6 +82,9 @@
     "🎉" : {
       "shouldTranslate" : false
     },
+    "Add images, links to webpages/articles/PDFs/YouTube videos, and text, and we'll feed it to the AI for you!" : {
+
+    },
     "Add New Link" : {
       "localizations" : {
         "es" : {
@@ -173,6 +176,9 @@
         }
       }
     },
+    "Attach Anything" : {
+
+    },
     "Attachments (%lld)" : {
       "localizations" : {
         "es" : {
@@ -223,6 +229,9 @@
         }
       }
     },
+    "Contribute" : {
+
+    },
     "Correct" : {
       "localizations" : {
         "es" : {
@@ -232,6 +241,9 @@
           }
         }
       }
+    },
+    "Create Personalized Quizzes" : {
+
     },
     "Customize Question Count" : {
       "localizations" : {
@@ -272,6 +284,9 @@
           }
         }
       }
+    },
+    "Education Free of Charge" : {
+
     },
     "Enter a free response" : {
       "localizations" : {
@@ -365,6 +380,9 @@
     },
     "Gemini" : {
       "shouldTranslate" : false
+    },
+    "Generate a quiz based solely on your notes from class." : {
+
     },
     "Generate Quiz" : {
       "localizations" : {
@@ -565,6 +583,9 @@
           }
         }
       }
+    },
+    "Powered by Google Gemini, get access to free AI-powered quizzes without any ads." : {
+
     },
     "Preferred Model" : {
       "localizations" : {
@@ -905,6 +926,9 @@
           }
         }
       }
+    },
+    "Welcome to Recap" : {
+
     },
     "What would you like a quiz on?" : {
       "localizations" : {
