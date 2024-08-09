@@ -2,7 +2,7 @@
 
 
 
-![AppIcon]([https://github.com/Visual-Studio-Coder/Recap/blob/master/Recap/Assets.xcassets/AppIcon.appiconset/Recap.png](https://github.com/Visual-Studio-Coder/Recap/blob/master/Recap/Recap.png)
+![AppIcon](https://github.com/Visual-Studio-Coder/Recap/blob/master/Recap/Recap.png)
 
 ## Table of Contents
 - Description
