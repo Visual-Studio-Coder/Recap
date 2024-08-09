@@ -477,6 +477,7 @@
       }
     },
     "Model Details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -826,6 +827,7 @@
       }
     },
     "Tokens Per Minute" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
