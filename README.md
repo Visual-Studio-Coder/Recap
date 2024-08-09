@@ -70,7 +70,7 @@ As mentioned previously, we prompt Gemini with your input, and it returns a JSON
 We welcome contributions from the community. Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
 
 ## License
-This project is licensed under the MIT License - see the [`LICENSE`](https://github.com/TopGApps/Recap/blob/master/LICENSE) file for details.
+This project is licensed under the Apache Version 2 License - see the [`LICENSE`](https://github.com/TopGApps/Recap/blob/master/LICENSE) file for details.
 
 ## Authors and Acknowledgments
 - **Aaron Ma** - [GitHub](https://github.com/aaronhma)
