@@ -2,7 +2,7 @@
 
 ## Made with 💖 & 😀 by [Aaron Ma](https://github.com/aaronhma) & [Vaibhav Satishkumar](https://github.com/Visual-Studio-Coder)
 
-![AppIcon](https://github.com/TopGApps/Recap/blob/master/Recap/Assets.xcassets/AppIcon.appiconset/Recap.png)
+![AppIcon]([https://github.com/TopGApps/Recap/blob/master/Recap/Assets.xcassets/AppIcon.appiconset/Recap.png](https://github.com/TopGApps/Recap/blob/master/Recap/Recap.png)
 
 ## Table of Contents
 - Description
