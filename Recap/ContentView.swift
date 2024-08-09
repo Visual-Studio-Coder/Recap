@@ -288,7 +288,7 @@ struct ContentView: View {
                         HStack {
                             
                             TextField("What would you like a quiz on?", text: $userInput, axis: .vertical)
-                                .disabled(gemeniGeneratingQuiz)
+                                .disabled(gemeniGeneratingQuiz || showQuiz == true)
                                 .autocorrectionDisabled()
                                 .focused($focus, equals: .quizPrompt)
                                 .padding()

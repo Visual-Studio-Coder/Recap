@@ -25,12 +25,6 @@
     },
     "%lld of %lld questions answered" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld of %2$lld questions answered"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41,12 +35,6 @@
     },
     "%lld out of %lld correct" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld out of %2$lld correct"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -439,12 +427,6 @@
     },
     "I got a %lld out of %lld on Recap!" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "I got a %1$lld out of %2$lld on Recap!"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",

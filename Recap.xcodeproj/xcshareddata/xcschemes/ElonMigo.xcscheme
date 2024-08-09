@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8B9675312C02420D005950FB"
+               BlueprintIdentifier = "78B5A5A82C617B6500E06E8B"
                BuildableName = "Recap.app"
                BlueprintName = "Recap"
                ReferencedContainer = "container:Recap.xcodeproj">
@@ -34,7 +34,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = "en"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -45,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8B9675312C02420D005950FB"
+            BlueprintIdentifier = "78B5A5A82C617B6500E06E8B"
             BuildableName = "Recap.app"
             BlueprintName = "Recap"
             ReferencedContainer = "container:Recap.xcodeproj">
@@ -68,7 +67,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8B9675312C02420D005950FB"
+            BlueprintIdentifier = "78B5A5A82C617B6500E06E8B"
             BuildableName = "Recap.app"
             BlueprintName = "Recap"
             ReferencedContainer = "container:Recap.xcodeproj">
