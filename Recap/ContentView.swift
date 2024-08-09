@@ -1013,13 +1013,13 @@ struct ContentView: View {
                                                     }
                                                 }
                                             }
-                                            DisclosureGroup("Model Details") {
-                                                List {
-                                                    HStack {
-                                                        Label("Tokens Per Minute", systemImage: "dollarsign.circle")
-                                                    }
-                                                }
-                                            }
+//                                            DisclosureGroup("Model Details") {
+//                                                List {
+//                                                    HStack {
+//                                                        Label("Tokens Per Minute", systemImage: "dollarsign.circle")
+//                                                    }
+//                                                }
+//                                            }
                                         } header: {
                                             Text("Choose Model")
                                         } footer: {
