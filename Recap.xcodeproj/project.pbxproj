@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		783D0D1B2C65F714003770A2 /* Recap.png in Resources */ = {isa = PBXBuildFile; fileRef = 783D0D1A2C65F714003770A2 /* Recap.png */; };
 		78B5A5E22C617B8200E06E8B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 78B5A5BA2C617B8100E06E8B /* README.md */; };
 		78B5A5E32C617B8200E06E8B /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B5A5BB2C617B8200E06E8B /* Explanation.swift */; };
 		78B5A5E42C617B8200E06E8B /* Motivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B5A5BC2C617B8200E06E8B /* Motivation.swift */; };
@@ -34,7 +35,6 @@
 		78B5A5FA2C617B8200E06E8B /* GeminiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B5A5D72C617B8200E06E8B /* GeminiAPI.swift */; };
 		78B5A5FC2C617B8200E06E8B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 78B5A5D92C617B8200E06E8B /* Localizable.xcstrings */; };
 		78B5A5FD2C617B8200E06E8B /* Recap-ICNS.icns in Resources */ = {isa = PBXBuildFile; fileRef = 78B5A5DA2C617B8200E06E8B /* Recap-ICNS.icns */; };
-		78B5A5FE2C617B8200E06E8B /* Recap.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5A5DB2C617B8200E06E8B /* Recap.png */; };
 		78B5A5FF2C617B8200E06E8B /* RecapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B5A5DC2C617B8200E06E8B /* RecapApp.swift */; };
 		78B5A6002C617B8200E06E8B /* Sample-JSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 78B5A5DD2C617B8200E06E8B /* Sample-JSON.json */; };
 		78B5A6012C617B8200E06E8B /* YoutubeTranscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B5A5DE2C617B8200E06E8B /* YoutubeTranscript.swift */; };
@@ -50,6 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		783D0D1A2C65F714003770A2 /* Recap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Recap.png; sourceTree = "<group>"; };
 		78B5A5A92C617B6500E06E8B /* Recap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78B5A5BA2C617B8100E06E8B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		78B5A5BB2C617B8200E06E8B /* Explanation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
@@ -79,7 +80,6 @@
 		78B5A5D82C617B8200E06E8B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		78B5A5D92C617B8200E06E8B /* Localizable.xcstrings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		78B5A5DA2C617B8200E06E8B /* Recap-ICNS.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Recap-ICNS.icns"; sourceTree = "<group>"; };
-		78B5A5DB2C617B8200E06E8B /* Recap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Recap.png; sourceTree = "<group>"; };
 		78B5A5DC2C617B8200E06E8B /* RecapApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecapApp.swift; sourceTree = "<group>"; };
 		78B5A5DD2C617B8200E06E8B /* Sample-JSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Sample-JSON.json"; sourceTree = "<group>"; };
 		78B5A5DE2C617B8200E06E8B /* YoutubeTranscript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeTranscript.swift; sourceTree = "<group>"; };
@@ -194,7 +194,7 @@
 				78B5A5D82C617B8200E06E8B /* Info.plist */,
 				78B5A5D92C617B8200E06E8B /* Localizable.xcstrings */,
 				78B5A5DA2C617B8200E06E8B /* Recap-ICNS.icns */,
-				78B5A5DB2C617B8200E06E8B /* Recap.png */,
+				783D0D1A2C65F714003770A2 /* Recap.png */,
 				78B5A5DC2C617B8200E06E8B /* RecapApp.swift */,
 				78B5A5DD2C617B8200E06E8B /* Sample-JSON.json */,
 				78B5A5DE2C617B8200E06E8B /* YoutubeTranscript.swift */,
@@ -280,8 +280,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				78B5A6032C617B8200E06E8B /* Privacy.md in Resources */,
+				783D0D1B2C65F714003770A2 /* Recap.png in Resources */,
 				78B5A6002C617B8200E06E8B /* Sample-JSON.json in Resources */,
-				78B5A5FE2C617B8200E06E8B /* Recap.png in Resources */,
 				78B5A5FC2C617B8200E06E8B /* Localizable.xcstrings in Resources */,
 				78B5A5EF2C617B8200E06E8B /* Preview Assets.xcassets in Resources */,
 				78B5A5FD2C617B8200E06E8B /* Recap-ICNS.icns in Resources */,
