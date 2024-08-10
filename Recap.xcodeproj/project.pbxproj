@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		783D0D1B2C65F714003770A2 /* Recap.png in Resources */ = {isa = PBXBuildFile; fileRef = 783D0D1A2C65F714003770A2 /* Recap.png */; };
+		7858DE6D2C67F2EA0060F863 /* RainbowText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7858DE6C2C67F2EA0060F863 /* RainbowText.swift */; };
 		78B5A5E22C617B8200E06E8B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 78B5A5BA2C617B8100E06E8B /* README.md */; };
 		78B5A5E32C617B8200E06E8B /* Explanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B5A5BB2C617B8200E06E8B /* Explanation.swift */; };
 		78B5A5E42C617B8200E06E8B /* Motivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B5A5BC2C617B8200E06E8B /* Motivation.swift */; };
@@ -51,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		783D0D1A2C65F714003770A2 /* Recap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Recap.png; sourceTree = "<group>"; };
+		7858DE6C2C67F2EA0060F863 /* RainbowText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainbowText.swift; sourceTree = "<group>"; };
 		78B5A5A92C617B6500E06E8B /* Recap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78B5A5BA2C617B8100E06E8B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		78B5A5BB2C617B8200E06E8B /* Explanation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Explanation.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				78B5A5C52C617B8200E06E8B /* String+isValidURL.swift */,
 				78B5A5C62C617B8200E06E8B /* UTType+recapExportType.swift */,
 				78B5A5C72C617B8200E06E8B /* View+splashView.swift */,
+				7858DE6C2C67F2EA0060F863 /* RainbowText.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				78B5A5F42C617B8200E06E8B /* QuizView.swift in Sources */,
 				78B5A5F72C617B8200E06E8B /* AppSettings.swift in Sources */,
 				78B5A5F02C617B8200E06E8B /* SplashCodeSyntaxHighlighter.swift in Sources */,
+				7858DE6D2C67F2EA0060F863 /* RainbowText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
