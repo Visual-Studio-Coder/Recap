@@ -1,4 +1,4 @@
-![Frame 1 (1)](https://github.com/user-attachments/assets/89eefde5-af35-4c9f-9760-1c519387a6e4)
+![Frame 1 (2)](https://github.com/user-attachments/assets/95b148f2-c73a-44b2-857e-35ed897aff4c)
 
 ## Features
  - 🤖 AI powered quiz generation based on user notes
@@ -14,7 +14,7 @@
     - Retake the quiz (or even regenerate it!)
     - View past results
 
-## Description
+## Why Recap?
 Recap is _the best_ way to ensure you understand a concept. Most online resources and practice don't cover _exactly_ what you learn at school. How do you know if you have fully understood a concept or not? You for sure don't want to "wait and find out 😣".
 
 ## Installation
