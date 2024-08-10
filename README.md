@@ -1,8 +1,4 @@
-# Recap
-
-## Made with 💖 & 😀 by [Aaron Ma](https://github.com/aaronhma) & [Vaibhav Satishkumar](https://github.com/Visual-Studio-Coder)
-
-![AppIcon](https://github.com/TopGApps/Recap/blob/master/Recap/Recap.png)
+![Frame 1 (1)](https://github.com/user-attachments/assets/89eefde5-af35-4c9f-9760-1c519387a6e4)
 
 ## Table of Contents
 - Description
@@ -18,7 +14,7 @@
 - Contact
 
 ## Description
-Recap is your *free* amigo who will help quiz you on the __SPECIFIC concepts__ you are learning about. Most online resources don't cover exactly what you learn at school. How do you know if you have fully understood a concept or not? You for sure don't want to "wait and find out 😣".
+Recap is _the best_ way to ensure you understand a concept. Most online resources and practice don't cover _exactly_ what you learn at school. How do you know if you have fully understood a concept or not? You for sure don't want to "wait and find out 😣".
 
 ## Installation
 To get started with Recap, follow these steps:
