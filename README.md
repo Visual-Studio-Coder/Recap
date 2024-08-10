@@ -60,8 +60,11 @@ As mentioned previously, we prompt Gemini with your input, and it returns a JSON
 - **Execution**: The solution is well-designed and adheres to software engineering practices. The LLM component is also well-designed and follows Machine Learning (ML)/LLM best practices. By leveraging SwiftUI, we ensure that our app is not only visually appealing but also highly accessible and inclusive. The app's architecture and code quality are robust, modular, and maintainable, ensuring that it can be easily extended and updated in the future. We follow best practices such as code reviews and continuous integration to maintain high standards of code quality and reliability.
 
 ## Disclaimers
-- When inputting your personal API key, be aware of the fact that on a free account, your prompts are linked to your identity and are used to train their models.
-- While we, Recap, do not collect any data from our users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on.
+> [!WARNING]
+> While we, Recap, do not collect any data from our users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on.
+
+> [!CAUTION]
+> When inputting your personal API key, be aware of the fact that on a free account, your prompts are linked to your identity and are used to train their models. Read the Google [`Privacy Policy`](https://github.com/TopGApps/Recap/blob/master/Privacy)
 
 ## Contributing
 We welcome contributions from the community. Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
