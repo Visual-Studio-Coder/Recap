@@ -95,7 +95,7 @@ cd recap
 open Recap.xcodeproj
 ```
 
-## Usage
+### Usage
 To use Recap, follow these steps:
 
 1. Open the project in Xcode.
