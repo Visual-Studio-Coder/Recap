@@ -1,17 +1,18 @@
 ![Frame 1 (1)](https://github.com/user-attachments/assets/89eefde5-af35-4c9f-9760-1c519387a6e4)
 
-## Table of Contents
-- Description
-- Installation
-- Usage
-- Features
-- [How It Works](#how-it-works)
-- [Why Us](#why-us)
-- Disclaimers
-- Contributing
-- License
-- [Authors and Acknowledgments](#authors-and-acknowledgments)
-- Contact
+## Features
+ - 🤖 AI powered quiz generation based on user notes
+    - 🖼️, 🔗, 📝, Input images, URLs, and plain text
+        - YouTube integration: Input URLs to videos with a transcript
+    - Supported question formats include multiple choice, multi-select, and free-response (AI-powered grading)
+ - 💬 Evaluate your understanding with feedback
+    - We offer an `Explain` button, allowing users to understand why each option in a question is correct/incorrect
+    - Free Response evaluates whether a user's response is correct, and it offers ways to improve their response, reguardless of whether they got it correct or not.
+    - Performance feedback at the end of a quiz means that Recap can recommend reading material and concepts to work on based on the user's performance.
+ - 🕰️ Recap includes quiz history, so you can revisit past quizzes and
+    - Share a quiz file with friends
+    - Retake the quiz (or even regenerate it!)
+    - View past results
 
 ## Description
 Recap is _the best_ way to ensure you understand a concept. Most online resources and practice don't cover _exactly_ what you learn at school. How do you know if you have fully understood a concept or not? You for sure don't want to "wait and find out 😣".
