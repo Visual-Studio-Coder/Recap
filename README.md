@@ -1,5 +1,13 @@
-![Frame 1 (5)](https://github.com/user-attachments/assets/ee6ee288-60f5-4c4e-9f20-d75342e37290)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ee6ee288-60f5-4c4e-9f20-d75342e37290" alt="Sublime's custom image"/>
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/platform-iOS%20|%20iPadOS%20|%20macOS%20|%20Vision%20Pro-blue">
+  <img src="https://img.shields.io/badge/language-Swift-orange">
+  <img src="https://img.shields.io/badge/App%20Store-Available-brightgreen">
+  <img src="https://img.shields.io/badge/model-Gemini%201.5-red">
+</p>
 
 ## Features
 <details>
