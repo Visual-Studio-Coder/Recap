@@ -61,10 +61,14 @@ As mentioned previously, we prompt Gemini with your input, and it returns a JSON
 
 ## Disclaimers
 > [!WARNING]
-> While we, Recap, do not collect any data from our users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on.
+> While we, Recap, do not collect any data from our users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on. Read our [`Privacy Policy`](https://github.com/TopGApps/Recap/blob/master/Privacy) for more information about this
+
 
 > [!CAUTION]
-> When inputting your personal API key, be aware of the fact that on a free account, your prompts are linked to your identity and are used to train their models. Read the Google [`Privacy Policy`](https://github.com/TopGApps/Recap/blob/master/Privacy)
+> Be sure not to share your API key with anybody else!
+
+> [!CAUTION]
+> When inputting your personal API key, be aware of the fact that on a free account, your prompts are linked to your identity and are used to train their models.
 
 ## Contributing
 We welcome contributions from the community. Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
