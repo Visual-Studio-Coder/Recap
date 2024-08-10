@@ -540,7 +540,7 @@ struct QuizView: View {
                             Form {
                                 Text("**Receiving Response from Gemini...**")
                                 Markdown(chatService.computerResponse.replacingOccurrences(of: "<`>", with: "```"))
-                                    .foregroundStyle(.brown)
+                                    .rainbowText()
                                     .redacted(reason: .placeholder)
                                 //rainbow gradient
                                     .shimmering()
@@ -597,64 +597,30 @@ struct QuizView: View {
                     ) {
                         Divider()
                         if let feedback = feedback {
-                            Markdown(feedback.feedback)
-                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                            HStack {
+                                Markdown(feedback.feedback)
+                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                Spacer()
+                            }
                         } else {
                             if chatService.computerResponse.isEmpty {
                                 ProgressView()
                                     .controlSize(.large)
                             } else {
-                                Text(chatService.computerResponse)
-                                    .redacted(reason: .placeholder)
-                                    .shimmering()
+                                Text(chatService.computerResponse
+                                    .replacingOccurrences(of: "{", with: "")
+                                    .replacingOccurrences(of: "}", with: "")
+                                    .replacingOccurrences(of: "\"", with: "")
+                                    .replacingOccurrences(of: "difficultyScore", with: "")
+                                )
+                                .redacted(reason: .placeholder)
+                                .shimmering()
+                                .rainbowText()
                             }
                         }
                     }
                     .onAppear {
                         chatService.computerResponse = ""
-                        func sendFeedbackRequest() {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                chatService.sendMessage(userInput: """
-                                Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only a SINGULAR JSON, and make sure not to include multiple JSONS or add keys that don't exist like "expectedAnswer" "isCorrect" or "feedback":
-                                
-                                {
-                                    "feedback": "Your feedback here in a consice bulleted list",
-                                    "difficultyScore": (something between 1 and 5)
-                                }
-                                """, selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
-                                    chatService.computerResponse = ""
-                                    let data = Data(response.utf8)
-                                    let decoder = JSONDecoder()
-                                    
-                                    DispatchQueue.main.async {
-                                        do {
-                                            let result = try decoder.decode(Feedback.self, from: data)
-                                            
-                                            print(response)
-                                            
-                                            self.feedback = result
-                                            print("Decoded feedback result: \(result)")
-                                        } catch let DecodingError.dataCorrupted(context) {
-                                            print("Data corrupted: \(context.debugDescription)")
-                                            print("Coding Path: \(context.codingPath)")
-                                        } catch let DecodingError.keyNotFound(key, context) {
-                                            print("Key '\(key)' not found: \(context.debugDescription)")
-                                            print("Coding Path: \(context.codingPath)")
-                                        } catch let DecodingError.valueNotFound(value, context) {
-                                            print("Value '\(value)' not found: \(context.debugDescription)")
-                                            print("Coding Path: \(context.codingPath)")
-                                        } catch let DecodingError.typeMismatch(type, context) {
-                                            print("Type '\(type)' mismatch: \(context.debugDescription)")
-                                            print("Coding Path: \(context.codingPath)")
-                                        } catch {
-                                            print("Failed to decode feedback result: \(error.localizedDescription)")
-                                            print("Raw response: \(response)")
-                                        }
-                                        
-                                    }
-                                })
-                            }
-                        }
                         
                         sendFeedbackRequest()
                     }
@@ -785,8 +751,49 @@ struct QuizView: View {
             }
         }
     }
-    // Assuming gradingResult, correctAnswers, answeredQuestions, and userAnswers are @State properties or are properly managed to reflect UI updates.
-    
+    func sendFeedbackRequest() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            chatService.sendMessage(userInput: """
+            Based on the user's responses here: \(userAnswers), state what the user seemed to be struggling on, ways for them to improve, and what they should re-review. Also, provide a difficulty score of this quiz based on your questions and the user's performance. Return only a SINGULAR JSON, and make sure not to include multiple JSONS or add keys that don't exist like "expectedAnswer" "isCorrect" or "feedback":
+            
+            {
+                "feedback": "Your feedback here in a consice bulleted list",
+                "difficultyScore": (something between 1 and 5)
+            }
+            """, selectedPhotosData: nil, streamContent: true, generateQuiz: false, completion: { response in
+                chatService.computerResponse = ""
+                let data = Data(response.utf8)
+                let decoder = JSONDecoder()
+                
+                DispatchQueue.main.async {
+                    do {
+                        let result = try decoder.decode(Feedback.self, from: data)
+                        
+                        print(response)
+                        
+                        self.feedback = result
+                        print("Decoded feedback result: \(result)")
+                    } catch let DecodingError.dataCorrupted(context) {
+                        print("Data corrupted: \(context.debugDescription)")
+                        print("Coding Path: \(context.codingPath)")
+                    } catch let DecodingError.keyNotFound(key, context) {
+                        print("Key '\(key)' not found: \(context.debugDescription)")
+                        print("Coding Path: \(context.codingPath)")
+                    } catch let DecodingError.valueNotFound(value, context) {
+                        print("Value '\(value)' not found: \(context.debugDescription)")
+                        print("Coding Path: \(context.codingPath)")
+                    } catch let DecodingError.typeMismatch(type, context) {
+                        print("Type '\(type)' mismatch: \(context.debugDescription)")
+                        print("Coding Path: \(context.codingPath)")
+                    } catch {
+                        print("Failed to decode feedback result: \(error.localizedDescription)")
+                        print("Raw response: \(response)")
+                    }
+                    
+                }
+            })
+        }
+    }
     func gradeFreeResponse() {
         guard quiz.questions[selectedTab].type == "free_answer" else { return }
         
