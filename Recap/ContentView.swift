@@ -297,7 +297,7 @@ struct ContentView: View {
                                 .padding(.horizontal)
                             Button {
                                 gemeniGeneratingQuiz = true
-                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.geminiModel, numberOfQuestions: userPreferences.numberOfQuestions)
+                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
                                 print(userPreferences.apiKey)
                                 print(userPreferences.geminiModel)
                                 
@@ -527,6 +527,7 @@ struct ContentView: View {
                         } label: {
                             Label("History", systemImage: "clock.arrow.circlepath")
                         }
+                        .disabled(quizStorage.history.isEmpty)
                     }
                 }
                 .alert("To use Recap, enter your API key!", isPresented: $showingGeminiAPIAlert) {
