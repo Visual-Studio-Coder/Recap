@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/platform-iOS%2017%20|%20iPadOS%2017%20|%20macOS%2014.5%20|%20Vision%20Pro-blue">
+  <img src="https://img.shields.io/badge/platform-iOS%2017.0%20|%20iPadOS%2017.0%20|%20macOS%2014.5%20|%20Vision%20Pro-blue">
   <img src="https://img.shields.io/badge/language-Swift-orange">
   <img src="https://img.shields.io/badge/App%20Store-Available-brightgreen">
   <img src="https://img.shields.io/badge/model-Gemini%201.5-red">
