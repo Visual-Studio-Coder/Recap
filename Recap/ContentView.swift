@@ -414,7 +414,6 @@ struct ContentView: View {
                                     //.clipShape(RoundedRectangle(cornerRadius: 15))
                                 }
                             }
-                            .accessibilityLabel("Generate Quiz")
                             .padding(.trailing)
                             .disabled(gemeniGeneratingQuiz || (userInput.isEmpty && selectedPhotosData.count == 0 && links.count == 0))
                             Spacer()
@@ -708,13 +707,17 @@ struct ContentView: View {
                             ForEach(quizStorage.history.indices.reversed(), id: \.self) { i in
                                 Menu {
                                     //share quiz
-                                    ShareLink(item: ExportableQuiz(quiz: quizStorage.history[i]), preview: SharePreview(quizStorage.history[i].quiz_title, icon: "square.and.arrow.up"))
+                                    ShareLink(item: ExportableQuiz(quiz: quizStorage.history[i]), preview: SharePreview(quizStorage.history[i].quiz_title, icon: "square.and.arrow.up")) {
+                                        Label("Share Quiz", systemImage: "square.and.arrow.up")
+                                    }
                                     Button(action: {
                                         //remove current quiz:
                                         showingAllQuizzes = false
                                         quiz = quizStorage.history[i]
                                         withAnimation {
-                                            showQuiz.toggle()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                                showQuiz = true
+                                            }
                                         }
                                         quizStorage.history.remove(at: i)
                                     }) {
@@ -732,9 +735,9 @@ struct ContentView: View {
                                     Button(action: {
                                         showingAllQuizzes = false
                                         gemeniGeneratingQuiz = true
-                                        userInput = quizStorage.history[i].userPrompt ?? ""
-                                        selectedPhotosData = quizStorage.history[i].userPhotos ?? []
-                                        links = quizStorage.history[i].userLinks ?? []
+                                            userInput = quizStorage.history[i].userPrompt ?? ""
+                                            selectedPhotosData = quizStorage.history[i].userPhotos ?? []
+                                            links = quizStorage.history[i].userLinks ?? []
                                         GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                         print(userPreferences.apiKey)
                                         print(userPreferences.geminiModel)
@@ -802,41 +805,36 @@ struct ContentView: View {
                                         
                                         group.notify(queue: .main) {
                                             if apiKey != "" {
-                                                // Unwrap userPrompt
-                                                if let userPrompt = quizStorage.history[i].userPrompt {
-                                                    let message = userPrompt + "Attached Website Content:" + websiteContent
-                                                    
-                                                    // Unwrap userPhotos
-                                                    if let userPhotos = quizStorage.history[i].userPhotos {
-                                                        geminiAPI!.sendMessage(userInput: message, selectedPhotosData: userPhotos, streamContent: false, generateQuiz: true) { response in
-                                                            //print(response)
-                                                            let (quiz, error) = decodeJSON(from: response)
-                                                            if let quiz = quiz {
-                                                                DispatchQueue.main.async {
-                                                                    self.quiz = quiz
-                                                                }
-                                                                self.showQuiz = true
-                                                                quizStorage.history.remove(at: i)
-                                                            } else {
-                                                                print("Failed to decode json: \(error ?? "Unknown error")")
-                                                                if response.contains("429") {
-                                                                    errorText = "Rate limit exceeded. Please try again later or shorten the prompt.\n\n(If you're using a free API key, Google unfortunately imposes heavy rate limits)."
-                                                                } else if response.contains("not available in your country") {
-                                                                    errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
-                                                                } else if response.contains("valid API key") {
-                                                                    errorText = "API key not valid. Please pass a valid API key."
-                                                                } else {
-                                                                    errorText = "Unknown error has occured! Please try a different prompt."
-                                                                }
-                                                                self.showingGeminiFailAlert = true
-                                                                gemeniGeneratingQuiz = false
+                                                let message = (quizStorage.history[i].userPrompt ?? "") + "Attached Website Content:" + websiteContent
+                                                
+                                                // Unwrap userPhotos
+                                                if let userPhotos = quizStorage.history[i].userPhotos {
+                                                    geminiAPI!.sendMessage(userInput: message, selectedPhotosData: userPhotos, streamContent: false, generateQuiz: true) { response in
+                                                        //print(response)
+                                                        let (quiz, error) = decodeJSON(from: response)
+                                                        if let quiz = quiz {
+                                                            DispatchQueue.main.async {
+                                                                self.quiz = quiz
                                                             }
+                                                            self.showQuiz = true
+                                                            quizStorage.history.remove(at: i)
+                                                        } else {
+                                                            print("Failed to decode json: \(error ?? "Unknown error")")
+                                                            if response.contains("429") {
+                                                                errorText = "Rate limit exceeded. Please try again later or shorten the prompt.\n\n(If you're using a free API key, Google unfortunately imposes heavy rate limits)."
+                                                            } else if response.contains("not available in your country") {
+                                                                errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
+                                                            } else if response.contains("valid API key") {
+                                                                errorText = "API key not valid. Please pass a valid API key."
+                                                            } else {
+                                                                errorText = "Unknown error has occured! Please try a different prompt."
+                                                            }
+                                                            self.showingGeminiFailAlert = true
+                                                            gemeniGeneratingQuiz = false
                                                         }
-                                                    } else {
-                                                        print("No user photos available.")
                                                     }
                                                 } else {
-                                                    print("No user prompt available.")
+                                                    print("No user photos available.")
                                                 }
                                             } else {
                                                 self.showingGeminiAPIAlert = true
