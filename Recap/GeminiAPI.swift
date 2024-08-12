@@ -46,7 +46,7 @@ class GeminiAPI: ObservableObject {
                 SafetySetting(harmCategory: .dangerousContent, threshold: safetySettings ? .blockOnlyHigh : .blockNone),
             ],
             systemInstruction:
-                "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true, but if all answers are true and you decide to use \"all of the above\", PLEASE MAKE THE OTHER ANSWERS FALSE. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes. Use GitHub Flavored Markdown (no HTML markdown or LateX is supported) whenever possible in the questions and answers, but replace all occurences of ``` with <`>"
+                "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes. Use GitHub Flavored Markdown (no HTML markdown or LateX is supported) whenever possible in the questions and answers, but replace all occurences of ``` with <`>"
         )
         
         if let model = self.model {
@@ -62,7 +62,55 @@ class GeminiAPI: ObservableObject {
         
         let quizPrompt: String = {
             if generateQuiz {
-                return String("\n\nUse this JSON schema to generate \(numberOfQuestions == 0 ? 5 : numberOfQuestions) questions, and make sure to randomize the order of the options such that the correct answer is not always in the same place:\n\n{\n  \"quiz_title\": \"Sample Quiz\",\n  \"questions\": [\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"What is the capital of France?\",\n      \"options\": [\n        {\"text\": \"Paris\", \"correct\": true},\n        {\"text\": \"London\",  \"correct\": false},\n        {\"text\": \"Berlin\", \"correct\": false},\n        {\"text\": \"Rome\", \"correct\": false}\n      ]\n    },\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"What is the largest planet in our solar system?\",\n      \"options\": [\n        {\"text\": \"Earth\", \"correct\": false},\n        {\"text\": \"Saturn\", \"correct\": false},\n        {\"text\": \"Jupiter\", \"correct\": true},\n        {\"text\": \"Uranus\", \"correct\": false}\n      ]\n    },\n    {\n      \"type\": \"free_answer\",\n      \"question\": \"What is the meaning of life?\",\n      \"answer\": \"\" // user input will be stored here\n    },\n    {\n      \"type\": \"multiple_choice\",\n      \"question\": \"Which of the following is not a primary color?\",\n      \"options\": [\n        {\"text\": \"Red\", \"correct\": false},\n        {\"text\": \"Blue\", \"correct\": false},\n        {\"text\": \"Yellow\", \"correct\": false},\n        {\"text\": \"Green\", \"correct\": true}\n      ]\n    },\n    {\n      \"type\": \"free_answer\",\n      \"question\": \"Describe the concept of artificial intelligence.\",\n      \"answer\": \"Enter the answer here\" \n    }\n  ]\n}\n")
+                return """
+                \n\nUse this JSON schema to generate \(numberOfQuestions == 0 ? 5 : numberOfQuestions) questions, and make sure to randomize the order of the options such that the correct answer is not always in the same place:
+
+                {
+                    "quiz_title": "Sample Quiz",
+                    "questions": [
+                        {
+                            "type": "multiple_choice",
+                            "question": "What is the capital of France?",
+                            "options": [
+                                {"text": "Paris", "correct": true},
+                                {"text": "London",  "correct": false},
+                                {"text": "Berlin", "correct": false},
+                                {"text": "Rome", "correct": false}
+                            ]
+                        },
+                        {
+                            "type": "multiple_choice",
+                            "question": "Which of the following are gas giants in our solar system?",
+                            "options": [
+                                {"text": "Earth", "correct": false},
+                                {"text": "Saturn", "correct": true},
+                                {"text": "Jupiter", "correct": true},
+                                {"text": "Uranus", "correct": false}
+                            ]
+                        },
+                        {
+                            "type": "free_answer",
+                            "question": "What is the meaning of life?",
+                            "answer": "" // user input will be stored here
+                        },
+                        {
+                            "type": "multiple_choice",
+                            "question": "Which of the following is a color?",
+                            "options": [
+                                {"text": "Red", "correct": false},
+                                {"text": "Blue", "correct": false},
+                                {"text": "Yellow", "correct": false},
+                                {"text": "All of the above", "correct": true}
+                            ]
+                        },
+                        {
+                            "type": "free_answer",
+                            "question": "Describe the concept of artificial intelligence.",
+                            "answer": "Enter the answer here"
+                        }
+                    ]
+                }
+                """
             }
             return "Please follow the example JSON EXACTLY"
         }()
