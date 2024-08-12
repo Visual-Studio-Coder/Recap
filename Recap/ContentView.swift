@@ -41,7 +41,11 @@ class UserPreferences: ObservableObject {
         }
     }
     
-    
+    @Published var safetySettings: Bool {
+        didSet {
+            UserDefaults.standard.set(safetySettings, forKey: "safetySettings")
+        }
+    }
     
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
@@ -49,6 +53,7 @@ class UserPreferences: ObservableObject {
         self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-1.5-pro-latest"
         self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
         self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
+        self.safetySettings = UserDefaults.standard.bool(forKey: "safetySettings")
     }
 }
 struct ContentView: View {
@@ -297,7 +302,7 @@ struct ContentView: View {
                                 .padding(.horizontal)
                             Button {
                                 gemeniGeneratingQuiz = true
-                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
+                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                 print(userPreferences.apiKey)
                                 print(userPreferences.geminiModel)
                                 
@@ -589,7 +594,7 @@ struct ContentView: View {
                             Section {
                                 Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions, in: 1...15, onEditingChanged: { editing in
                                     if !editing {
-                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
+                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                     }
                                 })
                                 
@@ -730,7 +735,7 @@ struct ContentView: View {
                                         userInput = quizStorage.history[i].userPrompt ?? ""
                                         selectedPhotosData = quizStorage.history[i].userPhotos ?? []
                                         links = quizStorage.history[i].userLinks ?? []
-                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.geminiModel, numberOfQuestions: userPreferences.numberOfQuestions)
+                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                         print(userPreferences.apiKey)
                                         print(userPreferences.geminiModel)
                                         
@@ -908,12 +913,12 @@ struct ContentView: View {
                             }
                     }
                 })
-//                .fullScreenCover(isPresented: $showOnboarding, onDismiss: {
-//                    showOnboarding = false
-//                }, content: {
-//                    OnboardingView.init()
-//                        .ignoresSafeArea(.all)
-//                })
+                //                .fullScreenCover(isPresented: $showOnboarding, onDismiss: {
+                //                    showOnboarding = false
+                //                }, content: {
+                //                    OnboardingView.init()
+                //                        .ignoresSafeArea(.all)
+                //                })
                 .welcomeSheet(isPresented: $showOnboarding, onDismiss: {
                     showOnboarding = false
                 }, rows: onboardingRows, title: "Welcome to Recap", onConfirm: {
@@ -991,7 +996,7 @@ struct ContentView: View {
                                             SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
                                                 .focused($focus, equals: .api)
                                                 .onChange(of: userPreferences.apiKey) {
-                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
+                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                                 }
                                                 .onChange(of: userPreferences.selectedOption) {
                                                     print("Selected option changed to: \(userPreferences.selectedOption)")
@@ -1014,13 +1019,13 @@ struct ContentView: View {
                                                     }
                                                 }
                                             }
-//                                            DisclosureGroup("Model Details") {
-//                                                List {
-//                                                    HStack {
-//                                                        Label("Tokens Per Minute", systemImage: "dollarsign.circle")
-//                                                    }
-//                                                }
-//                                            }
+                                            //                                            DisclosureGroup("Model Details") {
+                                            //                                                List {
+                                            //                                                    HStack {
+                                            //                                                        Label("Tokens Per Minute", systemImage: "dollarsign.circle")
+                                            //                                                    }
+                                            //                                                }
+                                            //                                            }
                                         } header: {
                                             Text("Choose Model")
                                         } footer: {
@@ -1029,6 +1034,19 @@ struct ContentView: View {
                                             } else {
                                                 Text("Prioritize **accuracy** over speed.")
                                             }
+                                        }
+                                        
+                                        Section {
+                                            Toggle("Enable Safety Settings", isOn: $userPreferences.safetySettings)
+                                                .onChange(of: userPreferences.safetySettings) { value in
+                                                    print("Safety settings enabled: \(value)")
+                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                                }
+                                            // add an on change
+                                        } header: {
+                                            Text("Safety Settings")
+                                        } footer: {
+                                            Text("We **\(userPreferences.safetySettings ? "will" : "will not")** block content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content.")
                                         }
                                     }
                                     .navigationTitle("Gemini")
