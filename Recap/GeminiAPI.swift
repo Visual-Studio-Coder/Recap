@@ -13,24 +13,26 @@ class GeminiAPI: ObservableObject {
     private var modelName: String
     private var safetySettings: Bool
     private var numberOfQuestions: Int
+    private var selectedLanguage: String
     
-    private init(key: String, modelName: String, safetySettings: Bool, numberOfQuestions: Int) {
+    private init(key: String, modelName: String, selectedLanguage: String, safetySettings: Bool, numberOfQuestions: Int) {
         self.key = key
         self.modelName = modelName
         self.numberOfQuestions = numberOfQuestions
         self.safetySettings = safetySettings
-        initializeModel(modelName: modelName, safetySettings: safetySettings)
+        self.selectedLanguage = selectedLanguage
+        initializeModel(modelName: modelName, selectedLanguage: selectedLanguage, safetySettings: safetySettings)
     }
     
-    static func initialize(with key: String, modelName: String, safetySettings: Bool, numberOfQuestions: Int) {
-        self.shared = GeminiAPI(key: key, modelName: modelName, safetySettings: safetySettings, numberOfQuestions: numberOfQuestions)
+    static func initialize(with key: String, modelName: String, selectedLanguage: String, safetySettings: Bool, numberOfQuestions: Int) {
+        self.shared = GeminiAPI(key: key, modelName: modelName, selectedLanguage: selectedLanguage, safetySettings: safetySettings, numberOfQuestions: numberOfQuestions)
     }
     
     func clearChat() {
         chat?.history.removeAll()
     }
     
-    private func initializeModel(modelName: String, safetySettings: Bool) {
+    private func initializeModel(modelName: String, selectedLanguage: String, safetySettings: Bool) {
         let config = GenerationConfig(
             responseMIMEType: "application/json"
         )
@@ -45,8 +47,8 @@ class GeminiAPI: ObservableObject {
                 SafetySetting(harmCategory: .sexuallyExplicit, threshold: safetySettings ? .blockOnlyHigh : .blockNone),
                 SafetySetting(harmCategory: .dangerousContent, threshold: safetySettings ? .blockOnlyHigh : .blockNone),
             ],
-            systemInstruction:
-                "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes. Use GitHub Flavored Markdown (no HTML markdown or LateX is supported) whenever possible in the questions and answers, but replace all occurences of ``` with <`>"
+                                                systemInstruction:
+                                                    "You are my teacher. Determine the subject of the notes and provide a json with possible questions relating to the notes BASED ON THE EXAMPLE JSON I GIVE YOU. You may be asked to provide an explanation for a question or be asked to generate an entire quiz (more likely). For Multiple choice questions, you can mark as many answers as true. Also, make sure to use the exact same property names, but just change the contents/values of each property based on the notes provided. Also make sure that all the information is true and taken purely from the notes. Use GitHub Flavored Markdown (no HTML markdown or LateX is supported) whenever possible in the questions and answers, but replace all occurences of ``` with <`>. The user would like the quiz and future chat messages to be generated in \((Dictionary(uniqueKeysWithValues: supportedLanguages.map { ($1, $0) })[selectedLanguage] ?? "English"))."
         )
         
         if let model = self.model {
@@ -64,7 +66,7 @@ class GeminiAPI: ObservableObject {
             if generateQuiz {
                 return """
                 \n\nUse this JSON schema to generate \(numberOfQuestions == 0 ? 5 : numberOfQuestions) questions, and make sure to randomize the order of the options such that the correct answer is not always in the same place:
-
+                
                 {
                     "quiz_title": "Sample Quiz",
                     "questions": [

@@ -46,11 +46,18 @@ class UserPreferences: ObservableObject {
             UserDefaults.standard.set(safetySettings, forKey: "safetySettings")
         }
     }
+    //@State private var selectedLanguage = "en"
+    @Published var selectedLanguage: String {
+        didSet {
+            UserDefaults.standard.set(selectedLanguage, forKey: "selectedLanguage")
+        }
+    }
     
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
         self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
         self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-1.5-pro-latest"
+        self.selectedLanguage = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
         self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
         self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
         self.safetySettings = UserDefaults.standard.bool(forKey: "safetySettings")
@@ -133,6 +140,7 @@ struct ContentView: View {
     var categories: [String] {
         Set(predefinedQuizzes.map { $0.category }).sorted()
     }
+    
     
     func decodeJSON(from jsonString: String) -> (quiz: Quiz?, error: String?) {
         let jsonData = jsonString.data(using: .utf8)!
@@ -302,7 +310,7 @@ struct ContentView: View {
                                 .padding(.horizontal)
                             Button {
                                 gemeniGeneratingQuiz = true
-                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                 print(userPreferences.apiKey)
                                 print(userPreferences.geminiModel)
                                 
@@ -593,7 +601,7 @@ struct ContentView: View {
                             Section {
                                 Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions, in: 1...15, onEditingChanged: { editing in
                                     if !editing {
-                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                     }
                                 })
                                 
@@ -735,10 +743,10 @@ struct ContentView: View {
                                     Button(action: {
                                         showingAllQuizzes = false
                                         gemeniGeneratingQuiz = true
-                                            userInput = quizStorage.history[i].userPrompt ?? ""
-                                            selectedPhotosData = quizStorage.history[i].userPhotos ?? []
-                                            links = quizStorage.history[i].userLinks ?? []
-                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                        userInput = quizStorage.history[i].userPrompt ?? ""
+                                        selectedPhotosData = quizStorage.history[i].userPhotos ?? []
+                                        links = quizStorage.history[i].userLinks ?? []
+                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                         print(userPreferences.apiKey)
                                         print(userPreferences.geminiModel)
                                         
@@ -994,7 +1002,7 @@ struct ContentView: View {
                                             SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
                                                 .focused($focus, equals: .api)
                                                 .onChange(of: userPreferences.apiKey) {
-                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                                 }
                                                 .onChange(of: userPreferences.selectedOption) {
                                                     print("Selected option changed to: \(userPreferences.selectedOption)")
@@ -1038,7 +1046,7 @@ struct ContentView: View {
                                             Toggle("Enable Safety Settings", isOn: $userPreferences.safetySettings)
                                                 .onChange(of: userPreferences.safetySettings) { value in
                                                     print("Safety settings enabled: \(value)")
-                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                                 }
                                             // add an on change
                                         } header: {
@@ -1046,6 +1054,25 @@ struct ContentView: View {
                                         } footer: {
                                             Text("We **\(userPreferences.safetySettings ? "will" : "will not")** block content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content.")
                                         }
+                                        
+                                        // add choose language here
+                                        Section {
+                                            Picker("Choose Language", selection: $userPreferences.selectedLanguage) {
+                                                ForEach(supportedLanguages.sorted(by: <), id: \.key) { language, code in
+                                                    Text(language).tag(code)
+                                                }
+                                            }
+                                            .pickerStyle(MenuPickerStyle())
+                                            .onChange(of: userPreferences.selectedLanguage) { value in
+                                                print("Safety settings enabled: \(value)")
+                                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                            }
+                                        } header: {
+                                            Text("Language")
+                                        } footer: {
+                                            Text("Choose what language you'd like your quiz to be generated in.")
+                                        }
+                                        
                                     }
                                     .navigationTitle("Gemini")
                                 } label: {
@@ -1264,3 +1291,45 @@ struct QuizResultsView: View {
         }
     }
 }
+
+
+let supportedLanguages = [
+    "Arabic": "ar",
+    "Bengali": "bn",
+    "Bulgarian": "bg",
+    "Chinese (Simplified and Traditional)": "zh",
+    "Croatian": "hr",
+    "Czech": "cs",
+    "Danish": "da",
+    "Dutch": "nl",
+    "English": "en",
+    "Estonian": "et",
+    "Finnish": "fi",
+    "French": "fr",
+    "German": "de",
+    "Greek": "el",
+    "Hebrew": "iw",
+    "Hindi": "hi",
+    "Hungarian": "hu",
+    "Indonesian": "id",
+    "Italian": "it",
+    "Japanese": "ja",
+    "Korean": "ko",
+    "Latvian": "lv",
+    "Lithuanian": "lt",
+    "Norwegian": "no",
+    "Polish": "pl",
+    "Portuguese": "pt",
+    "Romanian": "ro",
+    "Russian": "ru",
+    "Serbian": "sr",
+    "Slovak": "sk",
+    "Slovenian": "sl",
+    "Spanish": "es",
+    "Swahili": "sw",
+    "Swedish": "sv",
+    "Thai": "th",
+    "Turkish": "tr",
+    "Ukrainian": "uk",
+    "Vietnamese": "vi"
+]
