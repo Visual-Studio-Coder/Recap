@@ -276,6 +276,9 @@
     "Education Free of Charge" : {
 
     },
+    "Enable Safety Settings" : {
+
+    },
     "Enter a free response" : {
       "localizations" : {
         "es" : {
@@ -664,6 +667,9 @@
         }
       }
     },
+    "Safety Settings" : {
+
+    },
     "Save Quiz Results" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -890,6 +896,9 @@
           }
         }
       }
+    },
+    "We **%@** block content which contains harassment, hate speech, sexually explicit, or dangerous content." : {
+
     },
     "We do not collect any data from our users. All quizzes are saved locally on your device and we do not access or store:" : {
       "localizations" : {

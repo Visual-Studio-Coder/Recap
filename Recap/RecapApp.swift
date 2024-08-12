@@ -21,7 +21,7 @@ struct RecapApp: App {
                     }
                 }
                 .onAppear {
-                    GeminiAPI.initialize(with: key, modelName: userPreferences.selectedOption, numberOfQuestions: userPreferences.numberOfQuestions)
+                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                 }
                 .splashView {
                     ZStack {
