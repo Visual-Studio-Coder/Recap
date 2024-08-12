@@ -36,10 +36,16 @@ class QuizStorage: ObservableObject {
     func load() async {
         do {
             let fileURL = try Self.fileURL()
-            let data = try Data(contentsOf: fileURL)
-            let history = try JSONDecoder().decode([Quiz].self, from: data)
-            DispatchQueue.main.async {
-                self.history = history
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                let data = try Data(contentsOf: fileURL)
+                let history = try JSONDecoder().decode([Quiz].self, from: data)
+                DispatchQueue.main.async {
+                    self.history = history
+                }
+            } else {
+                // File does not exist, initialize with empty history
+                self.history = []
+                await save(history: self.history)
             }
         } catch {
             print("Failed to load quizzes: \(error)")

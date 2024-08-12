@@ -255,12 +255,32 @@
         }
       }
     },
+    "Choose Language" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige Idioma"
+          }
+        }
+      }
+    },
     "Choose Model" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Selecciona Modelo"
+          }
+        }
+      }
+    },
+    "Choose what language you'd like your quiz to be generated in." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige en qué idioma te gustaría que se genere tu cuestionario."
           }
         }
       }
@@ -605,6 +625,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Introduce los adjuntos para generar un cuestionario"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
           }
         }
       }
