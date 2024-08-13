@@ -59,7 +59,9 @@ TL;DR
 ## How to generate a quiz using Recap
 1. Install [Recap](https://apps.apple.com/us/app/recap-ai/id6602897472) from the App Store.
 - You can also follow these [installation instructions](#installation) to install it from GitHub
-2. Complete the Onboarding process and input your [API key](https://aistudio.google.com/app/apikey)
+2. Complete the Onboarding process and input your free Gemini [API key](https://aistudio.google.com/app/apikey)
+- If you aren't able to get the key from your iPhone, try opening the link on your laptop.
+- When you attempt to generate a quiz, you'll see a popup saying "Input your API key!" To fix this, open `Settings` (top right corner), scroll down, and click on `Gemini` under the model configurations. You'll see a textfield with a place to input your API key.
 > [!CAUTION]
 > Be sure not to share your API key with anybody else!
 3. Add attachments using the buttons marked for images and URLs, and add text-based attachments to the textfield.
@@ -110,6 +112,9 @@ To use Recap, follow these steps:
 2. Select your target device or simulator.
 3. Click the "Run" button or press `Cmd + R` to build and run the app.
 
+## FAQ
+- Why do I need to input an API key?
+    - Unfortunately, as an indie developer, I can't afford to provide free AI access for everyone. However, Google, a very generous company, offers powerful AI tools for developers at no cost. All you need to do is input the key. If you need help adding the key, feel free to contact me or submit an issue!
 
 ## Contributing
 We welcome contributions from the community. Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
