@@ -123,7 +123,6 @@ We welcome contributions from the community. Please read our [contributing guide
 This project is licensed under the Apache Version 2 License - see the [`LICENSE`](https://github.com/TopGApps/Recap/blob/master/LICENSE) file for details.
 
 ## Authors and Acknowledgments
-- **Aaron Ma** - [GitHub](https://github.com/aaronhma)
 - **Vaibhav Satishkumar** - [GitHub](https://github.com/Visual-Studio-Coder)
 
 ## Contact
