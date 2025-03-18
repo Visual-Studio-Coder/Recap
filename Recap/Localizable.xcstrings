@@ -5,6 +5,7 @@
 
     },
     " Gemini 1.5 Flash" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -16,6 +17,7 @@
       "shouldTranslate" : false
     },
     " Gemini 1.5 Pro" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -25,6 +27,12 @@
         }
       },
       "shouldTranslate" : false
+    },
+    " Gemini 2.0 Flash" : {
+
+    },
+    " Gemini 2.0 Pro" : {
+
     },
     "**Receiving Response from Gemini...**" : {
       "localizations" : {
@@ -117,6 +125,7 @@
       "shouldTranslate" : false
     },
     "Add images, links to webpages/articles/PDFs/YouTube videos, and text, and we'll feed it to the AI for you!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -197,6 +206,9 @@
         }
       }
     },
+    "API Key Required" : {
+
+    },
     "App Details" : {
       "localizations" : {
         "es" : {
@@ -236,6 +248,7 @@
       }
     },
     "Attach Anything" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -285,6 +298,9 @@
         }
       }
     },
+    "Choose Your Model" : {
+
+    },
     "Clear" : {
       "localizations" : {
         "es" : {
@@ -315,6 +331,9 @@
         }
       }
     },
+    "Content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content will be blocked." : {
+
+    },
     "Contribute" : {
       "localizations" : {
         "es" : {
@@ -336,6 +355,7 @@
       }
     },
     "Create Personalized Quizzes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -386,6 +406,7 @@
       }
     },
     "Education Free of Charge" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -424,6 +445,9 @@
           }
         }
       }
+    },
+    "Enter your Gemini API key" : {
+
     },
     "Exit Quiz" : {
       "localizations" : {
@@ -507,6 +531,7 @@
       "shouldTranslate" : false
     },
     "Generate a quiz based solely on your notes from class." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -556,6 +581,12 @@
           }
         }
       }
+    },
+    "Get API Key" : {
+
+    },
+    "Get your free API key from Google AI Studio:" : {
+
     },
     "Google Gemini:" : {
       "localizations" : {
@@ -660,6 +691,9 @@
         }
       }
     },
+    "No content filtering will be applied. Note that this may result in inappropriate content being generated." : {
+
+    },
     "No guarantee, but we'll try to get Gemini to generate only ^[%lld question](inflect: true)." : {
       "localizations" : {
         "es" : {
@@ -731,6 +765,7 @@
       }
     },
     "Powered by Google Gemini, get access to free AI-powered quizzes without any ads." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -832,6 +867,9 @@
         }
       }
     },
+    "Recap uses Google Gemini to power its AI features" : {
+
+    },
     "Regenerate Quiz" : {
       "localizations" : {
         "es" : {
@@ -892,6 +930,9 @@
           }
         }
       }
+    },
+    "Select which Gemini model you'd like to use" : {
+
     },
     "Settings" : {
       "localizations" : {
@@ -1128,6 +1169,7 @@
       }
     },
     "Welcome to Recap" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1136,6 +1178,9 @@
           }
         }
       }
+    },
+    "Welcome to Recap AI" : {
+
     },
     "What would you like a quiz on?" : {
       "localizations" : {
@@ -1156,6 +1201,9 @@
           }
         }
       }
+    },
+    "Would you like to enable content filtering?" : {
+
     },
     "You got this question correct" : {
       "localizations" : {
