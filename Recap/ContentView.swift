@@ -5,7 +5,7 @@ import Splash
 import LinkPresentation
 import Shimmer
 import PDFKit
-import OnboardingKit
+// Remove OnboardingKit import
 
 @MainActor
 class UserPreferences: ObservableObject {
@@ -56,7 +56,7 @@ class UserPreferences: ObservableObject {
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
         self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
-        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-1.5-pro-latest"
+        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-2.0-pro-latest"
         self.selectedLanguage = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
         self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
         self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
@@ -77,16 +77,11 @@ struct ContentView: View {
     @AppStorage("apiKey") private var apiKey = ""
     @AppStorage("showOnboarding") private var showOnboarding = true
     
-    let onboardingRows = [
-        OnboardingRow(image: Image(systemName: "brain.head.profile"), title: "Create Personalized Quizzes", description: "Generate a quiz based solely on your notes from class."),
-        OnboardingRow(image: Image(systemName: "dollarsign.arrow.circlepath"), title: "Education Free of Charge", description: "Powered by Google Gemini, get access to free AI-powered quizzes without any ads."),
-        OnboardingRow(image: Image(systemName: "doc"), title: "Attach Anything", description: "Add images, links to webpages/articles/PDFs/YouTube videos, and text, and we'll feed it to the AI for you!")
-    ]
+    // Remove onboardingRows array as it's no longer needed
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
-    //@AppStorage("model") private var selectedOption = "gemini-1.5-pro-latest"
-    let options = ["gemini-1.5-pro-latest", "gemini-1.5-flash"]
+    let options = ["gemini-2.0-pro-latest", "gemini-2.0-flash"]
     
     @State private var quiz: Quiz?
     @State private var showingQuizSheet = false
@@ -109,7 +104,7 @@ struct ContentView: View {
     
     // Settings
     //@AppStorage("geminiModel") private var geminiModel = AppSettings.geminiModel
-    let geminiModels = ["1.5 Pro", "1.5 Flash"]
+    let geminiModels = ["2.0 Pro", "2.0 Flash"]
     
     // Web Search
     @State private var showingURLSheet = false
@@ -392,6 +387,8 @@ struct ContentView: View {
                                                     errorText = "Gemini API free tier is not available in your country. Please enable billing on your project in Google AI Studio.\n\n(Switch your VPN to the United States 😉)."
                                                 } else if response.contains("valid API key") {
                                                     errorText = "API key not valid. Please pass a valid API key."
+                                                } else if response.contains("The model is overloaded") {
+                                                    errorText = "The model is overloaded. Please try again later."
                                                 } else {
                                                     errorText = "Unknown error has occured! Please try a different prompt."
                                                 }
@@ -925,10 +922,11 @@ struct ContentView: View {
                 //                    OnboardingView.init()
                 //                        .ignoresSafeArea(.all)
                 //                })
-                .welcomeSheet(isPresented: $showOnboarding, onDismiss: {
+                .fullScreenCover(isPresented: $showOnboarding, onDismiss: {
                     showOnboarding = false
-                }, rows: onboardingRows, title: "Welcome to Recap", onConfirm: {
-                    showOnboarding = false
+                }, content: {
+                    OnboardingView()
+                        .environmentObject(userPreferences)
                 })
                 
                 .sheet(isPresented: $showingSettingsSheet) {
@@ -1017,10 +1015,10 @@ struct ContentView: View {
                                             Picker("Preferred Model", selection: $userPreferences.selectedOption) {
                                                 ForEach(options, id: \.self) { option in
                                                     HStack {
-                                                        if option == "gemini-1.5-pro-latest" {
-                                                            Label(" Gemini 1.5 Pro", systemImage: "brain.head.profile")
+                                                        if option == "gemini-2.0-pro-latest" {
+                                                            Label(" Gemini 2.0 Pro", systemImage: "brain.head.profile")
                                                         } else {
-                                                            Label(" Gemini 1.5 Flash", systemImage: "bolt.fill")
+                                                            Label(" Gemini 2.0 Flash", systemImage: "bolt.fill")
                                                         }
                                                     }
                                                 }
@@ -1035,7 +1033,7 @@ struct ContentView: View {
                                         } header: {
                                             Text("Choose Model")
                                         } footer: {
-                                            if userPreferences.selectedOption == "gemini-1.5-flash" {
+                                            if userPreferences.selectedOption == "gemini-2.0-flash" {
                                                 Text("Prioritize **faster response** over accuracy.")
                                             } else {
                                                 Text("Prioritize **accuracy** over speed.")

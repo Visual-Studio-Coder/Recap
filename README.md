@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/platform-iOS%2017.0%20|%20iPadOS%2017.0%20|%20macOS%2014.5%20|%20Vision%20Pro-blue">
   <img src="https://img.shields.io/badge/language-Swift-orange">
   <img src="https://img.shields.io/badge/App%20Store-Available-brightgreen">
-  <img src="https://img.shields.io/badge/model-Gemini%201.5-red">
+  <img src="https://img.shields.io/badge/model-Gemini%202.0-red">
 </p>
 
 ## Features
@@ -46,7 +46,7 @@ TL;DR
 
 - **Impact**: We are the first quizzing iOS app to use Gemini's large context window to deliver accurate quizzes. Our solution is designed to be easy and enjoyable for everyone, including people with disabilities. SwiftUI provides robust accessibility features out-of-the-box, such as VoiceOver, Dynamic Type, and support for various input methods. By choosing SwiftUI, we ensure that our app is accessible to a wider audience, including those with visual, auditory, and motor impairments. Additionally, we have localized the app to Spanish, making it accessible to a broader user base. Our app has the potential to contribute meaningfully to improving people's lives by providing personalized learning experiences.
 
-- **Remarkability**: Our approach is surprising both to those well-versed and not well-versed in Large Language Models (LLM). The use of Gemini 1.5 Pro for personalized quizzing is unprecedented. This innovative use of LLM technology sets our app apart from existing solutions and showcases the potential of advanced AI in educational tools.
+- **Remarkability**: Our approach is surprising both to those well-versed and not well-versed in Large Language Models (LLM). The use of Gemini 2.0 Pro for personalized quizzing is unprecedented. This innovative use of LLM technology sets our app apart from existing solutions and showcases the potential of advanced AI in educational tools.
 
 - **Creativity**: Recap differs from existing applications in both functionality and user experience. We use creative problem-solving approaches to offer a unique and personalized quizzing experience. Our app supports input from various resources like images, URLs, and plaintext, which is not commonly found in other quizzing apps. This flexibility allows users to create quizzes tailored to their specific learning materials.
 
@@ -71,7 +71,7 @@ TL;DR
 <summary>Prompting Instructions:</summary>
 
 - No need to use phrases such as "quiz me on [...]." We've already instructed Gemini to generate you a quiz. Just simply add attachments relating to whatever you'd like to be quizzed on.
-- Free users have a 32K input limit on the Gemini 1.5 Pro model, so this means you should not exceed the limit by adding too much content. Switch to `1.5 Flash` to have a significantly larger input limit.
+- Free users have a 32K input limit on the Gemini 2.0 Pro model, so this means you should not exceed the limit by adding too much content. Switch to `2.0 Flash` to have a significantly larger input limit.
 </details>
 
 > [!TIP]
@@ -130,4 +130,4 @@ For any inquiries, please contact [vsdev@duck.com](mailto:vsdev@duck.com).
 
 ---
 
-Why not download our previous app, [QR Share Pro](https://apps.apple.com/us/app/qr-share-pro/id6479589995)? It's 100% free, no ads, no in-app purchases, doesn't sell your data or track you, and is [open-source on GitHub](https://github.com/visual-studio-coder/qr-share-pro).
+Why not download my previous app, [QR Share Pro](https://apps.apple.com/us/app/qr-share-pro/id6479589995)? It's 100% free, no ads, no in-app purchases, doesn't sell your data or track you, and is [open-source on GitHub](https://github.com/visual-studio-coder/qr-share-pro).
