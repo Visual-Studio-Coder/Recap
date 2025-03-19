@@ -10,7 +10,7 @@ struct OnboardingView: View {
     @FocusState private var apiKeyFocused: Bool
     
     // Update Gemini version references
-    let options = ["gemini-2.0-pro-latest", "gemini-2.0-flash"]
+    let options = ["gemini-2.0-pro-exp-02-05", "gemini-2.0-flash"]
     
     // Brown gradient colors
     let gradientColors = [
@@ -204,6 +204,9 @@ struct OnboardingView: View {
             VStack(spacing: 15) {
                 // Updated text field styling with transparent background
                 SecureField("Enter your Gemini API key", text: $userPreferences.apiKey)
+                    .onChange(of: userPreferences.apiKey) {
+                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                    }
                     .padding()
                     .background(Color.white.opacity(0.2))
                     .cornerRadius(10)
@@ -306,7 +309,7 @@ struct OnboardingView: View {
             VStack(spacing: 20) {
                 // Update model names to Gemini 2.0
                 modelOptionCard(
-                    option: "gemini-2.0-pro-latest",
+                    option: "gemini-2.0-pro-exp-02-05",
                     title: "Gemini 2.0 Pro",
                     description: "Prioritize accuracy over speed",
                     icon: "brain.head.profile"
