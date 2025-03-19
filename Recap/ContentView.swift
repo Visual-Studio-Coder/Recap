@@ -56,7 +56,7 @@ class UserPreferences: ObservableObject {
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
         self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
-        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-2.0-pro-latest"
+        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-2.0-pro-exp-02-05"
         self.selectedLanguage = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
         self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
         self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
@@ -81,7 +81,7 @@ struct ContentView: View {
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
-    let options = ["gemini-2.0-pro-latest", "gemini-2.0-flash"]
+    let options = ["gemini-2.0-pro-exp-02-05", "gemini-2.0-flash"]
     
     @State private var quiz: Quiz?
     @State private var showingQuizSheet = false
@@ -1015,7 +1015,7 @@ struct ContentView: View {
                                             Picker("Preferred Model", selection: $userPreferences.selectedOption) {
                                                 ForEach(options, id: \.self) { option in
                                                     HStack {
-                                                        if option == "gemini-2.0-pro-latest" {
+                                                        if option == "gemini-2.0-pro-exp-02-05" {
                                                             Label(" Gemini 2.0 Pro", systemImage: "brain.head.profile")
                                                         } else {
                                                             Label(" Gemini 2.0 Flash", systemImage: "bolt.fill")
