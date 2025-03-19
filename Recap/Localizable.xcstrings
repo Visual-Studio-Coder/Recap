@@ -85,6 +85,9 @@
         }
       }
     },
+    "%lld Stars" : {
+
+    },
     "%lld/%lld (%@%%)" : {
       "localizations" : {
         "en" : {
@@ -332,6 +335,9 @@
       }
     },
     "Content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content will be blocked." : {
+
+    },
+    "Continue" : {
 
     },
     "Contribute" : {
@@ -598,6 +604,9 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "Help me earn the Starstruck badge on GitHub!" : {
+
     },
     "History" : {
       "localizations" : {
@@ -984,6 +993,12 @@
         }
       }
     },
+    "Skip for now" : {
+
+    },
+    "Star Repo" : {
+
+    },
     "Submit" : {
       "localizations" : {
         "es" : {
@@ -1003,6 +1018,9 @@
           }
         }
       }
+    },
+    "Support Open Source" : {
+
     },
     "Take Quiz Again" : {
       "localizations" : {
@@ -1254,6 +1272,9 @@
           }
         }
       }
+    },
+    "Your star helps in many ways:" : {
+
     }
   },
   "version" : "1.0"

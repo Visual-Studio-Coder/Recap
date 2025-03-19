@@ -8,6 +8,9 @@ struct OnboardingView: View {
     @State private var currentTab = 0
     @State private var showApiKeyInfo = false
     @FocusState private var apiKeyFocused: Bool
+    @State private var hasStarred = false // Track if the user has starred the repo
+    @State private var hasVisitedGitHub = false
+    @State private var repoStarCount: Int? = nil
     
     // Update Gemini version references
     let options = ["gemini-2.0-pro-exp-02-05", "gemini-2.0-flash"]
@@ -52,13 +55,21 @@ struct OnboardingView: View {
                 }
                 .tag(1)
                 
-                // Model selection page
-                pageContainer(content: modelSelectionContent, buttonText: "Next") {
-                    withAnimation {
-                        currentTab = 3
+                // Star Repository page
+                pageContainer(content: starRepoContent) {
+                    if let url = URL(string: "https://github.com/Visual-Studio-Coder/Recap") {
+                        UIApplication.shared.open(url)
                     }
                 }
                 .tag(2)
+                
+                // Model selection page
+                pageContainer(content: modelSelectionContent, buttonText: "Next") {
+                    withAnimation {
+                        currentTab = 4
+                    }
+                }
+                .tag(3)
                 
                 // Safety settings page
                 pageContainer(content: safetySettingsContent, buttonText: "Get Started") {
@@ -74,7 +85,7 @@ struct OnboardingView: View {
                     // Complete onboarding
                     dismiss()
                 }
-                .tag(3)
+                .tag(4)
             }
             .tabViewStyle(
                 PageTabViewStyle(indexDisplayMode: .never) // Properly hide the dots
@@ -110,6 +121,126 @@ struct OnboardingView: View {
                 .opacity(buttonDisabled ? 0.5 : 1)
             }
         }
+    }
+    
+    private func pageContainer(content: some View, action: @escaping () -> Void) -> some View {
+        VStack(spacing: 0) {
+            // Content in ScrollView
+            ScrollView {
+                content
+                    .padding()
+                    .padding(.bottom, 80) // Ensure content scrolls above button
+                    .onAppear {
+                        fetchRepoStars()
+                    }
+            }
+            
+            // Star Repo and navigation buttons
+            VStack(spacing: 10) {
+                // Main Star Repo button with star count bubble
+                Button(action: {
+                    if let url = URL(string: "https://github.com/Visual-Studio-Coder/Recap") {
+                        UIApplication.shared.open(url)
+                        hasVisitedGitHub = true
+                    }
+                }) {
+                    HStack {
+                        HStack(spacing: 8) {
+                            Image(systemName: "star")
+                                .font(.system(size: 18))
+                                .foregroundColor(.yellow)
+                            
+                            Text("Star Repo")
+                                .fontWeight(.medium)
+                                .foregroundColor(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        // Star count bubble
+                        if let starCount = repoStarCount {
+                            Text("\(starCount) Stars")
+                                .font(.footnote.bold())
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.gray.opacity(0.4))
+                                )
+                        }
+
+                        // External link indicator
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 12))
+                            .foregroundColor(.white.opacity(0.7))
+                            .padding(.trailing, 4)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.black.opacity(0.8))
+                    )
+                    .shadow(color: Color.black.opacity(0.3), radius: 5)
+                }
+                .padding(.horizontal, 20)
+                
+                if hasVisitedGitHub {
+                    // Continue button (appears after visiting GitHub)
+                    Button {
+                        withAnimation {
+                            currentTab += 1
+                        }
+                    } label: {
+                        Text("Continue")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .font(.headline)
+                    }
+                    .buttonStyle(BrownButtonStyle())
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 15)
+                } else {
+                    // Skip for now button (only shown before visiting GitHub)
+                    Button {
+                        withAnimation {
+                            currentTab += 1
+                        }
+                    } label: {
+                        Text("Skip for now")
+                            .font(.footnote)
+                            .foregroundColor(.white.opacity(0.6))
+                            .underline()
+                    }
+                    .padding(.bottom, 20)
+                    .padding(.top, 5)
+                }
+            }
+        }
+    }
+    
+    // Function to fetch the repo stars
+    private func fetchRepoStars() {
+        guard repoStarCount == nil else { return } // Fetch only once
+        
+        let url = URL(string: "https://api.github.com/repos/Visual-Studio-Coder/Recap")!
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                       let starCount = json["stargazers_count"] as? Int {
+                        DispatchQueue.main.async {
+                            self.repoStarCount = starCount
+                        }
+                    }
+                } catch {
+                    print("Error parsing GitHub API response:", error)
+                }
+            }
+        }.resume()
     }
     
     // Break down the page content to be used within containers
@@ -235,6 +366,7 @@ struct OnboardingView: View {
                             
                             Image(systemName: "arrow.up.right")
                                 .font(.footnote.bold())
+                                .foregroundColor(.white)
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
@@ -268,6 +400,112 @@ struct OnboardingView: View {
         //         apiKeyFocused = true
         //     }
         // }
+    }
+    
+    private var starRepoContent: some View {
+        VStack(spacing: 25) {
+            Spacer(minLength: 20)
+            
+            Image(systemName: "star.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 100, height: 100)
+                .foregroundColor(.yellow)
+                .padding()
+                .background(
+                    Circle()
+                        .fill(.black)
+                        .opacity(0.5)
+                        .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
+                )
+            
+            Text("Support Open Source")
+                .font(.system(size: 34, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: Color.black.opacity(0.2), radius: 2)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Text("Help me earn the Starstruck badge on GitHub!")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.yellow)
+                .padding(.horizontal)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Your star helps in many ways:")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 4)
+                
+                bulletPoint(text: "Makes the app more discoverable")
+                bulletPoint(text: "Motivates me to add more features")
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.white.opacity(0.15))
+                    .shadow(color: Color.black.opacity(0.2), radius: 10)
+            )
+            .padding(.horizontal)
+            
+            Spacer()
+            
+            // // GitHub-like "I've Starred the Repo" button
+            // Button {
+            //     hasStarred.toggle()
+            //     if let url = URL(string: "https://github.com/vaibhavsatishkumar/Recap"), !hasStarred {
+            //         UIApplication.shared.open(url)
+            //     }
+            // } label: {
+            //     HStack(spacing: 8) {
+            //         Image(systemName: hasStarred ? "star.fill" : "star")
+            //             .font(.system(size: 18))
+            //             .foregroundColor(.yellow)
+                    
+            //         Text(hasStarred ? "Starred" : "I've Starred the Repo")
+            //             .fontWeight(.medium)
+            //             .foregroundColor(.white)
+            //     }
+            //     .frame(maxWidth: .infinity)
+            //     .padding(.vertical, 12)
+            //     .background(
+            //         RoundedRectangle(cornerRadius: 8)
+            //             .fill(Color.black.opacity(0.8)) // Button background
+            //     )
+            //     .shadow(color: Color.black.opacity(0.3), radius: 5)
+            // }
+            // .padding(.horizontal, 20)
+            
+            // // "Skip for now" link below the button
+            // Button {
+            //     withAnimation {
+            //         currentTab = 3
+            //     }
+            // } label: {
+            //     Text("Skip for now")
+            //         .font(.footnote)
+            //         .foregroundColor(.white.opacity(0.6))
+            //         .underline()
+            // }
+            .padding(.bottom, 20)
+        }
+    }
+    
+    private func bulletPoint(text: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "star.fill")
+                .font(.system(size: 12))
+                .foregroundColor(.yellow)
+                .frame(width: 20, height: 20)
+            
+            Text(text)
+                .font(.subheadline)
+                .foregroundColor(.white.opacity(0.9))
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
     
     private var modelSelectionContent: some View {
