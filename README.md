@@ -122,12 +122,12 @@ We welcome contributions from the community. Please read our [contributing guide
 ## License
 This project is licensed under the Apache Version 2 License - see the [`LICENSE`](https://github.com/Visual-Studio-Coder/Recap/blob/master/LICENSE) file for details.
 
-## Authors and Acknowledgments
-- **Vaibhav Satishkumar** - [GitHub](https://github.com/Visual-Studio-Coder)
-
 ## Contact
 For any inquiries, please contact [vsdev@duck.com](mailto:vsdev@duck.com).
 
 ---
 
 Why not download my previous app, [QR Share Pro](https://apps.apple.com/us/app/qr-share-pro/id6479589995)? It's 100% free, no ads, no in-app purchases, doesn't sell your data or track you, and is [open-source on GitHub](https://github.com/visual-studio-coder/qr-share-pro).
+
+> [!NOTE]
+> I, Visual-Studio-Coder, am the sole developer of Recap AI, and this is the official repository listed on the App Store. QR Share Pro is unaffiliated with any other user or organization on GitHub. For those posting inappropriate spam reviews on my apps, note that whenever Apple removes a review that violates guidelines, my app is boosted on the App Store for a week, so indirectly, spammers help my app gain popularity.
