@@ -9,6 +9,8 @@
   <img src="https://img.shields.io/badge/model-Gemini%202.0-red">
 </p>
 
+#### ⚠️ Scroll down for an important disclaimer
+
 ## Features
 <details>
 
