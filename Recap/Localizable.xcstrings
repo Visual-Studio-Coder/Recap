@@ -88,6 +88,9 @@
         }
       }
     },
+    "%lld Selected" : {
+
+    },
     "%lld Stars" : {
 
     },
@@ -284,6 +287,9 @@
 
     },
     "Buy Me a Coffee" : {
+
+    },
+    "Choose from Library" : {
 
     },
     "Choose Language" : {
@@ -1073,6 +1079,9 @@
 
     },
     "Support Open Source" : {
+
+    },
+    "Take Photo" : {
 
     },
     "Take Quiz Again" : {

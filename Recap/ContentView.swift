@@ -5,7 +5,7 @@ import Splash
 import LinkPresentation
 import Shimmer
 import PDFKit
-// Remove OnboardingKit import
+import AVFoundation // Import AVFoundation
 
 @MainActor
 class UserPreferences: ObservableObject {
@@ -110,9 +110,11 @@ struct ContentView: View {
     @State private var showingURLSheet = false
     @State private var links: [String] = []
     
-    // Photos Picker
+    // Photos Picker / Camera
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
+    @State private var showingImagePicker = false // For Photo Library
+    @State private var showingCamera = false      // For Camera
     
     let predefinedQuizzes = [
         PredefinedQuiz(title: "The Importance of Recycling", description: "Learn about the importance of recycling and how it helps reduce waste and conserve natural resources.", prompt: "Quiz me on the importance of recycling.", links: [], category: "Environment"),
@@ -182,8 +184,9 @@ struct ContentView: View {
                     Spacer()
                     
                     VStack(alignment: .leading) {
-                        if !selectedItems.isEmpty || !userInput.isEmpty || !links.isEmpty {
-                            DisclosureGroup("Attachments (\((userInput.isEmpty ? 0 : 1) + selectedItems.count + links.count))", isExpanded: $attachmentsIsExpanded) {
+                        // Update DisclosureGroup label count calculation
+                        if !selectedPhotosData.isEmpty || !userInput.isEmpty || !links.isEmpty {
+                            DisclosureGroup("Attachments (\((userInput.isEmpty ? 0 : 1) + selectedPhotosData.count + links.count))", isExpanded: $attachmentsIsExpanded) { // Use selectedPhotosData.count
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack {
                                         if !userInput.isEmpty {
@@ -230,10 +233,11 @@ struct ContentView: View {
                                                         .cornerRadius(16.0)
                                                     
                                                     Button {
+                                                        // Update removal logic to handle only selectedPhotosData
                                                         if let index = selectedPhotosData.firstIndex(of: photoData) {
                                                             withAnimation {
                                                                 selectedPhotosData.remove(at: index)
-                                                                selectedItems.remove(at: index)
+                                                                // No need to modify selectedItems here anymore
                                                             }
                                                         }
                                                     } label: {
@@ -433,60 +437,34 @@ struct ContentView: View {
                             .buttonStyle(.bordered)
                             .clipShape(RoundedRectangle(cornerRadius: 100))
                             
-                            PhotosPicker(selection: $selectedItems, maxSelectionCount: 5, matching: .images) {
-                                if selectedItems.count == 1 {
-                                    Label("\(selectedItems.count != 0 ? "\(selectedItems.count) Selected" : "")", systemImage: "photo")
-                                } else if selectedItems.count == 0 {
+                            // Replace PhotosPicker with a Menu
+                            Menu {
+                                Button {
+                                    // Action to show camera
+                                    showingCamera = true
+                                } label: {
+                                    Label("Take Photo", systemImage: "camera")
+                                }
+                                .disabled(!UIImagePickerController.isSourceTypeAvailable(.camera)) // Disable if camera not available
+                                
+                                Button {
+                                    // Action to show photo library picker
+                                    showingImagePicker = true
+                                } label: {
+                                    Label("Choose from Library", systemImage: "photo.on.rectangle")
+                                }
+                            } label: {
+                                // Use the existing label logic for the button appearance
+                                if selectedPhotosData.count == 1 { // Check selectedPhotosData count now
+                                    Label("\(selectedPhotosData.count) Selected", systemImage: "photo")
+                                } else if selectedPhotosData.count == 0 {
                                     Image(systemName: "photo")
                                 } else {
-                                    Label("\(selectedItems.count != 0 ? "\(selectedItems.count) Selected" : "")", systemImage: "photo")
+                                    Label("\(selectedPhotosData.count) Selected", systemImage: "photo")
                                 }
                             }
-                            .buttonStyle(.bordered)
-                            .clipShape(RoundedRectangle(cornerRadius: 100))
-                            .onChange(of: selectedItems) {
-                                selectedPhotosData = []
-                                
-                                // Define the maximum allowed dimension for an image.
-                                let largestImageDimension: CGFloat = 768.0
-                                
-                                // Use a concurrent loop to process images in parallel.
-                                Task {
-                                    await withTaskGroup(of: Data?.self) { group in
-                                        for item in selectedItems {
-                                            group.addTask {
-                                                return try? await item.loadTransferable(type: Data.self)
-                                            }
-                                        }
-                                        
-                                        // Process each image as it finishes loading.
-                                        for await result in group {
-                                            if let data = result, let image = UIImage(data: data) {
-                                                // Check if the image fits within the largest allowed dimension.
-                                                if image.size.fits(largestDimension: largestImageDimension) {
-                                                    // If it fits, use the original image data.
-                                                    await MainActor.run {
-                                                        selectedPhotosData.append(data)
-                                                    }
-                                                } else {
-                                                    // If it doesn't fit, resize the image.
-                                                    guard let resizedImage = image.preparingThumbnail(of: CGSize(width: largestImageDimension, height: largestImageDimension).aspectFit(largestDimension: largestImageDimension)) else {
-                                                        continue
-                                                    }
-                                                    
-                                                    // Convert the resized image back to Data, if possible.
-                                                    if let resizedImageData = resizedImage.jpegData(compressionQuality: 1.0) {
-                                                        // Append the resized image data to the selectedPhotosData array.
-                                                        await MainActor.run {
-                                                            selectedPhotosData.append(resizedImageData)
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            .buttonStyle(.bordered) // Apply button style to the Menu label
+                            .clipShape(RoundedRectangle(cornerRadius: 100)) // Apply clip shape
                             
                             Button {
                                 showingURLSheet = true
@@ -507,8 +485,72 @@ struct ContentView: View {
                     }
                     .padding(.vertical)
                     .background(.ultraThinMaterial)
-                    
-                    
+                    // Add photosPicker modifier here
+                    .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems, maxSelectionCount: 5, matching: .images)
+                    // Add sheet for camera here
+                    .sheet(isPresented: $showingCamera) {
+                        ImagePicker(selectedImageData: $selectedPhotosData)
+                            .ignoresSafeArea() // Make camera view full screen
+                    }
+                    // Move onChange for selectedItems here as well
+                    .onChange(of: selectedItems) { newItems in // Use newItems parameter
+                        // This existing logic handles images chosen from the library
+                        // Don't clear selectedPhotosData here if you want to add from multiple sources
+                        // selectedPhotosData = []
+
+                        // Define the maximum allowed dimension for an image.
+                        let largestImageDimension: CGFloat = 768.0
+
+                        // Use a concurrent loop to process images in parallel.
+                        Task {
+                            await withTaskGroup(of: Data?.self) { group in
+                                for item in newItems { // Iterate over newItems
+                                    group.addTask {
+                                        return try? await item.loadTransferable(type: Data.self)
+                                    }
+                                }
+
+                                // Process each image as it finishes loading.
+                                for await result in group {
+                                    if let data = result, let image = UIImage(data: data) {
+                                        // Check if the image fits within the largest allowed dimension.
+                                        if image.size.fits(largestDimension: largestImageDimension) {
+                                            // If it fits, use the original image data.
+                                            await MainActor.run {
+                                                // Append, don't replace, to handle multiple sources
+                                                if !selectedPhotosData.contains(data) {
+                                                    selectedPhotosData.append(data)
+                                                }
+                                            }
+                                        } else {
+                                            // If it doesn't fit, resize the image.
+                                            guard let resizedImage = image.preparingThumbnail(of: CGSize(width: largestImageDimension, height: largestImageDimension).aspectFit(largestDimension: largestImageDimension)) else {
+                                                continue
+                                            }
+
+                                            // Convert the resized image back to Data, if possible.
+                                            if let resizedImageData = resizedImage.jpegData(compressionQuality: 1.0) {
+                                                // Append the resized image data to the selectedPhotosData array.
+                                                await MainActor.run {
+                                                    // Append, don't replace, to handle multiple sources
+                                                    if !selectedPhotosData.contains(resizedImageData) {
+                                                         selectedPhotosData.append(resizedImageData)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                // Clear selectedItems after processing to avoid re-processing if picker shown again
+                                // Only clear if you intend the picker to be for single additions,
+                                // otherwise, keep them if you want the picker to reflect current selection state.
+                                // For now, let's clear them as the original logic did.
+                                selectedItems = []
+                            }
+                        }
+                    }
+
+
                 }
                 
                 //.navigationTitle("Recap")
@@ -1465,3 +1507,62 @@ let supportedLanguages = [
     "Ukrainian": "uk",
     "Vietnamese": "vi"
 ]
+
+// --- Add ImagePicker Struct and Coordinator ---
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var selectedImageData: [Data]
+    @Environment(\.presentationMode) private var presentationMode
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        picker.sourceType = .camera // Specify camera source
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                // Process the captured image (similar to PhotosPicker logic)
+                let largestImageDimension: CGFloat = 768.0
+                var imageData: Data?
+
+                if uiImage.size.fits(largestDimension: largestImageDimension) {
+                    imageData = uiImage.jpegData(compressionQuality: 1.0)
+                } else {
+                    if let resizedImage = uiImage.preparingThumbnail(of: CGSize(width: largestImageDimension, height: largestImageDimension).aspectFit(largestDimension: largestImageDimension)) {
+                        imageData = resizedImage.jpegData(compressionQuality: 1.0)
+                    }
+                }
+
+                if let finalData = imageData {
+                    // Append the data to the parent's binding
+                    // Ensure this runs on the main thread if it updates UI-bound state
+                    DispatchQueue.main.async {
+                         if !self.parent.selectedImageData.contains(finalData) {
+                             self.parent.selectedImageData.append(finalData)
+                         }
+                    }
+                }
+            }
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+    }
+}
+// --- End of ImagePicker Struct ---
