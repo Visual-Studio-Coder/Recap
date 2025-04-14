@@ -24,6 +24,7 @@ struct OnboardingView: View {
     
     var body: some View {
         ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
             // Rich brown gradient background
             LinearGradient(
                 gradient: Gradient(colors: gradientColors),

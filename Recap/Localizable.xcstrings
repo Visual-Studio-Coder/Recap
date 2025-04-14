@@ -44,6 +44,9 @@
         }
       }
     },
+    "**Reminder: Never share API keys.**" : {
+
+    },
     "%@" : {
       "localizations" : {
         "es" : {
@@ -127,6 +130,9 @@
       },
       "shouldTranslate" : false
     },
+    "About" : {
+
+    },
     "Add images, links to webpages/articles/PDFs/YouTube videos, and text, and we'll feed it to the AI for you!" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -159,6 +165,7 @@
       }
     },
     "Add your API keys and configure how you want the AI to respond." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -200,6 +207,7 @@
       }
     },
     "API Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -213,6 +221,7 @@
 
     },
     "App Details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -271,7 +280,14 @@
         }
       }
     },
+    "Bug Report" : {
+
+    },
+    "Buy Me a Coffee" : {
+
+    },
     "Choose Language" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -282,6 +298,7 @@
       }
     },
     "Choose Model" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -291,7 +308,11 @@
         }
       }
     },
+    "Choose the language for quiz generation." : {
+
+    },
     "Choose what language you'd like your quiz to be generated in." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -341,6 +362,7 @@
 
     },
     "Contribute" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -390,6 +412,9 @@
           }
         }
       }
+    },
+    "Developer" : {
+
     },
     "Done" : {
       "localizations" : {
@@ -505,6 +530,9 @@
         }
       }
     },
+    "Feature Request" : {
+
+    },
     "Feedback:" : {
       "localizations" : {
         "es" : {
@@ -516,6 +544,7 @@
       }
     },
     "Furthermore, we do not collect any analytics. Read on to understand the terms and conditions imposed by Google's Gemini on your data." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -526,6 +555,7 @@
       }
     },
     "Gemini" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -535,6 +565,9 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "General" : {
+
     },
     "Generate a quiz based solely on your notes from class." : {
       "extractionState" : "stale",
@@ -579,6 +612,7 @@
       }
     },
     "Get a free API key from [makersuite.google.com](https://makersuite.google.com/app/apikey).\n**Reminder: Never share API keys.**" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -588,6 +622,9 @@
         }
       }
     },
+    "Get a free API key from makersuite.google.com." : {
+
+    },
     "Get API Key" : {
 
     },
@@ -595,6 +632,7 @@
 
     },
     "Google Gemini:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -629,6 +667,7 @@
       }
     },
     "If you are using the free Google API key, they may train models with your inputs and you may be subject to rate limits." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -639,6 +678,7 @@
       }
     },
     "Images" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -714,6 +754,7 @@
       }
     },
     "Notes you add to your quizzes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -764,6 +805,7 @@
       }
     },
     "Please review the terms of service and privacy policies of this third-party service:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -795,6 +837,7 @@
       }
     },
     "Prioritize **accuracy** over speed." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -805,6 +848,7 @@
       }
     },
     "Prioritize **faster response** over accuracy." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -855,6 +899,9 @@
         }
       }
     },
+    "Rate & Review App" : {
+
+    },
     "Recap" : {
       "localizations" : {
         "es" : {
@@ -877,6 +924,9 @@
       }
     },
     "Recap uses Google Gemini to power its AI features" : {
+
+    },
+    "Recap v%@" : {
 
     },
     "Regenerate Quiz" : {
@@ -1019,6 +1069,9 @@
         }
       }
     },
+    "Support & Feedback" : {
+
+    },
     "Support Open Source" : {
 
     },
@@ -1033,6 +1086,7 @@
       }
     },
     "Text-based notes (anything you input to create a quiz)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1043,6 +1097,7 @@
       }
     },
     "Third-Party Services" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1053,6 +1108,7 @@
       }
     },
     "This information is necessary for the models to generate quizzes. However, please note that:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1115,6 +1171,7 @@
       }
     },
     "URLs" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1137,6 +1194,7 @@
       }
     },
     "User Data" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1145,6 +1203,9 @@
           }
         }
       }
+    },
+    "Vaibhav Satishkumar" : {
+
     },
     "View Past Results" : {
       "localizations" : {
@@ -1156,7 +1217,11 @@
         }
       }
     },
+    "View Source Code" : {
+
+    },
     "We **%@** block content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1166,7 +1231,11 @@
         }
       }
     },
+    "We **%@** block potentially harmful content (harassment, hate speech, sexually explicit, dangerous)." : {
+
+    },
     "We do not collect any data from our users. All quizzes are saved locally on your device and we do not access or store:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1177,6 +1246,7 @@
       }
     },
     "We integrate with Google's Gemini to provide multimodal models for quiz generation. When you use these services, we provide them with the following user information:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

@@ -931,168 +931,302 @@ struct ContentView: View {
                 
                 .sheet(isPresented: $showingSettingsSheet) {
                     NavigationStack {
-                        Form {
-                            //                            Section("AI Model") {
-                            //                                Toggle(isOn: .constant(true)) {
-                            //                                    Label("Use Gemini", systemImage: "cpu")
-                            //                                }
-                            //                            }
-                            
-                            Section("App Details") {
-                                Button {
-                                    showOnboarding = true
-                                } label: {
-                                    Label("Show Onboarding", systemImage: "hand.wave.fill")
-                                }
-                                Button {
-                                    if let url = URL(string: "https://github.com/Visual-Studio-Coder/Recap") {
-                                        UIApplication.shared.open(url)
-                                    }
-                                } label: {
-                                    HStack {
-                                        Label("Contribute", systemImage: "curlybraces")
-                                        Spacer()
-                                        Image(systemName: "arrow.up.right")
-                                            .tint(.secondary)
-                                    }
-                                }
-                                .tint(.primary)
-                                DisclosureGroup {
-                                    Markdown(
-                                """
-                                # \(NSLocalizedString("Privacy Policy", comment: ""))
-                                
-                                ## \(NSLocalizedString("User Data", comment: ""))
-                                \(NSLocalizedString("We do not collect any data from our users. All quizzes are saved locally on your device and we do not access or store:", comment: ""))
-                                - \(NSLocalizedString("Images", comment: ""))
-                                - \(NSLocalizedString("URLs", comment: ""))
-                                - \(NSLocalizedString("Notes you add to your quizzes", comment: ""))
-                                
-                                \(NSLocalizedString("Furthermore, we do not collect any analytics. Read on to understand the terms and conditions imposed by Google's Gemini on your data.", comment: ""))
-                                
-                                ## \(NSLocalizedString("Third-Party Services", comment: ""))
-                                \(NSLocalizedString("We integrate with Google's Gemini to provide multimodal models for quiz generation. When you use these services, we provide them with the following user information:", comment: ""))
-                                - \(NSLocalizedString("Images", comment: ""))
-                                - \(NSLocalizedString("URLs", comment: ""))
-                                - \(NSLocalizedString("Text-based notes (anything you input to create a quiz)", comment: ""))
-                                
-                                \(NSLocalizedString("This information is necessary for the models to generate quizzes. However, please note that:", comment: ""))
-                                - \(NSLocalizedString("If you are using the free Google API key, they may train models with your inputs and you may be subject to rate limits.", comment: ""))
-                                
-                                \(NSLocalizedString("Please review the terms of service and privacy policies of this third-party service:", comment: ""))
-                                - \(NSLocalizedString("Google Gemini:", comment: "")) [ai.google.dev/gemini-api/terms](https://ai.google.dev/gemini-api/terms)
-                                """
-                                    )
-                                    
-                                    
-                                    
-                                    
-                                } label: {
-                                    Label("Privacy Policy", systemImage: "hand.raised.circle.fill")
-                                }
-                                
-                            }
-                            
+                        // Replace Form with List
+                        List {
+                            // Section: AI Model Configurations (Moved to top)
                             Section {
-                                NavigationLink {
-                                    Form {
-                                        Section {
-                                            SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
-                                                .focused($focus, equals: .api)
-                                                .onChange(of: userPreferences.apiKey) {
-                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
-                                                }
-                                                .onChange(of: userPreferences.selectedOption) {
-                                                    print("Selected option changed to: \(userPreferences.selectedOption)")
-                                                }
-                                        } header: {
-                                            Text("API Key")
-                                        } footer: {
-                                            Text("Get a free API key from [makersuite.google.com](https://makersuite.google.com/app/apikey).\n**Reminder: Never share API keys.**")
+                                // Keep Gemini settings directly here, using Labels with SettingsBoxView
+                                Label {
+                                    SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
+                                        .focused($focus, equals: .api)
+                                        .onChange(of: userPreferences.apiKey) {
+                                            GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                         }
-                                        
-                                        Section {
-                                            Picker("Preferred Model", selection: $userPreferences.selectedOption) {
-                                                ForEach(options, id: \.self) { option in
-                                                    HStack {
-                                                        if option == "gemini-2.0-pro-exp-02-05" {
-                                                            Label(" Gemini 2.0 Pro", systemImage: "brain.head.profile")
-                                                        } else {
-                                                            Label(" Gemini 2.0 Flash", systemImage: "bolt.fill")
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            //                                            DisclosureGroup("Model Details") {
-                                            //                                                List {
-                                            //                                                    HStack {
-                                            //                                                        Label("Tokens Per Minute", systemImage: "dollarsign.circle")
-                                            //                                                    }
-                                            //                                                }
-                                            //                                            }
-                                        } header: {
-                                            Text("Choose Model")
-                                        } footer: {
-                                            if userPreferences.selectedOption == "gemini-2.0-flash" {
-                                                Text("Prioritize **faster response** over accuracy.")
-                                            } else {
-                                                Text("Prioritize **accuracy** over speed.")
-                                            }
+                                        .onChange(of: userPreferences.selectedOption) {
+                                            print("Selected option changed to: \(userPreferences.selectedOption)")
                                         }
-                                        
-                                        Section {
-                                            Toggle("Enable Safety Settings", isOn: $userPreferences.safetySettings)
-                                                .onChange(of: userPreferences.safetySettings) { value in
-                                                    print("Safety settings enabled: \(value)")
-                                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
-                                                }
-                                            // add an on change
-                                        } header: {
-                                            Text("Safety Settings")
-                                        } footer: {
-                                            Text("We **\(userPreferences.safetySettings ? "will" : "will not")** block content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content.")
-                                        }
-                                        
-                                        // add choose language here
-                                        Section {
-                                            Picker("Choose Language", selection: $userPreferences.selectedLanguage) {
-                                                ForEach(supportedLanguages.sorted(by: <), id: \.key) { language, code in
-                                                    Text(language).tag(code)
-                                                }
-                                            }
-                                            .pickerStyle(MenuPickerStyle())
-                                            .onChange(of: userPreferences.selectedLanguage) { value in
-                                                print("Safety settings enabled: \(value)")
-                                                GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
-                                            }
-                                        } header: {
-                                            Text("Language")
-                                        } footer: {
-                                            Text("Choose what language you'd like your quiz to be generated in.")
-                                        }
-                                        
-                                    }
-                                    .navigationTitle("Gemini")
-                                } label: {
-                                    Text("Gemini")
+                                } icon: {
+                                    SettingsBoxView(icon: "key.fill", color: .gray) // Example color
                                 }
+
+                                Picker(selection: $userPreferences.selectedOption) {
+                                    ForEach(options, id: \.self) { option in
+                                        HStack {
+                                            if option == "gemini-2.0-pro-exp-02-05" {
+                                                Label(" Gemini 2.0 Pro", systemImage: "brain.head.profile")
+                                            } else {
+                                                Label(" Gemini 2.0 Flash", systemImage: "bolt.fill")
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    // Use Label for Picker with SettingsBoxView
+                                    Label {
+                                        Text("Preferred Model")
+                                    } icon: {
+                                        SettingsBoxView(icon: "cpu", color: .blue) // Example color
+                                    }
+                                }
+
+                                // Language Picker removed from here
+
                             } header: {
                                 Text("AI Model Configurations")
                             } footer: {
-                                Text("Add your API keys and configure how you want the AI to respond.")
+                                // Adjust footer text - Markdown support is limited in footers, use simple Text
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text("Get a free API key from makersuite.google.com.")
+                                    Text("**Reminder: Never share API keys.**")
+                                    // Removed language text from here
+                                }
                             }
+
+                            // Section: Safety Settings (Separate Section)
+                            Section {
+                                Toggle(isOn: $userPreferences.safetySettings) {
+                                    // Use Label for Toggle with SettingsBoxView
+                                    Label {
+                                        Text("Enable Safety Settings")
+                                    } icon: {
+                                        SettingsBoxView(icon: "shield.lefthalf.filled", color: .green) // Example color
+                                    }
+                                }
+                                .onChange(of: userPreferences.safetySettings) { value in
+                                    print("Safety settings enabled: \(value)")
+                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                }
+                            } footer: {
+                                Text("We **\(userPreferences.safetySettings ? "will" : "will not")** block potentially harmful content (harassment, hate speech, sexually explicit, dangerous).")
+                            }
+
+                            // Section: Language (Separate Section)
+                            Section {
+                                Picker(selection: $userPreferences.selectedLanguage) {
+                                    ForEach(supportedLanguages.sorted(by: <), id: \.key) { language, code in
+                                        Text(language).tag(code)
+                                    }
+                                } label: {
+                                    // Use Label for Picker with SettingsBoxView
+                                    Label {
+                                        Text("Language")
+                                    } icon: {
+                                        SettingsBoxView(icon: "globe", color: .indigo) // Example color
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .onChange(of: userPreferences.selectedLanguage) { value in
+                                    print("Language changed to: \(value)")
+                                    GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                }
+                            } footer: {
+                                Text("Choose the language for quiz generation.")
+                            }
+
+
+                            // Section: General
+                            Section("General") {
+                                Button {
+                                    showOnboarding = true
+                                } label: {
+                                    // Use Label with SettingsBoxView
+                                    Label {
+                                        Text("Show Onboarding")
+                                    } icon: {
+                                        SettingsBoxView(icon: "hand.wave.fill", color: .orange)
+                                    }
+                                }
+                                .tint(.primary) // Ensure button text color is standard
+                            }
+
+                            // Section: Support & Feedback
+                            Section("Support & Feedback") {
+                                // Link to Rate App
+                                Link(destination: URL(string: "itms-apps://itunes.apple.com/app/id6602897472?action=write-review")!) {
+                                     HStack {
+                                         Label {
+                                             Text("Rate & Review App")
+                                         } icon: {
+                                             SettingsBoxView(icon: "star.fill", color: .yellow) // Example color
+                                         }
+                                         Spacer()
+                                         Image(systemName: "arrow.up.right")
+                                             .foregroundStyle(.secondary)
+                                     }
+                                 }
+                                .tint(.primary)
+
+                                // Link to Bug Report
+                                Link(destination: URL(string: "https://github.com/Visual-Studio-Coder/Recap/issues/new?template=bug_report.md")!) {
+                                     HStack {
+                                         Label {
+                                             Text("Bug Report")
+                                         } icon: {
+                                             SettingsBoxView(icon: "ant.fill", color: .red) // Example color
+                                         }
+                                         Spacer()
+                                         Image(systemName: "arrow.up.right")
+                                             .foregroundStyle(.secondary)
+                                     }
+                                 }
+                                .tint(.primary)
+
+                                // Link to Feature Request
+                                Link(destination: URL(string: "https://github.com/Visual-Studio-Coder/Recap/issues/new?template=feature_request.md")!) {
+                                     HStack {
+                                         Label {
+                                             Text("Feature Request")
+                                         } icon: {
+                                             SettingsBoxView(icon: "lightbulb.fill", color: .cyan) // Example color
+                                         }
+                                         Spacer()
+                                         Image(systemName: "arrow.up.right")
+                                             .foregroundStyle(.secondary)
+                                     }
+                                 }
+                                .tint(.primary)
+                            }
+
+                            // Section: About
+                            Section("About") {
+                                // Link to GitHub (Renamed)
+                                Link(destination: URL(string: "https://github.com/Visual-Studio-Coder/Recap")!) {
+                                    HStack {
+                                        Label {
+                                            Text("View Source Code") // Renamed from "Contribute"
+                                        } icon: {
+                                            // Replace SettingsBoxView with AsyncImage for GitHub icon
+                                            AsyncImage(url: URL(string: "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/github-white-icon.png")) { image in
+                                                image
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .padding(4) // Add padding to make the icon smaller
+                                                    .frame(width: 30, height: 30) // Keep the frame size
+                                                    .background(.black) // Match SettingsBoxView background
+                                                    .clipShape(RoundedRectangle(cornerRadius: 7))
+                                            } placeholder: {
+                                                // Placeholder with matching style
+                                                // Use a simple Rectangle as placeholder background matching the frame
+                                                Rectangle()
+                                                    .fill(.black) // Match background
+                                                    .frame(width: 30, height: 30)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 7))
+                                                    .overlay {
+                                                        ProgressView() // Show activity indicator while loading
+                                                    }
+
+                                            }
+                                        }
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right")
+                                            .foregroundStyle(.secondary) // Use foregroundStyle for tinting Images
+                                    }
+                                }
+                                .tint(.primary) // Ensure link text color is standard
+
+                                // Link to Privacy Policy
+                                Link(destination: URL(string: "https://github.com/Visual-Studio-Coder/Recap/blob/master/Privacy.md")!) {
+                                    HStack {
+                                        Label {
+                                            Text("Privacy Policy")
+                                        } icon: {
+                                            SettingsBoxView(icon: "hand.raised.circle.fill", color: .blue) // Example color
+                                        }
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .tint(.primary)
+
+                                // Link to Buy Me a Coffee
+                                Link(destination: URL(string: "https://buymeacoffee.com/visualstudiocoder")!) {
+                                     HStack {
+                                         Label {
+                                             Text("Buy Me a Coffee")
+                                         } icon: {
+                                             SettingsBoxView(icon: "cup.and.saucer.fill", color: .brown) // Example color
+                                         }
+                                         Spacer()
+                                         Image(systemName: "arrow.up.right")
+                                             .foregroundStyle(.secondary)
+                                     }
+                                 }
+                                .tint(.primary)
+                            }
+
+                            // Section: Developer (Renamed from Credits)
+                            Section("Developer") { // Renamed header
+                                Link(destination: URL(string: "https://github.com/Visual-Studio-Coder")!) {
+                                    HStack {
+                                        Label {
+                                            Text("Vaibhav Satishkumar")
+                                        } icon: {
+                                            // AsyncImage for GitHub profile picture
+                                            AsyncImage(url: URL(string: "https://avatars.githubusercontent.com/u/78756662?v=4")) { image in
+                                                image
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 30, height: 30) // Match SettingsBoxView size
+                                                    .clipShape(RoundedRectangle(cornerRadius: 7)) // Match SettingsBoxView shape
+                                            } placeholder: {
+                                                // Placeholder with matching style
+                                                Image(systemName: "person.fill")
+                                                    .font(.callout)
+                                                    .foregroundStyle(.white)
+                                                    .frame(width: 30, height: 30)
+                                                    .background(.gray) // Placeholder color
+                                                    .clipShape(RoundedRectangle(cornerRadius: 7))
+                                            }
+                                        }
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .tint(.primary)
+                            }
+
+
+                            // App Version Footer (remains at the bottom)
+                            Section {
+                                EmptyView() // Needed for footer on its own
+                            } footer: {
+                                HStack {
+                                    Spacer()
+                                    // Fetch app version dynamically
+                                    Text("Recap v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0")")
+                                        .foregroundStyle(.secondary)
+                                        .font(.caption)
+                                    Spacer()
+                                }
+                                .padding(.top) // Add some spacing above the footer
+                            }
+
                         }
+                        // Use .listStyle(.insetGrouped) for similar appearance to Form
+                        .listStyle(.insetGrouped)
                         .navigationTitle("Settings")
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement: .topBarTrailing) {
-                                Button("Done") {
+                                // Changed to X button with gray style
+                                Button {
                                     showingSettingsSheet = false
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        // .font(.title2) // Removed explicit font size
+                                        .foregroundStyle(.gray) // Use gray color
                                 }
                             }
                         }
+                        // Hide the drag indicator (the bar at the top)
+                        .presentationDragIndicator(.hidden)
                     }
-                    .presentationDetents([.medium, .large])
+                    // Apply presentation modifiers like the example
+                    .presentationDetents([.medium, .large]) // Allow medium and large sizes
+                    .presentationBackground(.regularMaterial) // Apply glassy background
+                    .presentationCornerRadius(32) // Match corner radius
+                    .presentationBackgroundInteraction(.enabled(upThrough: .large)) // Allow interaction with content behind
                 }
                 
             }

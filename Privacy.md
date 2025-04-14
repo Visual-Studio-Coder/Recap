@@ -1,15 +1,15 @@
 # Privacy Policy
                                 
 ## User Data
-We do not collect any data from our users. All quizzes are saved locally on your device, and we do not access or store:
+Recap does not collect any data from its users. All quizzes are saved locally on your device, and it does not access or store:
  - Images
  - URLs
  - Notes you add to your quizzes
                                 
-Additionally, we do not collect any analytics. Please continue reading to understand the terms and conditions that Google's Gemini impose on your data.
+Additionally, Recap does not collect any analytics. Please continue reading to understand the terms and conditions that Google's Gemini impose on your data.
                                 
 ## Third-Party Services
-We integrate with Google's Gemini to provide multi-modal models for quiz generation. When you use these services, we provide them with the following user information:
+Recap integrates with Google's Gemini to provide multi-modal models for quiz generation. When you use these services, Recap provide them with the following user information:
 - Images
 - URLs
 - Text-based notes (anything you input to make a quiz)

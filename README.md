@@ -24,7 +24,7 @@
 
 <summary>💬 Evaluate your understanding with AI-feedback</summary>
 
-- We offer an `Explain` button, allowing users to understand why each option in a question is correct/incorrect
+- Recap offers an `Explain` button, allowing users to understand why each option in a question is correct/incorrect
 - Free Response evaluates whether a user's response is correct, and it offers ways to improve their response, reguardless of whether they got it correct or not.
 - Performance feedback at the end of a quiz means that Recap can recommend reading material and concepts to work on based on the user's performance.
 </details>
@@ -46,15 +46,15 @@ TL;DR
 <details>
     <summary>More information:</summary>
 
-- **Impact**: We are the first quizzing iOS app to use Gemini's large context window to deliver accurate quizzes. Our solution is designed to be easy and enjoyable for everyone, including people with disabilities. SwiftUI provides robust accessibility features out-of-the-box, such as VoiceOver, Dynamic Type, and support for various input methods. By choosing SwiftUI, we ensure that our app is accessible to a wider audience, including those with visual, auditory, and motor impairments. Additionally, we have localized the app to Spanish, making it accessible to a broader user base. Our app has the potential to contribute meaningfully to improving people's lives by providing personalized learning experiences.
+- **Impact**: Recap is the first quizzing iOS app to use Gemini's large context window to deliver accurate quizzes. My solution is designed to be easy and enjoyable for everyone, including people with disabilities. SwiftUI provides robust accessibility features out-of-the-box, such as VoiceOver, Dynamic Type, and support for various input methods. By choosing SwiftUI, it ensures that the app is accessible to a wider audience, including those with visual, auditory, and motor impairments. Additionally, Recap has localized the app to Spanish, making it accessible to a broader user base. My app has the potential to contribute meaningfully to improving people's lives by providing personalized learning experiences.
 
-- **Remarkability**: Our approach is surprising both to those well-versed and not well-versed in Large Language Models (LLM). The use of Gemini 2.0 Pro for personalized quizzing is unprecedented. This innovative use of LLM technology sets our app apart from existing solutions and showcases the potential of advanced AI in educational tools.
+- **Remarkability**: My approach is surprising both to those well-versed and not well-versed in Large Language Models (LLM). The use of Gemini 2.0 Pro for personalized quizzing is unprecedented. This innovative use of LLM technology sets my app apart from existing solutions and showcases the potential of advanced AI in educational tools.
 
-- **Creativity**: Recap differs from existing applications in both functionality and user experience. We use creative problem-solving approaches to offer a unique and personalized quizzing experience. Our app supports input from various resources like images, URLs, and plaintext, which is not commonly found in other quizzing apps. This flexibility allows users to create quizzes tailored to their specific learning materials.
+- **Creativity**: Recap differs from existing applications in both functionality and user experience. Recap uses creative problem-solving approaches to offer a unique and personalized quizzing experience. My app supports input from various resources like images, URLs, and plaintext, which is not commonly found in other quizzing apps. This flexibility allows users to create quizzes tailored to their specific learning materials.
 
-- **Usefulness**: We have a well-defined target user persona—students who need personalized quizzes to reinforce their learning. Our solution addresses specific user needs by allowing input from various resources like images, URLs, and plaintext. The app's design ensures that it meets these needs effectively, helping users to better understand and retain the concepts they are studying.
+- **Usefulness**: Recap has a well-defined target user persona—students who need personalized quizzes to reinforce their learning. My solution addresses specific user needs by allowing input from various resources like images, URLs, and plaintext. The app's design ensures that it meets these needs effectively, helping users to better understand and retain the concepts they are studying.
 
-- **Execution**: The solution is well-designed and adheres to software engineering practices. The LLM component is also well-designed and follows Machine Learning (ML)/LLM best practices. By leveraging SwiftUI, we ensure that our app is not only visually appealing but also highly accessible and inclusive. The app's architecture and code quality are robust, modular, and maintainable, ensuring that it can be easily extended and updated in the future. We follow best practices such as code reviews and continuous integration to maintain high standards of code quality and reliability.
+- **Execution**: The solution is well-designed and adheres to software engineering practices. The LLM component is also well-designed and follows Machine Learning (ML)/LLM best practices. By leveraging SwiftUI, it ensures that my app is not only visually appealing but also highly accessible and inclusive. The app's architecture and code quality are robust, modular, and maintainable, ensuring that it can be easily extended and updated in the future. Recap follows best practices such as code reviews and continuous integration to maintain high standards of code quality and reliability.
 
 </details>
 
@@ -83,12 +83,12 @@ TL;DR
 > If you'd like to choose how many of each you want or add further customizations, add those instructions to the prompt (the textfield). Ex: In the quiz, put two multiple choice questions about [...], one multi-select, and three free response questions.
 
 ## How It Works
-As mentioned previously, we prompt Gemini with your input, and it returns a JSON with the quiz info, which we parse and put in a JSON. We then parse the JSON, rendering the quiz UI.
+As mentioned previously, Recap prompts Gemini with your input, and it returns a JSON with the quiz info, which Recap parses and put in a JSON. Recap then parses the JSON, rendering the quiz UI.
 
 
 ## Disclaimers
 > [!WARNING]
-> While we, Recap, do not collect any data from our users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on. Read our [`Privacy Policy`](https://github.com/Visual-Studio-Coder/Recap/blob/master/Privacy.md) for more information about this
+> While we, Recap, do not collect any data from its users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on. Read the [`Privacy Policy`](https://github.com/Visual-Studio-Coder/Recap/blob/master/Privacy.md) for more information about this
 
 > [!CAUTION]
 > When inputting your personal API key, be aware of the fact that on a free account, your prompts are linked to your identity and are used to train their models.
@@ -119,7 +119,7 @@ To use Recap, follow these steps:
     - Unfortunately, as an indie developer, I can't afford to provide free AI access for everyone. However, Google, a very generous company, offers powerful AI tools for developers at no cost. All you need to do is input the key. If you need help adding the key, feel free to contact me or submit an issue!
 
 ## Contributing
-We welcome contributions from the community. Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
+Recap welcomes contributions from the community. Please read the [contributing guidelines](CONTRIBUTING.md) for more information.
 
 ## License
 This project is licensed under the Apache Version 2 License - see the [`LICENSE`](https://github.com/Visual-Studio-Coder/Recap/blob/master/LICENSE) file for details.
