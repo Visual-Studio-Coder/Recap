@@ -25,7 +25,7 @@
 <summary>💬 Evaluate your understanding with AI-feedback</summary>
 
 - Recap offers an `Explain` button, allowing users to understand why each option in a question is correct/incorrect
-- Free Response evaluates whether a user's response is correct, and it offers ways to improve their response, reguardless of whether they got it correct or not.
+- Free Response evaluates whether a user's response is correct, and it offers ways to improve their response, regardless of whether they got it correct or not.
 - Performance feedback at the end of a quiz means that Recap can recommend reading material and concepts to work on based on the user's performance.
 </details>
 
@@ -41,7 +41,7 @@
 
 ## Why Recap?
 TL;DR
-> Recap is _the best_ way to ensure you understand a concept. Most online resources and practice don't cover _exactly_ what you learn at school. How do you know if you have fully understood a concept or not? You for sure don't want to "wait and find out 😣".
+> Recap is _the best_ way to ensure you understand a concept. Most online resources and practice don't cover _exactly_ what you learn at school. How do you know if you have fully understood a concept or not? You for sure don't want to "wait and find out 😣."
 
 <details>
     <summary>More information:</summary>
@@ -72,7 +72,7 @@ TL;DR
 
 <summary>Prompting Instructions:</summary>
 
-- No need to use phrases such as "quiz me on [...]." We've already instructed Gemini to generate you a quiz. Just simply add attachments relating to whatever you'd like to be quizzed on.
+- No need to use phrases such as "quiz me on [...]." Recap has already instructed Gemini to generate you a quiz. Just simply add attachments relating to whatever you'd like to be quizzed on.
 - Free users have a 32K input limit on the Gemini 2.0 Pro model, so this means you should not exceed the limit by adding too much content. Switch to `2.0 Flash` to have a significantly larger input limit.
 </details>
 
@@ -83,12 +83,12 @@ TL;DR
 > If you'd like to choose how many of each you want or add further customizations, add those instructions to the prompt (the textfield). Ex: In the quiz, put two multiple choice questions about [...], one multi-select, and three free response questions.
 
 ## How It Works
-As mentioned previously, Recap prompts Gemini with your input, and it returns a JSON with the quiz info, which Recap parses and put in a JSON. Recap then parses the JSON, rendering the quiz UI.
+As mentioned previously, Recap prompts Gemini with your input, and it returns a JSON with the quiz info, which Recap parses and puts in a JSON. Recap then parses the JSON, rendering the quiz UI.
 
 
 ## Disclaimers
 > [!WARNING]
-> While we, Recap, do not collect any data from its users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on. Read the [`Privacy Policy`](https://github.com/Visual-Studio-Coder/Recap/blob/master/Privacy.md) for more information about this
+> While Recap does not collect any data from its users, there's nothing stopping Google from collecting YOUR data, so be sure to read *their* privacy policies to be aware of what's going on. Read the [`Privacy Policy`](https://github.com/Visual-Studio-Coder/Recap/blob/master/Privacy.md) for more information about this.
 
 > [!CAUTION]
 > When inputting your personal API key, be aware of the fact that on a free account, your prompts are linked to your identity and are used to train their models.
@@ -129,7 +129,7 @@ For any inquiries, please contact [vsdev@duck.com](mailto:vsdev@duck.com).
 
 ---
 
-Why not download my previous app, [QR Share Pro](https://apps.apple.com/us/app/qr-share-pro/id6479589995)? It's 100% free, no ads, no in-app purchases, doesn't sell your data or track you, and is [open-source on GitHub](https://github.com/visual-studio-coder/qr-share-pro).
+Check out my previous app, [QR Share Pro](https://apps.apple.com/us/app/qr-share-pro/id6479589995)? It's 100% free, no ads, no in-app purchases, doesn't sell your data or track you, and is [open-source on GitHub](https://github.com/visual-studio-coder/qr-share-pro).
 
 > [!WARNING]
 > I, Visual-Studio-Coder (Vaibhav Satishkumar), am the sole developer of Recap AI, and this is the official repository listed on the App Store. Recap AI is not affiliated with any fraudulent users or organizations on GitHub falsely claiming involvement in this project. To those posting inappropriate spam reviews on my apps: whenever Apple removes a review that violates guidelines, my app gains a boost on the App Store for a week, so indirectly, spammers contribute to my app's popularity.
