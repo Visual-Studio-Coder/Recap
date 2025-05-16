@@ -2,10 +2,6 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
-    },
-    " Gemini 1.5 Flash" : {
-      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -13,29 +9,22 @@
             "value" : ""
           }
         }
-      },
+      }
+    },
+    " Gemini 2.5 Flash" : {
       "shouldTranslate" : false
     },
-    " Gemini 1.5 Pro" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      },
+    " Gemini 2.5 Pro" : {
       "shouldTranslate" : false
-    },
-    " Gemini 2.0 Flash" : {
-
-    },
-    " Gemini 2.0 Pro" : {
-
     },
     "**Receiving Response from Gemini...**" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Receiving Response from Gemini...**"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45,14 +34,33 @@
       }
     },
     "**Reminder: Never share API keys.**" : {
-
-    },
-    "%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Reminder: Never share API keys.**"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "**Recordatorio: Nunca compartas claves API.**"
+          }
+        }
+      }
+    },
+    "%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
           }
         }
       },
@@ -60,6 +68,12 @@
     },
     "%lld of %lld questions answered" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld of %lld questions answered"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -70,6 +84,12 @@
     },
     "%lld out of %lld correct" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld out of %lld correct"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -80,6 +100,12 @@
     },
     "%lld Questions" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Questions"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -89,23 +115,49 @@
       }
     },
     "%lld Selected" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Seleccionados"
+          }
+        }
+      }
     },
     "%lld Stars" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Stars"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Estrellas"
+          }
+        }
+      }
     },
     "%lld/%lld (%@%%)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$lld/%2$lld (%3$@%%)"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "%1$lld/%2$lld (%3$@%%)"
           }
         }
       },
@@ -113,10 +165,16 @@
     },
     "%lld%%" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "%lld%%"
           }
         }
       },
@@ -124,6 +182,12 @@
     },
     "🎉" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🎉"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -134,21 +198,29 @@
       "shouldTranslate" : false
     },
     "About" : {
-
-    },
-    "Add images, links to webpages/articles/PDFs/YouTube videos, and text, and we'll feed it to the AI for you!" : {
-      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Agrega imágenes, enlaces a páginas web/artículos/PDFs/videos de YouTube y texto, y se lo daremos a la IA para ti."
+            "value" : "Acerca de"
           }
         }
       }
     },
     "Add New Link" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add New Link"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -159,6 +231,12 @@
     },
     "Add up to 5 URLs" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add up to 5 URLs"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -167,30 +245,14 @@
         }
       }
     },
-    "Add your API keys and configure how you want the AI to respond." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Agrega tus claves API y configura cómo quieres que responda la IA"
-          }
-        }
-      }
-    },
-    "AI Model" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modelo de IA"
-          }
-        }
-      }
-    },
     "AI Model Configurations" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI Model Configurations"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -201,6 +263,12 @@
     },
     "All Quizzes" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Quizzes"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -209,33 +277,30 @@
         }
       }
     },
-    "API Key" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clave API"
-          }
-        }
-      }
-    },
     "API Key Required" : {
-
-    },
-    "App Details" : {
-      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API Key Required"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detalles de la Aplicación"
+            "value" : "Clave API Requerida"
           }
         }
       }
     },
     "Are you sure you want to clear history?" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to clear history?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -244,37 +309,14 @@
         }
       }
     },
-    "asdasdasd1234asfafa" : {
-      "comment" : "Random Stuff",
-      "extractionState" : "manual",
+    "Attachments (%lld)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "fghjkjhghjkjhghjklkyiuyiuyqwe1234dkakcabsmcmnabsmncbmasc"
+            "value" : "Attachments (%lld)"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "12837yeurhjbsdmasdas"
-          }
-        }
-      }
-    },
-    "Attach Anything" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adjunta Cualquier Cosa"
-          }
-        }
-      }
-    },
-    "Attachments (%lld)" : {
-      "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -284,55 +326,93 @@
       }
     },
     "Bug Report" : {
-
-    },
-    "Buy Me a Coffee" : {
-
-    },
-    "Choose from Library" : {
-
-    },
-    "Choose Language" : {
-      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bug Report"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elige Idioma"
+            "value" : "Informe de Error"
           }
         }
       }
     },
-    "Choose Model" : {
-      "extractionState" : "stale",
+    "Buy Me a Coffee" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buy Me a Coffee"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Selecciona Modelo"
+            "value" : "Invítame un Café"
+          }
+        }
+      }
+    },
+    "Choose from Library" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose from Library"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir de la Biblioteca"
           }
         }
       }
     },
     "Choose the language for quiz generation." : {
-
-    },
-    "Choose what language you'd like your quiz to be generated in." : {
-      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose the language for quiz generation."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elige en qué idioma te gustaría que se genere tu cuestionario."
+            "value" : "Elige el idioma para la generación del cuestionario."
           }
         }
       }
     },
     "Choose Your Model" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Your Model"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige Tu Modelo"
+          }
+        }
+      }
     },
     "Clear" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -343,6 +423,12 @@
     },
     "Clear All" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -353,6 +439,12 @@
     },
     "Click here to answer..." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Click here to answer..."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -362,24 +454,45 @@
       }
     },
     "Content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content will be blocked." : {
-
-    },
-    "Continue" : {
-
-    },
-    "Contribute" : {
-      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content will be blocked."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contribuir"
+            "value" : "El contenido que contenga altas cantidades de acoso, discurso de odio, contenido sexualmente explícito o peligroso será bloqueado."
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
           }
         }
       }
     },
     "Correct" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -388,19 +501,14 @@
         }
       }
     },
-    "Create Personalized Quizzes" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Crea cuestionarios personalizados"
-          }
-        }
-      }
-    },
     "Customize Question Count" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customize Question Count"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -411,6 +519,12 @@
     },
     "Delete" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -420,10 +534,29 @@
       }
     },
     "Developer" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desarrollador"
+          }
+        }
+      }
     },
     "Done" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -434,6 +567,12 @@
     },
     "Download Recap Today!" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download Recap Today!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -442,19 +581,14 @@
         }
       }
     },
-    "Education Free of Charge" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Educación gratuita"
-          }
-        }
-      }
-    },
     "Enable Safety Settings" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Safety Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -465,6 +599,12 @@
     },
     "Enter a free response" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a free response"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -475,6 +615,12 @@
     },
     "Enter URL #%lld" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter URL #%lld"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -484,10 +630,29 @@
       }
     },
     "Enter your Gemini API key" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your Gemini API key"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingresa tu clave API de Gemini"
+          }
+        }
+      }
     },
     "Exit Quiz" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exit Quiz"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -498,6 +663,12 @@
     },
     "Expected Answer:" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expected Answer:"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -508,6 +679,12 @@
     },
     "Explain" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explain"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -518,6 +695,12 @@
     },
     "Explore" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -528,19 +711,44 @@
     },
     "Explore Prompts" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore Prompts"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Explorar Prompts"
+            "value" : "Explorar Indicaciones"
           }
         }
       }
     },
     "Feature Request" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feature Request"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solicitud de Función"
+          }
+        }
+      }
     },
     "Feedback:" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback:"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -549,56 +757,30 @@
         }
       }
     },
-    "Furthermore, we do not collect any analytics. Read on to understand the terms and conditions imposed by Google's Gemini on your data." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Además, no recopilamos ningún tipo de análisis. Sigue leyendo para entender los términos y condiciones impuestos por Gemini de Google sobre tus datos."
-          }
-        }
-      }
-    },
-    "Gemini" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gemini"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
     "General" : {
-
-    },
-    "Generate a quiz based solely on your notes from class." : {
-      "extractionState" : "stale",
       "localizations" : {
-        "es" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Genera un cuestionario basado únicamente en tus notas de clase."
+            "value" : "General"
           }
-        }
-      }
-    },
-    "Generate Quiz" : {
-      "extractionState" : "stale",
-      "localizations" : {
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Generar Cuestionario"
+            "value" : "General"
           }
         }
       }
     },
     "Generating explanation..." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generating explanation..."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -609,6 +791,12 @@
     },
     "Generating quiz..." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generating quiz..."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -617,43 +805,78 @@
         }
       }
     },
-    "Get a free API key from [makersuite.google.com](https://makersuite.google.com/app/apikey).\n**Reminder: Never share API keys.**" : {
-      "extractionState" : "stale",
+    "Get a free API key from makersuite.google.com." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get a free API key from makersuite.google.com."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Obtén una clave API gratuita en [makersuite.google.com](https://makersuite.google.com/app/apikey).\n**Recordatorio: Nunca compartas tus claves API.**"
+            "value" : "Obtén una clave API gratuita en makersuite.google.com."
           }
         }
       }
     },
-    "Get a free API key from makersuite.google.com." : {
-
-    },
     "Get API Key" : {
-
-    },
-    "Get your free API key from Google AI Studio:" : {
-
-    },
-    "Google Gemini:" : {
-      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get API Key"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gemini de Google:"
+            "value" : "Obtener Clave API"
           }
         }
-      },
-      "shouldTranslate" : false
+      }
+    },
+    "Get your free API key from Google AI Studio:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get your free API key from Google AI Studio:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtén tu clave API gratuita de Google AI Studio:"
+          }
+        }
+      }
     },
     "Help me earn the Starstruck badge on GitHub!" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help me earn the Starstruck badge on GitHub!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Ayúdame a ganar la insignia Starstruck en GitHub!"
+          }
+        }
+      }
     },
     "History" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -664,6 +887,12 @@
     },
     "I got a %lld out of %lld on Recap!" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I got a %lld out of %lld on Recap!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -672,51 +901,30 @@
         }
       }
     },
-    "If you are using the free Google API key, they may train models with your inputs and you may be subject to rate limits." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Si estás utilizando la clave API gratuita de Google, es posible que entrenen modelos con tus entradas y podrías estar sujeto a límites de tasa."
-          }
-        }
-      }
-    },
-    "Images" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Imágenes"
-          }
-        }
-      }
-    },
-    "Improve Gemini for Everyone" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mejorar Gemini para Todos"
-          }
-        }
-      }
-    },
     "Input attachments to generate a quiz\n" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Input attachments to generate a quiz\n"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Introduce los adjuntos para generar un cuestionario"
+            "value" : "Ingresa adjuntos para generar un cuestionario\n"
           }
         }
       }
     },
     "Language" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -725,19 +933,14 @@
         }
       }
     },
-    "Model Details" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detalles del Modelo"
-          }
-        }
-      }
-    },
     "Next" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -747,31 +950,45 @@
       }
     },
     "No content filtering will be applied. Note that this may result in inappropriate content being generated." : {
-
-    },
-    "No guarantee, but we'll try to get Gemini to generate only ^[%lld question](inflect: true)." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No content filtering will be applied. Note that this may result in inappropriate content being generated."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sin garantías, pero intentaremos que Gemini genere solo ^[%lld pregunta](inflect: true)."
+            "value" : "No se aplicará ningún filtro de contenido. Ten en cuenta que esto puede resultar en la generación de contenido inapropiado."
           }
         }
       }
     },
-    "Notes you add to your quizzes" : {
-      "extractionState" : "stale",
+    "No guarantee, but we'll try to get Gemini to generate only ^[%lld question](inflect: true)." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No guarantee, but we'll try to get Gemini to generate only ^[%lld question](inflect: true)."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notas que agregas a tus cuestionarios"
+            "value" : "Sin garantía, pero intentaremos que Gemini genere solo ^[%lld pregunta](inflect: true)."
           }
         }
       }
     },
     "Number of Questions: %lld" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of Questions: %lld"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -782,6 +999,12 @@
     },
     "Open Settings" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -792,6 +1015,12 @@
     },
     "Paste from Clipboard" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paste from Clipboard"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -802,6 +1031,12 @@
     },
     "Performance Feedback" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Performance Feedback"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -810,30 +1045,24 @@
         }
       }
     },
-    "Please review the terms of service and privacy policies of this third-party service:" : {
-      "extractionState" : "stale",
+    "Personal Gemini API Key" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Por favor, revisa los términos de servicio y las políticas de privacidad de este servicio de terceros:"
-          }
-        }
-      }
-    },
-    "Powered by Google Gemini, get access to free AI-powered quizzes without any ads." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Impulsado por Google Gemini, accede a cuestionarios con IA gratis y sin anuncios."
+            "value" : "Clave de API Personal de Gemini"
           }
         }
       }
     },
     "Preferred Model" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferred Model"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -842,41 +1071,14 @@
         }
       }
     },
-    "Prioritize **accuracy** over speed." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prioriza **la precisión** sobre la velocidad."
-          }
-        }
-      }
-    },
-    "Prioritize **faster response** over accuracy." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prioriza una respuesta **más rápida(( sobre la precisión."
-          }
-        }
-      }
-    },
-    "Privacy" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Privacidad"
-          }
-        }
-      }
-    },
     "Privacy Policy" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -887,6 +1089,12 @@
     },
     "Question %lld" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Question %lld"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -897,6 +1105,12 @@
     },
     "Quiz Settings" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quiz Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -906,10 +1120,29 @@
       }
     },
     "Rate & Review App" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate & Review App"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calificar y Reseñar la Aplicación"
+          }
+        }
+      }
     },
     "Recap" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -921,6 +1154,12 @@
     },
     "Recap AI" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap AI"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -930,13 +1169,46 @@
       }
     },
     "Recap uses Google Gemini to power its AI features" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap uses Google Gemini to power its AI features"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap utiliza Google Gemini para potenciar sus funciones de IA"
+          }
+        }
+      }
     },
     "Recap v%@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap v%@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recap v%@"
+          }
+        }
+      },
+      "shouldTranslate" : false
     },
     "Regenerate Quiz" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regenerate Quiz"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -947,6 +1219,12 @@
     },
     "Safety Settings" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Safety Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -955,19 +1233,14 @@
         }
       }
     },
-    "Save Quiz Results" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guardar Resultados del Cuestionario"
-          }
-        }
-      }
-    },
     "Scan URLs" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan URLs"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -978,6 +1251,12 @@
     },
     "Select **multiple** answers" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select **multiple** answers"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -988,6 +1267,12 @@
     },
     "Select **one** answer" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select **one** answer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -997,10 +1282,29 @@
       }
     },
     "Select which Gemini model you'd like to use" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select which Gemini model you'd like to use"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecciona qué modelo de Gemini te gustaría usar"
+          }
+        }
+      }
     },
     "Settings" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1011,6 +1315,12 @@
     },
     "Share Quiz" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Quiz"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1021,6 +1331,12 @@
     },
     "Share Results" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Results"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1031,6 +1347,12 @@
     },
     "Show My Responses" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show My Responses"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1041,6 +1363,12 @@
     },
     "Show Onboarding" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Onboarding"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1050,13 +1378,45 @@
       }
     },
     "Skip for now" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip for now"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omitir por ahora"
+          }
+        }
+      }
     },
     "Star Repo" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Star Repo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Destacar Repositorio"
+          }
+        }
+      }
     },
     "Submit" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Submit"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1067,6 +1427,12 @@
     },
     "Submit Answer" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Submit Answer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1076,16 +1442,61 @@
       }
     },
     "Support & Feedback" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support & Feedback"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soporte y Comentarios"
+          }
+        }
+      }
     },
     "Support Open Source" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support Open Source"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apoyar Código Abierto"
+          }
+        }
+      }
     },
     "Take Photo" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take Photo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tomar Foto"
+          }
+        }
+      }
     },
     "Take Quiz Again" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take Quiz Again"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1094,52 +1505,30 @@
         }
       }
     },
-    "Text-based notes (anything you input to create a quiz)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notas basadas en texto (cualquier cosa que ingreses para crear un cuestionario)"
-          }
-        }
-      }
-    },
-    "Third-Party Services" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Servicios de Terceros"
-          }
-        }
-      }
-    },
-    "This information is necessary for the models to generate quizzes. However, please note that:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta información es necesaria para que los modelos generen cuestionarios. Sin embargo, ten en cuenta que:"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
     "Tip: Long press on the `Add New Link` button in order to paste a URL." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tip: Long press on the `Add New Link` button in order to paste a URL."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Consejo: Mantén presionado el botón Agregar Nuevo Enlace para pegar una URL."
+            "value" : "Consejo: Mantén presionado el botón `Agregar Nuevo Enlace` para pegar una URL."
           }
         }
       }
     },
     "To use Recap, enter your API key!" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To use Recap, enter your API key!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1148,29 +1537,14 @@
         }
       }
     },
-    "Tokens Per Minute" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tokens por Minuto"
-          }
-        }
-      }
-    },
-    "Top Secret Gemini API Key" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clave API de Gemini Ultra Secreta"
-          }
-        }
-      }
-    },
     "Total Questions" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total Questions"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1179,45 +1553,31 @@
         }
       }
     },
-    "URLs" : {
-      "extractionState" : "stale",
+    "Vaibhav Satishkumar" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaibhav Satishkumar"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "URLs"
+            "value" : "Vaibhav Satishkumar"
           }
         }
       },
       "shouldTranslate" : false
     },
-    "Use Gemini" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usar Gemini"
-          }
-        }
-      }
-    },
-    "User Data" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Datos del Usuario"
-          }
-        }
-      }
-    },
-    "Vaibhav Satishkumar" : {
-
-    },
     "View Past Results" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Past Results"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1227,60 +1587,61 @@
       }
     },
     "View Source Code" : {
-
-    },
-    "We **%@** block content which contains high amounts of harassment, hate speech, sexually explicit, or dangerous content." : {
-      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Source Code"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ofrecemos la opción de bloquear contenido que contenga altos niveles de acoso, discursos de odio, contenido sexualmente explícito o peligroso."
+            "value" : "Ver Código Fuente"
           }
         }
       }
     },
     "We **%@** block potentially harmful content (harassment, hate speech, sexually explicit, dangerous)." : {
-
-    },
-    "We do not collect any data from our users. All quizzes are saved locally on your device and we do not access or store:" : {
-      "extractionState" : "stale",
       "localizations" : {
-        "es" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No recopilamos ningún dato de nuestros usuarios. Todos los cuestionarios se guardan localmente en tu dispositivo y no accedemos ni almacenamos:"
+            "value" : "We **%@** block potentially harmful content (harassment, hate speech, sexually explicit, dangerous)."
           }
-        }
-      }
-    },
-    "We integrate with Google's Gemini to provide multimodal models for quiz generation. When you use these services, we provide them with the following user information:" : {
-      "extractionState" : "stale",
-      "localizations" : {
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nos integramos con Gemini de Google para ofrecer modelos multimodales para la generación de cuestionarios. Cuando utilizas estos servicios, les proporcionamos la siguiente información del usuario:"
-          }
-        }
-      }
-    },
-    "Welcome to Recap" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bienvenido a Recap"
+            "value" : "**%@** bloqueamos contenido potencialmente dañino (acoso, discurso de odio, sexualmente explícito, peligroso)."
           }
         }
       }
     },
     "Welcome to Recap AI" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to Recap AI"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenido a Recap IA"
+          }
+        }
+      }
     },
     "What would you like a quiz on?" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What would you like a quiz on?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1289,21 +1650,30 @@
         }
       }
     },
-    "Why did the AI quizzer app get top marks?\nBecause it aced all the byte-sized questions!" : {
+    "Would you like to enable content filtering?" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Would you like to enable content filtering?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Por qué la app de cuestionarios AI obtuvo la mejor calificación?\n¡Porque respondió todas las preguntas en bytes de manera excelente!"
+            "value" : "¿Te gustaría habilitar el filtrado de contenido?"
           }
         }
       }
     },
-    "Would you like to enable content filtering?" : {
-
-    },
     "You got this question correct" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You got this question correct"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1314,6 +1684,12 @@
     },
     "You got this question correct!" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You got this question correct!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1324,6 +1700,12 @@
     },
     "You got this question incorrect" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You got this question incorrect"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1334,6 +1716,12 @@
     },
     "You got this question incorrect." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You got this question incorrect."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1344,6 +1732,12 @@
     },
     "Your Answer:" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Answer:"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1353,7 +1747,20 @@
       }
     },
     "Your star helps in many ways:" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your star helps in many ways:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu estrella ayuda de muchas maneras:"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -31,6 +31,10 @@ class UserPreferences: ObservableObject {
     
     @Published var numberOfQuestions: Int = 5 {
         didSet {
+            // Ensure numberOfQuestions is never less than 1
+            if numberOfQuestions < 1 {
+                numberOfQuestions = 1
+            }
             UserDefaults.standard.set(numberOfQuestions, forKey: "numberOfQuestions")
         }
     }
@@ -56,9 +60,11 @@ class UserPreferences: ObservableObject {
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
         self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
-        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-2.0-pro-exp-02-05"
+        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-2.5-pro-preview-05-06"
         self.selectedLanguage = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
-        self.numberOfQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
+        // Set default to 5 questions if not stored or is 0
+        let storedQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
+        self.numberOfQuestions = storedQuestions > 0 ? storedQuestions : 5
         self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? AppSettings.geminiModel
         self.safetySettings = UserDefaults.standard.bool(forKey: "safetySettings")
     }
@@ -81,7 +87,7 @@ struct ContentView: View {
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
-    let options = ["gemini-2.0-pro-exp-02-05", "gemini-2.0-flash"]
+    let options = ["gemini-2.5-pro-preview-05-06", "gemini-2.5-flash-preview-04-17"]
     
     @State private var quiz: Quiz?
     @State private var showingQuizSheet = false
@@ -104,7 +110,7 @@ struct ContentView: View {
     
     // Settings
     //@AppStorage("geminiModel") private var geminiModel = AppSettings.geminiModel
-    let geminiModels = ["2.0 Pro", "2.0 Flash"]
+    let geminiModels = ["2.5 Pro", "2.5 Flash"]
     
     // Web Search
     @State private var showingURLSheet = false
@@ -172,7 +178,6 @@ struct ContentView: View {
                                 .shimmering(
                                     active: gemeniGeneratingQuiz
                                 )
-                            
                             Spacer()
                         }
                         
@@ -638,11 +643,14 @@ struct ContentView: View {
                     NavigationStack {
                         Form {
                             Section {
-                                Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: $userPreferences.numberOfQuestions, in: 1...15, onEditingChanged: { editing in
-                                    if !editing {
-                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
+                                Stepper("Number of Questions: \(userPreferences.numberOfQuestions)", value: Binding(
+                                    get: { userPreferences.numberOfQuestions },
+                                    set: { newValue in
+                                        let validValue = max(1, newValue)
+                                        userPreferences.numberOfQuestions = validValue
+                                        GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: validValue)
                                     }
-                                })
+                                ), in: 1...15)
                                 
                                 
                             } header: {
@@ -979,7 +987,7 @@ struct ContentView: View {
                             Section {
                                 // Keep Gemini settings directly here, using Labels with SettingsBoxView
                                 Label {
-                                    SecureField("Top Secret Gemini API Key", text: $userPreferences.apiKey)
+                                    SecureField("Personal Gemini API Key", text: $userPreferences.apiKey)
                                         .focused($focus, equals: .api)
                                         .onChange(of: userPreferences.apiKey) {
                                             GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
@@ -994,11 +1002,14 @@ struct ContentView: View {
                                 Picker(selection: $userPreferences.selectedOption) {
                                     ForEach(options, id: \.self) { option in
                                         HStack {
-                                            if option == "gemini-2.0-pro-exp-02-05" {
-                                                Label(" Gemini 2.0 Pro", systemImage: "brain.head.profile")
+                                            if option == "gemini-2.5-pro-preview-05-06" {
+                                                Label(" Gemini 2.5 Pro", systemImage: "brain.head.profile")
                                             } else {
-                                                Label(" Gemini 2.0 Flash", systemImage: "bolt.fill")
+                                                Label(" Gemini 2.5 Flash", systemImage: "bolt.fill")
                                             }
+                                        }
+                                        .onChange(of: userPreferences.selectedOption) {
+                                            GeminiAPI.initialize(with: userPreferences.apiKey, modelName: userPreferences.selectedOption, selectedLanguage: userPreferences.selectedLanguage, safetySettings: userPreferences.safetySettings, numberOfQuestions: userPreferences.numberOfQuestions)
                                         }
                                     }
                                 } label: {

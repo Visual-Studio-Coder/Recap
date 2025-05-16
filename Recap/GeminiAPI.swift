@@ -18,14 +18,15 @@ class GeminiAPI: ObservableObject {
     private init(key: String, modelName: String, selectedLanguage: String, safetySettings: Bool, numberOfQuestions: Int) {
         self.key = key
         self.modelName = modelName
-        self.numberOfQuestions = numberOfQuestions
+        self.numberOfQuestions = max(1, numberOfQuestions) // Ensure at least 1 question
         self.safetySettings = safetySettings
         self.selectedLanguage = selectedLanguage
         initializeModel(modelName: modelName, selectedLanguage: selectedLanguage, safetySettings: safetySettings)
     }
     
     static func initialize(with key: String, modelName: String, selectedLanguage: String, safetySettings: Bool, numberOfQuestions: Int) {
-        self.shared = GeminiAPI(key: key, modelName: modelName, selectedLanguage: selectedLanguage, safetySettings: safetySettings, numberOfQuestions: numberOfQuestions)
+        let validQuestionCount = max(1, numberOfQuestions) // Ensure at least 1 question
+        self.shared = GeminiAPI(key: key, modelName: modelName, selectedLanguage: selectedLanguage, safetySettings: safetySettings, numberOfQuestions: validQuestionCount)
     }
     
     func clearChat() {
@@ -65,7 +66,7 @@ class GeminiAPI: ObservableObject {
         let quizPrompt: String = {
             if generateQuiz {
                 return """
-                \n\nUse this JSON schema to generate \(numberOfQuestions == 0 ? 5 : numberOfQuestions) questions, and make sure to randomize the order of the options such that the correct answer is not always in the same place:
+                \n\nUse this JSON schema to generate \(max(1, numberOfQuestions)) questions, and make sure to randomize the order of the options such that the correct answer is not always in the same place:
                 
                 {
                     "quiz_title": "Sample Quiz",

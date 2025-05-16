@@ -39,19 +39,14 @@ struct RecapApp: App {
                                 .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
                                 .shadow(color: colorScheme == .dark ? .brown : .brown.opacity(0.1), radius: 50)
                             
+                            Spacer()
+
                             Text("Recap")
                                 .font(.largeTitle)
                                 .bold()
                                 .foregroundStyle(.white)
                                 .padding(.top, 5)
                                 .shadow(radius: 50)
-                            
-                            Spacer()
-                            
-                            Text("Why did the AI quizzer app get top marks?\nBecause it aced all the byte-sized questions!")
-                                .multilineTextAlignment(.center)
-                                .foregroundStyle(.white)
-                                .padding(.bottom)
                             
                             Spacer()
                         }

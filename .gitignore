@@ -90,6 +90,5 @@ fastlane/test_output
 iOSInjectionProject/
 
 # Editors
-.nova
 .vscode
 .DS_Store
