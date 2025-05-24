@@ -1,3 +1,17 @@
+// Copyright 2024-2025 Vaibhav Satishkumar
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import SwiftUI
 import ConfettiSwiftUI
 import MarkdownUI
@@ -161,8 +175,6 @@ struct QuizView: View {
     @State private var isGradingInProgress = false
     @State private var computerResponse = ""
     @State private var isGenerating = false
-    @State private var showPassMotivation = false
-    @State private var showFailMotivation = false
     @State private var confettiCounter = 0
     @State private var renderedImage = Image(systemName: "photo")
     @State private var showFullFeedback = false
@@ -170,6 +182,9 @@ struct QuizView: View {
     @State private var gradingCompleted: Bool = false // Add this state variable
     @State private var showingGeminiQuotaLimit = false
     @State private var isShowingResults = false
+    
+    @State private var showFeedbackIndicator = false // Added
+    @State private var feedbackIndicatorSuccess = false // Added
     
     @Environment(\.displayScale) var displayScale
     @Environment(\.colorScheme) private var colorScheme
@@ -184,395 +199,435 @@ struct QuizView: View {
     
     var body: some View {
         if selectedTab < quiz.questions.count {
-            VStack(alignment: .leading) {
-                HStack {
-                    //show quiz title in menu on tap
-                    Menu {
-                        Section(quiz.quiz_title) {
-                            Button(role: .destructive) {
-                                withAnimation {
-                                    chatService.clearChat()
-                                    showQuiz = false
-                                }
-                                
-                                // Add the quiz to the history and save it asynchronously
-                                Task {
-                                    await quizStorage.addQuiz(quiz, userAnswers: userAnswers, userPrompt: userPrompt, userLinks: userLinks, userPhotos: userPhotos)
-                                }
-                            } label: {
-                                Label("Exit Quiz", systemImage: "rectangle.portrait.and.arrow.forward")
-                            }
-                        }
-                    } label: {
-                        HStack(spacing: 2) {
-                            Image(systemName: "chevron.backward")
-                                .foregroundStyle(.primary)
-                                .bold()
-                            
-                            Text(quiz.quiz_title)
-                                .foregroundStyle(.primary)
-                                .lineLimit(1)
-                        }
-                        .padding([.leading, .top, .bottom])
-                    }
-                    
-                    Spacer()
-                    
-                    Button {
-                        showExplanation.toggle()
-                        chatService.computerResponse = ""
-                        self.explanation = Explanation(question: "", choices: [])
-                        
-                        // Collect all options for the current question
-                        let currentQuestion = quiz.questions[selectedTab]
-                        
-                        // Safely unwrap options
-                        guard let options = currentQuestion.options else {
-                            print("Options are nil")
-                            return
-                        }
-                        
-                        let choices = options.map { (option: Option) in
-                            Explanation.Choice(
-                                answer_option: option.text, // Assuming 'text' is the property containing the string value
-                                correct: option.correct, // Assuming 'answer' is a string
-                                explanation: "Insert the explanation here for why this is the \(option.correct ? "correct" : "wrong") answer."
-                            )
-                        }
-                        
-                        let explanationPrompt = Explanation(question: currentQuestion.question, choices: choices)
-                        
-                        let encoder = JSONEncoder()
-                        encoder.outputFormatting = .prettyPrinted
-                        
-                        do {
-                            let data = try encoder.encode(explanationPrompt)
-                            let jsonString = String(data: data, encoding: .utf8)!
-                            
-                            // Debug print to verify JSON string
-                            print("JSON String being sent: \(jsonString)")
-                            
-                            chatService.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return this exact JSON (with the same properties and ordering) back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title", selectedPhotosData: nil, streamContent: true, generateQuiz: false) { response in
-                                DispatchQueue.main.async {
-                                    let data = Data(chatService.computerResponse.utf8)
-                                    let decoder = JSONDecoder()
-                                    
-                                    if let partialExplanation = try? decoder.decode(Explanation.self, from: data) {
-                                        // If the response can be decoded into an Explanation, update explanation
-                                        self.explanation = partialExplanation
-                                    } else {
-                                        // If the response can't be decoded into an Explanation, show the raw JSON
-                                        print("Raw JSON response: \(String(chatService.computerResponse))")
-                                    }
-                                }
-                            }
-                        } catch {
-                            print("Error encoding JSON: \(error)")
-                        }
-                    } label: {
-                        Label("Explain", systemImage: "sparkle")
-                    }
-                    .disabled(quiz.questions[selectedTab].type == "free_answer")
-                    .symbolEffect(.bounce, value: showExplanation)
-                    .buttonBorderShape(.capsule)
-                    .buttonStyle(.bordered)
-                    .padding(.horizontal)
-                }
+            ZStack { // Added ZStack to overlay feedback indicator
+                questionDisplayAndInteractionView // Call to the new computed property
                 
-                ScrollView {
-                    if quiz.questions[selectedTab].type == "multiple_choice" {
-                        if let options = quiz.questions[selectedTab].options {
-                            if options.filter({$0.correct}).count > 1 {
-                                QuestionView(
-                                    question: quiz.questions[selectedTab],
-                                    answerCallback: { selectedOptions, isCorrect in
-                                        answeredQuestions += 1
-                                        
-                                        if isCorrect {
-                                            correctAnswers += 1
-                                            showPassMotivation = true
-                                        } else {
-                                            showFailMotivation = true
-                                        }
-                                        
-                                        userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
-                                        
-                                        userDidGetAnswerCorrect[selectedTab] = isCorrect
-                                        hasAnswered[selectedTab] = true
-                                    },
-                                    selectedOptions: Binding(
-                                        get: { selectedOptions[selectedTab] ?? [] },
-                                        set: { selectedOptions[selectedTab] = $0 }
-                                    ),
-                                    hasAnswered: $hasAnswered[selectedTab],
-                                    userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab]
-                                )
-                            } else {
-                                QuestionView(
-                                    question: quiz.questions[selectedTab],
-                                    answerCallback: { selectedOptions, isCorrect in
-                                        answeredQuestions += 1
-                                        
-                                        if isCorrect {
-                                            correctAnswers += 1
-                                            showPassMotivation = true
-                                        } else {
-                                            showFailMotivation = true
-                                        }
-                                        
-                                        userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
-                                        
-                                        userDidGetAnswerCorrect[selectedTab] = isCorrect
-                                        hasAnswered[selectedTab] = true
-                                    },
-                                    selectedOptions: Binding(
-                                        get: { selectedOptions[selectedTab] ?? [] },
-                                        set: { selectedOptions[selectedTab] = $0 }
-                                    ),
-                                    hasAnswered: $hasAnswered[selectedTab],
-                                    userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab]
-                                )
-                            }
-                        }
-                    } else {
-                        HStack {
-                            Markdown(quiz.questions[selectedTab].question)
-                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                .bold()
-                            //                                .font(.title)
-                                .padding()
-                            Spacer()
-                        }
-                        .transition(.slide)
-                        
-                        TextField("Click here to answer...", text: $userInput, axis: .vertical)
-                            .transition(.slide)
-                            .padding(.horizontal)
-                            .onChange(of: userInput) {
-                                hasAnswered[selectedTab] = !userInput.isEmpty
-                            }
-                            .disabled(isGradingInProgress || gradingResult != nil)
-                            .scrollDismissesKeyboard(.interactively)
-                        if hasAnswered[selectedTab] == true {
-                            if let gradingResult = gradingResult {
-                                //use a groupbox in swiftui please
-                                GroupBox {
-                                    VStack(alignment: .leading) {
-                                        Label {
-                                            Text("Expected Answer:")
-                                                .bold()
-                                        } icon: {
-                                            Image(systemName: "chevron.right")
-                                                .rotationEffect(showFullExpectedAnswer ? .degrees(90) : .degrees(0))
-                                        }
-                                        .onTapGesture {
-                                            withAnimation(.spring()) {
-                                                showFullExpectedAnswer.toggle()
-                                            }
-                                        }
-                                        .foregroundStyle(.secondary)
-                                        if showFullExpectedAnswer {
-                                            Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
-                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                                .opacity(showFullExpectedAnswer ? 1 : 0)
-                                                .animation(.easeInOut)
-                                                .onTapGesture {
-                                                    withAnimation(.spring()) {
-                                                        showFullExpectedAnswer.toggle()
-                                                    }
-                                                }
-                                        } else {
-                                            Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
-                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                                .lineLimit(showFullExpectedAnswer ? nil : 3)
-                                                .truncationMode(.tail)
-                                            //.opacity(showFullExpectedAnswer ? 1 : 0)
-                                                .animation(.easeInOut)
-                                                .onTapGesture {
-                                                    withAnimation(.spring()) {
-                                                        showFullExpectedAnswer.toggle()
-                                                    }
-                                                }
-                                        }
-                                        Divider()
-                                        Label {
-                                            Text("Feedback:")
-                                                .bold()
-                                        } icon: {
-                                            Image(systemName: "chevron.right")
-                                                .rotationEffect(showFullFeedback ? .degrees(90) : .degrees(0))
-                                        }
-                                        .foregroundStyle(.secondary)
-                                        .onTapGesture {
-                                            withAnimation(.spring()) {
-                                                showFullFeedback.toggle()
-                                            }
-                                        }
-                                        if showFullFeedback {
-                                            Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
-                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                                .opacity(showFullFeedback ? 1 : 0)
-                                                .animation(.easeInOut)
-                                                .onTapGesture {
-                                                    withAnimation(.spring()) {
-                                                        showFullFeedback.toggle()
-                                                    }
-                                                }
-                                        } else {
-                                            Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
-                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                                .lineLimit(showFullFeedback ? nil : 3)
-                                                .truncationMode(.tail)
-                                            //.opacity(showFullFeedback ? 1 : 0)
-                                                .animation(.easeInOut)
-                                                .onTapGesture {
-                                                    withAnimation(.spring()) {
-                                                        showFullFeedback.toggle()
-                                                    }
-                                                }
-                                        }
-                                        
-                                    }
-                                } label: {
-                                    Label("\(gradingResult.isCorrect ? "Correct!" : "Wrong")", systemImage: "\(gradingResult.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")")
-                                        .font(.subheadline)
-                                        .foregroundStyle(gradingResult.isCorrect ? .green : .red)
-                                }
-                                .padding()
-                                .animation(.easeInOut)
-                                .transition(.slide)
-                                .id(gradingResult.feedback) // Add an identifier to the GroupBox to trigger animation when gradingResult changes
-                                
-                            }
-                        }
-                    }
+                if showFeedbackIndicator { // Added feedback indicator display
+                    FeedbackIndicatorView(isSuccess: feedbackIndicatorSuccess)
+                        .transition(.scale.combined(with: .opacity))
                 }
-                Spacer()
-                VStack {
-                    Button {
-                        withAnimation {
-                            if quiz.questions.count-1 < selectedTab {
-                                
-                            } else if quiz.questions[selectedTab].type == "free_answer" && !gradingCompleted {
-                                // If it's a free response question and grading hasn't been completed, start grading
-                                gradeFreeResponse()
-                            } else {
-                                // For other question types, or if grading is completed, proceed to the next question
-                                selectedTab += 1
-                                gradingCompleted = false // Reset grading completion state
-                                gradingResult = nil
-                                userInput = ""
-                                selectedOptions = [:] // Reset selected options after moving to the next question
-                            }
-                        }
-                    } label: {
-                        if isGradingInProgress && quiz.questions[selectedTab].type == "free_answer" {
-                            ProgressView() // Show progress view if grading is in progress
-                        } else {
-                            Spacer()
-                            Text(gradingCompleted ? "Next" : (quiz.questions[selectedTab].type == "free_answer") ? "Submit Answer" : "Next")
-                                .bold()
-                                .padding(6)
-                            Spacer()
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .padding(.horizontal)
-                    .disabled(hasAnswered[selectedTab] == nil || (quiz.questions[selectedTab].type == "free_answer" && isGradingInProgress))
-                    .transition(.slide)
-                    // .ignoresSafeArea(.keyboard)
-                    // Spacer()
-                    QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
-                        .frame(height: 10)
-                        .padding(.vertical)
-                        .ignoresSafeArea(.keyboard)
-                    HStack {
-                        Spacer()
-                        Text("\(answeredQuestions) of \(quiz.questions.count) questions answered")
-                            .bold()
-                            .multilineTextAlignment(.center)
-                        Spacer()
-                    }
-                    .ignoresSafeArea(.keyboard)
-                    .transition(.slide)
-                }
-                .ignoresSafeArea(.keyboard)
-                
-                
-                
-            }
-            .alert(Motivation.correctMotivation, isPresented: $showPassMotivation) {}
-            .alert(Motivation.wrongMotivation, isPresented: $showFailMotivation) {}
-            .sheet(isPresented: $showExplanation) {
-                NavigationStack {
-                    VStack {
-                        if let explanationUnwrapped = explanation, !explanationUnwrapped.question.isEmpty {
-                            // Markdown(explanationUnwrapped.question.replacingOccurrences(of: "<`>", with: "```"))
-                            //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                            //     .font(.headline)
-                            //     .padding()
-                            Form {
-                                ForEach(explanationUnwrapped.choices, id: \.answer_option) { choice in
-                                    Section {
-                                        Label {
-                                            Markdown("\(choice.answer_option.replacingOccurrences(of: "<`>", with: "```"))")
-                                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                        } icon: {
-                                            if choice.correct {
-                                                Image(systemName: "checkmark.circle.fill")
-                                                    .foregroundStyle(.green)
-                                            } else {
-                                                Image(systemName: "xmark.circle.fill")
-                                                    .foregroundStyle(.red)
-                                            }
-                                        }
-                                        
-                                        Markdown(choice.explanation.replacingOccurrences(of: "<`>", with: "```"))
-                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                    }
-                                }
-                            }
-                        } else if !chatService.computerResponse.isEmpty {
-                            // Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
-                            //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                            //     .font(.headline)
-                            //     .padding()
-                            Form {
-                                Text("**Receiving Response from Gemini...**")
-                                Markdown(chatService.computerResponse.replacingOccurrences(of: "<`>", with: "```"))
-                                    .rainbowText()
-                                    .redacted(reason: .placeholder)
-                                //rainbow gradient
-                                    .shimmering()
-                                    .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                            }
-                            .onChange(of: chatService.computerResponse, { oldValue, newValue in
-                                let generator = UIImpactFeedbackGenerator(style: .light)
-                                generator.impactOccurred()
-                            })
-                        } else {
-                            VStack {
-                                // Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
-                                //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
-                                // //.font(.headline)
-                                //     .padding()
-                                ProgressView()
-                                    .controlSize(.extraLarge)
-                                    .padding(.top, 25)
-                                
-                                Text("Generating explanation...")
-                                    .bold()
-                                    .padding(.top)
-                                Spacer()
-                            }
-                        }
-                    }
-                    .navigationTitle(quiz.questions[selectedTab].question)
-                    .navigationBarTitleDisplayMode(.inline)
-                }
-                .presentationDetents([.medium, .large])
             }
         } else {
+            resultsView // Call to the correctly placed computed property
+        }
+    }
+
+    // Computed property for displaying questions and handling interactions
+    private var questionDisplayAndInteractionView: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                //show quiz title in menu on tap
+                Menu {
+                    Section(quiz.quiz_title) {
+                        Button(role: .destructive) {
+                            withAnimation {
+                                chatService.clearChat()
+                                showQuiz = false
+                            }
+                            
+                            // Add the quiz to the history and save it asynchronously
+                            Task {
+                                await quizStorage.addQuiz(quiz, userAnswers: userAnswers, userPrompt: userPrompt, userLinks: userLinks, userPhotos: userPhotos)
+                            }
+                        } label: {
+                            Label("Exit Quiz", systemImage: "rectangle.portrait.and.arrow.forward")
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 2) {
+                        Image(systemName: "chevron.backward")
+                            .foregroundStyle(.primary)
+                            .bold()
+                        
+                        Text(quiz.quiz_title)
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+                    }
+                    .padding([.leading, .top, .bottom])
+                }
+                
+                Spacer()
+                
+                Button {
+                    showExplanation.toggle()
+                    chatService.computerResponse = ""
+                    self.explanation = Explanation(question: "", choices: [])
+                    
+                    // Collect all options for the current question
+                    let currentQuestion = quiz.questions[selectedTab]
+                    
+                    // Safely unwrap options
+                    guard let options = currentQuestion.options else {
+                        print("Options are nil")
+                        return
+                    }
+                    
+                    let choices = options.map { (option: Option) in
+                        Explanation.Choice(
+                            answer_option: option.text, // Assuming 'text' is the property containing the string value
+                            correct: option.correct, // Assuming 'answer' is a string
+                            explanation: "Insert the explanation here for why this is the \(option.correct ? "correct" : "wrong") answer."
+                        )
+                    }
+                    
+                    let explanationPrompt = Explanation(question: currentQuestion.question, choices: choices)
+                    
+                    let encoder = JSONEncoder()
+                    encoder.outputFormatting = .prettyPrinted
+                    
+                    do {
+                        let data = try encoder.encode(explanationPrompt)
+                        let jsonString = String(data: data, encoding: .utf8)!
+                        
+                        // Debug print to verify JSON string
+                        print("JSON String being sent: \(jsonString)")
+                        
+                        chatService.sendMessage(userInput: "Act as my teacher in this subject. Explain the reasoning of EACH answer is wrong or right and return this exact JSON (with the same properties and ordering) back with the explanation values you add: \(jsonString). Do not use values that aren't in this JSON such as quiz_title", selectedPhotosData: nil, streamContent: true, generateQuiz: false) { response in
+                            DispatchQueue.main.async {
+                                let data = Data(chatService.computerResponse.utf8)
+                                let decoder = JSONDecoder()
+                                
+                                if let partialExplanation = try? decoder.decode(Explanation.self, from: data) {
+                                    // If the response can be decoded into an Explanation, update explanation
+                                    self.explanation = partialExplanation
+                                } else {
+                                    // If the response can't be decoded into an Explanation, show the raw JSON
+                                    print("Raw JSON response: \(String(chatService.computerResponse))")
+                                }
+                            }
+                        }
+                    } catch {
+                        print("Error encoding JSON: \(error)")
+                    }
+                } label: {
+                    Label("Explain", systemImage: "sparkle")
+                }
+                .disabled(quiz.questions[selectedTab].type == "free_answer")
+                .symbolEffect(.bounce, value: showExplanation)
+                .buttonBorderShape(.capsule)
+                .buttonStyle(.bordered)
+                .padding(.horizontal)
+            }
+            
+            ScrollView {
+                if quiz.questions[selectedTab].type == "multiple_choice" {
+                    if let options = quiz.questions[selectedTab].options {
+                        if options.filter({$0.correct}).count > 1 {
+                            QuestionView(
+                                question: quiz.questions[selectedTab],
+                                answerCallback: { selectedOptions, isCorrect in
+                                    answeredQuestions += 1
+                                    
+                                    if isCorrect {
+                                        correctAnswers += 1
+                                        // showPassMotivation = true // Removed
+                                        feedbackIndicatorSuccess = true // Added
+                                    } else {
+                                        // showFailMotivation = true // Removed
+                                        feedbackIndicatorSuccess = false // Added
+                                    }
+                                    
+                                    // Added logic to show/hide feedback indicator
+                                    withAnimation {
+                                        showFeedbackIndicator = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        withAnimation {
+                                            showFeedbackIndicator = false
+                                        }
+                                    }
+                                    
+                                    userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
+                                    
+                                    userDidGetAnswerCorrect[selectedTab] = isCorrect
+                                    hasAnswered[selectedTab] = true
+                                },
+                                selectedOptions: Binding(
+                                    get: { selectedOptions[selectedTab] ?? [] },
+                                    set: { selectedOptions[selectedTab] = $0 }
+                                ),
+                                hasAnswered: $hasAnswered[selectedTab],
+                                userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab]
+                            )
+                        } else {
+                            QuestionView(
+                                question: quiz.questions[selectedTab],
+                                answerCallback: { selectedOptions, isCorrect in
+                                    answeredQuestions += 1
+                                    
+                                    if isCorrect {
+                                        correctAnswers += 1
+                                        // showPassMotivation = true // Removed
+                                        feedbackIndicatorSuccess = true // Added
+                                    } else {
+                                        // showFailMotivation = true // Removed
+                                        feedbackIndicatorSuccess = false // Added
+                                    }
+                                    
+                                    // Added logic to show/hide feedback indicator
+                                    withAnimation {
+                                        showFeedbackIndicator = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        withAnimation {
+                                            showFeedbackIndicator = false
+                                        }
+                                    }
+                                    
+                                    userAnswers.append(UserAnswer(question: quiz.questions[selectedTab], userAnswer: selectedOptions, isCorrect: isCorrect, correctAnswer: nil))
+                                    
+                                    userDidGetAnswerCorrect[selectedTab] = isCorrect
+                                    hasAnswered[selectedTab] = true
+                                },
+                                selectedOptions: Binding(
+                                    get: { selectedOptions[selectedTab] ?? [] },
+                                    set: { selectedOptions[selectedTab] = $0 }
+                                ),
+                                hasAnswered: $hasAnswered[selectedTab],
+                                userDidGetAnswerCorrect: $userDidGetAnswerCorrect[selectedTab]
+                            )
+                        }
+                    }
+                } else {
+                    HStack {
+                        Markdown(quiz.questions[selectedTab].question)
+                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                            .bold()
+                        //                                .font(.title)
+                            .padding()
+                        Spacer()
+                    }
+                    .transition(.slide)
+                    
+                    TextField("Click here to answer...", text: $userInput, axis: .vertical)
+                        .transition(.slide)
+                        .padding(.horizontal)
+                        .onChange(of: userInput) {
+                            hasAnswered[selectedTab] = !userInput.isEmpty
+                        }
+                        .disabled(isGradingInProgress || gradingResult != nil)
+                        .scrollDismissesKeyboard(.interactively)
+                    if hasAnswered[selectedTab] == true {
+                        if let gradingResult = gradingResult {
+                            //use a groupbox in swiftui please
+                            GroupBox {
+                                VStack(alignment: .leading) {
+                                    Label {
+                                        Text("Expected Answer:")
+                                            .bold()
+                                    } icon: {
+                                        Image(systemName: "chevron.right")
+                                            .rotationEffect(showFullExpectedAnswer ? .degrees(90) : .degrees(0))
+                                    }
+                                    .onTapGesture {
+                                        withAnimation(.spring()) {
+                                            showFullExpectedAnswer.toggle()
+                                        }
+                                    }
+                                    .foregroundStyle(.secondary)
+                                    if showFullExpectedAnswer {
+                                        Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                            .opacity(showFullExpectedAnswer ? 1 : 0)
+                                            .animation(.easeInOut)
+                                            .onTapGesture {
+                                                withAnimation(.spring()) {
+                                                    showFullExpectedAnswer.toggle()
+                                                }
+                                            }
+                                    } else {
+                                        Markdown("\(gradingResult.expectedAnswer.replacingOccurrences(of: "<`>", with: "```"))")
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                            .lineLimit(showFullExpectedAnswer ? nil : 3)
+                                            .truncationMode(.tail)
+                                        //.opacity(showFullExpectedAnswer ? 1 : 0)
+                                            .animation(.easeInOut)
+                                            .onTapGesture {
+                                                withAnimation(.spring()) {
+                                                    showFullExpectedAnswer.toggle()
+                                                }
+                                            }
+                                    }
+                                    Divider()
+                                    Label {
+                                        Text("Feedback:")
+                                            .bold()
+                                    } icon: {
+                                        Image(systemName: "chevron.right")
+                                            .rotationEffect(showFullFeedback ? .degrees(90) : .degrees(0))
+                                    }
+                                    .foregroundStyle(.secondary)
+                                    .onTapGesture {
+                                        withAnimation(.spring()) {
+                                            showFullFeedback.toggle()
+                                        }
+                                    }
+                                    if showFullFeedback {
+                                        Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                            .opacity(showFullFeedback ? 1 : 0)
+                                            .animation(.easeInOut)
+                                            .onTapGesture {
+                                                withAnimation(.spring()) {
+                                                    showFullFeedback.toggle()
+                                                }
+                                            }
+                                    } else {
+                                        Markdown("\(gradingResult.feedback.replacingOccurrences(of: "<`>", with: "```"))")
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                            .lineLimit(showFullFeedback ? nil : 3)
+                                            .truncationMode(.tail)
+                                        //.opacity(showFullFeedback ? 1 : 0)
+                                            .animation(.easeInOut)
+                                            .onTapGesture {
+                                                withAnimation(.spring()) {
+                                                    showFullFeedback.toggle()
+                                                }
+                                            }
+                                    }
+                                    
+                                }
+                            } label: {
+                                Label("\(gradingResult.isCorrect ? "Correct!" : "Wrong")", systemImage: "\(gradingResult.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")")
+                                    .font(.subheadline)
+                                    .foregroundStyle(gradingResult.isCorrect ? .green : .red)
+                            }
+                            .padding()
+                            .animation(.easeInOut)
+                            .transition(.slide)
+                            .id(gradingResult.feedback) // Add an identifier to the GroupBox to trigger animation when gradingResult changes
+                            
+                        }
+                    }
+                }
+            }
+            Spacer()
+            VStack {
+                Button {
+                    withAnimation {
+                        if quiz.questions.count-1 < selectedTab {
+                            
+                        } else if quiz.questions[selectedTab].type == "free_answer" && !gradingCompleted {
+                            // If it's a free response question and grading hasn't been completed, start grading
+                            gradeFreeResponse()
+                        } else {
+                            // For other question types, or if grading is completed, proceed to the next question
+                            selectedTab += 1
+                            gradingCompleted = false // Reset grading completion state
+                            gradingResult = nil
+                            userInput = ""
+                            selectedOptions = [:] // Reset selected options after moving to the next question
+                        }
+                    }
+                } label: {
+                    if isGradingInProgress && quiz.questions[selectedTab].type == "free_answer" {
+                        ProgressView() // Show progress view if grading is in progress
+                    } else {
+                        Spacer()
+                        Text(gradingCompleted ? "Next" : (quiz.questions[selectedTab].type == "free_answer") ? "Submit Answer" : "Next")
+                            .bold()
+                            .padding(6)
+                        Spacer()
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.horizontal)
+                .disabled(hasAnswered[selectedTab] == nil || (quiz.questions[selectedTab].type == "free_answer" && isGradingInProgress))
+                .transition(.slide)
+                // .ignoresSafeArea(.keyboard)
+                // Spacer()
+                QuizProgressBar(current: Float(answeredQuestions), total: Float(quiz.questions.count))
+                    .frame(height: 10)
+                    .padding(.vertical)
+                    .ignoresSafeArea(.keyboard)
+                HStack {
+                    Spacer()
+                    Text("\(answeredQuestions) of \(quiz.questions.count) questions answered")
+                        .bold()
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                }
+                .ignoresSafeArea(.keyboard)
+                .transition(.slide)
+            }
+            .ignoresSafeArea(.keyboard)
+        }
+        // .alert(Motivation.correctMotivation, isPresented: $showPassMotivation) {} // Removed
+        // .alert(Motivation.wrongMotivation, isPresented: $showFailMotivation) {} // Removed
+        .sheet(isPresented: $showExplanation) {
+            NavigationStack {
+                VStack {
+                    if let explanationUnwrapped = explanation, !explanationUnwrapped.question.isEmpty {
+                        // Markdown(explanationUnwrapped.question.replacingOccurrences(of: "<`>", with: "```"))
+                        //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                        //     .font(.headline)
+                        //     .padding()
+                        Form {
+                            ForEach(explanationUnwrapped.choices, id: \.answer_option) { choice in
+                                Section {
+                                    Label {
+                                        Markdown("\(choice.answer_option.replacingOccurrences(of: "<`>", with: "```"))")
+                                            .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                    } icon: {
+                                        if choice.correct {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundStyle(.green)
+                                        } else {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .foregroundStyle(.red)
+                                        }
+                                    }
+                                    
+                                    Markdown(choice.explanation.replacingOccurrences(of: "<`>", with: "```"))
+                                        .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                                }
+                            }
+                        }
+                    } else if !chatService.computerResponse.isEmpty {
+                        // Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
+                        //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                        //     .font(.headline)
+                        //     .padding()
+                        Form {
+                            Text("**Receiving Response from Gemini...**")
+                            Markdown(chatService.computerResponse.replacingOccurrences(of: "<`>", with: "```"))
+                                .rainbowText()
+                                .redacted(reason: .placeholder)
+                            //rainbow gradient
+                                .shimmering()
+                                .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                        }
+                        .onChange(of: chatService.computerResponse, { oldValue, newValue in
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                        })
+                    } else {
+                        VStack {
+                            // Markdown(quiz.questions[selectedTab].question.replacingOccurrences(of: "<`>", with: "```"))
+                            //     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
+                            // //.font(.headline)
+                            //     .padding()
+                            ProgressView()
+                                .controlSize(.extraLarge)
+                                .padding(.top, 25)
+                            
+                            Text("Generating explanation...")
+                                .bold()
+                                .padding(.top)
+                            Spacer()
+                        }
+                    }
+                }
+                .navigationTitle(quiz.questions[selectedTab].question)
+                .navigationBarTitleDisplayMode(.inline)
+            }
+            .presentationDetents([.medium, .large])
+        }
+    }
+    
+    // Computed property for displaying results
+    private var resultsView: some View {
+        VStack { // Added parent VStack
             ScrollView {
                 VStack {
                     Spacer()
@@ -824,11 +879,24 @@ struct QuizView: View {
                     
                     if result.isCorrect {
                         self.correctAnswers += 1
-                        self.showPassMotivation = true
+                        // self.showPassMotivation = true // Removed
+                        self.feedbackIndicatorSuccess = true // Added
                         //gradingResult = nil
                     } else {
-                        self.showFailMotivation = true
+                        // self.showFailMotivation = true // Removed
+                        self.feedbackIndicatorSuccess = false // Added
                     }
+                    
+                    // Added logic to show/hide feedback indicator
+                    withAnimation {
+                        self.showFeedbackIndicator = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        withAnimation {
+                            self.showFeedbackIndicator = false
+                        }
+                    }
+                    
                     self.answeredQuestions += 1
                     
                     self.userAnswers.append(UserAnswer(question: self.quiz.questions[self.selectedTab], userAnswer: [self.userInput], isCorrect: result.isCorrect, correctAnswer: result.expectedAnswer))
@@ -876,3 +944,19 @@ struct QuizView: View {
 //#Preview {
 //    QuizView(quiz: Quiz(quiz_title: "Long Quiz Title Long Quiz Title", questions: [Question(type: "free_answer", question: "Explain how Elon Musk bought X.", options: [], answer: ""), Question(type: "multiple_choice", question: "Select Elon Musk #1", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Jeff Bezos #2", options: [Option(text: "Elon Musk", correct: false), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: true), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk"), Question(type: "multiple_choice", question: "Select Elon Musk #3", options: [Option(text: "Elon Musk", correct: true), Option(text: "Elon Crust", correct: false), Option(text: "Jeff Bezos", correct: false), Option(text: "Mark Zuckerberg", correct: false)], answer: "Elon Musk")]), showQuiz: .constant(true))
 //}
+
+struct FeedbackIndicatorView: View {
+    let isSuccess: Bool
+
+    var body: some View {
+        VStack {
+            Image(systemName: isSuccess ? "checkmark" : "xmark")
+                .font(.system(size: 60, weight: .bold))
+                .foregroundColor(isSuccess ? .green : .red)
+        }
+        .padding(40)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
+    }
+}

@@ -1,3 +1,17 @@
+// Copyright 2024-2025 Vaibhav Satishkumar
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import SwiftUI
 
 struct OnboardingView: View {
@@ -13,7 +27,7 @@ struct OnboardingView: View {
     @State private var repoStarCount: Int? = nil
     
     // Update Gemini version references
-    let options = ["gemini-2.5-pro-preview-05-06", "gemini-2.5-flash-preview-04-17"]
+    let options = ["gemini-2.5-pro-preview-05-06", "gemini-2.5-flash-preview-05-20"]
     
     // Brown gradient colors
     let gradientColors = [
@@ -555,7 +569,7 @@ struct OnboardingView: View {
                 )
                 
                 modelOptionCard(
-                    option: "gemini-2.5-flash-preview-04-17",
+                    option: "gemini-2.5-flash-preview-05-20",
                     title: "Gemini 2.5 Flash",
                     description: "Prioritize faster response over accuracy",
                     icon: "bolt.fill"
