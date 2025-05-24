@@ -133,3 +133,7 @@ Check out my previous app, [QR Share Pro](https://apps.apple.com/us/app/qr-share
 
 > [!WARNING]
 > I, Visual-Studio-Coder (Vaibhav Satishkumar), am the sole developer of Recap AI, and this is the official repository listed on the App Store. Recap AI is not affiliated with any fraudulent users or organizations on GitHub falsely claiming involvement in this project. To those posting inappropriate spam reviews on my apps: whenever Apple removes a review that violates guidelines, my app gains a boost on the App Store for a week, so indirectly, spammers contribute to my app's popularity.
+
+---
+
+Copyright © 2024-2025 Vaibhav Satishkumar. All rights reserved.
