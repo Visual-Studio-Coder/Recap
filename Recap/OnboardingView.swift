@@ -27,7 +27,7 @@ struct OnboardingView: View {
     @State private var repoStarCount: Int? = nil
     
     // Update Gemini version references
-    let options = ["gemini-2.5-pro-preview-05-06", "gemini-2.5-flash-preview-05-20"]
+    let options = ["gemini-2.5-pro", "gemini-2.5-flash"]
     
     // Brown gradient colors
     let gradientColors = [
@@ -562,14 +562,14 @@ struct OnboardingView: View {
             VStack(spacing: 20) {
                 // Update model names to Gemini 2.5
                 modelOptionCard(
-                    option: "gemini-2.5-pro-preview-05-06",
+                    option: "gemini-2.5-pro",
                     title: "Gemini 2.5 Pro",
                     description: "Prioritize accuracy over speed",
                     icon: "brain.head.profile"
                 )
                 
                 modelOptionCard(
-                    option: "gemini-2.5-flash-preview-05-20",
+                    option: "gemini-2.5-flash",
                     title: "Gemini 2.5 Flash",
                     description: "Prioritize faster response over accuracy",
                     icon: "bolt.fill"

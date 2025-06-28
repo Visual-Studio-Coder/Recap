@@ -74,12 +74,12 @@ class UserPreferences: ObservableObject {
     init() {
         self.somePreference = UserDefaults.standard.bool(forKey: "somePreference")
         self.apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
-        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-2.5-pro-preview-05-06"
+        self.selectedOption = UserDefaults.standard.string(forKey: "model") ?? "gemini-2.5-pro"
         self.selectedLanguage = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
         // Set default to 5 questions if not stored or is 0
         let storedQuestions = UserDefaults.standard.integer(forKey: "numberOfQuestions")
         self.numberOfQuestions = storedQuestions > 0 ? storedQuestions : 5
-        self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? "gemini-2.5-pro-preview-05-06"
+        self.geminiModel = UserDefaults.standard.string(forKey: "geminiModel") ?? "gemini-2.5-pro"
         self.safetySettings = UserDefaults.standard.bool(forKey: "safetySettings")
     }
 }
@@ -101,7 +101,7 @@ struct ContentView: View {
     
     // Gemini
     let geminiAPI = GeminiAPI.shared
-    let options = ["gemini-2.5-pro-preview-05-06", "gemini-2.5-flash-preview-05-20"]
+    let options = ["gemini-2.5-pro", "gemini-2.5-flash"]
     
     @State private var quiz: Quiz?
     @State private var showingQuizSheet = false
@@ -1016,7 +1016,7 @@ struct ContentView: View {
                                 Picker(selection: $userPreferences.selectedOption) {
                                     ForEach(options, id: \.self) { option in
                                         HStack {
-                                            if option == "gemini-2.5-pro-preview-05-06" {
+                                            if option == "gemini-2.5-pro" {
                                                 Label(" Gemini 2.5 Pro", systemImage: "brain.head.profile")
                                             } else {
                                                 Label(" Gemini 2.5 Flash", systemImage: "bolt.fill")
